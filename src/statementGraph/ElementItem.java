@@ -1,0 +1,48 @@
+package statementGraph;
+
+import org.eclipse.jdt.core.dom.ASTNode;
+
+public abstract class ElementItem {
+	public static final int ANONYMOUS_CLASS_DECLARATION = ASTNode.ANONYMOUS_CLASS_DECLARATION; 
+	public static final int ASSERT_STATEMENT = ASTNode.ASSERT_STATEMENT;
+	public static final int BLOCK = ASTNode.BLOCK; //Statement.
+	public static final int BREAK_STATEMENT = ASTNode.BREAK_STATEMENT;
+	public static final int CATCH_CLAUSE = ASTNode.CATCH_CLAUSE;
+	public static final int COMPILATION_UNIT = ASTNode.COMPILATION_UNIT; //Not inside a method.
+	public static final int CONSTRUCTOR_INVOCATION = ASTNode.CONSTRUCTOR_INVOCATION; //Statement.
+	public static final int CONTINUE_STATEMENT = ASTNode.CONTINUE_STATEMENT;
+	public static final int DO_STATEMENT = ASTNode.DO_STATEMENT;
+	public static final int EMPTY_STATEMENT = ASTNode.EMPTY_STATEMENT;
+	public static final int EXPRESSION_STATEMENT = ASTNode.EXPRESSION_STATEMENT;
+	public static final int FIELD_DECLARATION = ASTNode.FIELD_DECLARATION; //Not inside a method.
+	public static final int FOR_STATEMENT = ASTNode.FOR_STATEMENT;
+	public static final int IF_STATEMENT = ASTNode.IF_STATEMENT;
+	public static final int IMPORT_DECLARATION = ASTNode.IMPORT_DECLARATION; //Not inside a method.
+	public static final int INITIALIZER = ASTNode.INITIALIZER; //Not clear yet.
+	public static final int JAVADOC = ASTNode.JAVADOC;
+	public static final int LABELED_STATEMENT = ASTNode.LABELED_STATEMENT;
+	public static final int METHOD_DECLARATION = ASTNode.METHOD_DECLARATION;
+	public static final int PACKAGE_DECLARATION = ASTNode.PACKAGE_DECLARATION;
+	public static final int RETURN_STATEMENT = ASTNode.RETURN_STATEMENT;
+	public static final int SUPER_CONSTRUCTOR_INVOCATION = ASTNode.SUPER_CONSTRUCTOR_INVOCATION; //Statement.
+	public static final int SWITCH_CASE = ASTNode.SWITCH_CASE;  //Statement.
+	public static final int SWITCH_STATEMENT = ASTNode.SWITCH_STATEMENT; 
+	public static final int SYNCHRONIZED_STATEMENT = ASTNode.SYNCHRONIZED_STATEMENT;
+	public static final int THROW_STATEMENT = ASTNode.THROW_STATEMENT;
+	public static final int TRY_STATEMENT = ASTNode.TRY_STATEMENT;
+	public static final int TYPE_DECLARATION = ASTNode.TYPE_DECLARATION; //Not inside a method.
+	public static final int TYPE_DECLARATION_STATEMENT = ASTNode.TYPE_DECLARATION_STATEMENT;
+	public static final int VARIABLE_DECLARATION_STATEMENT = ASTNode.VARIABLE_DECLARATION_STATEMENT;
+	public static final int WHILE_STATEMENT = ASTNode.WHILE_STATEMENT;
+	public static final int LINE_COMMENT = ASTNode.LINE_COMMENT;
+	public static final int BLOCK_COMMENT = ASTNode.BLOCK_COMMENT;
+	public static final int TAG_ELEMENT = ASTNode.TAG_ELEMENT;
+	public static final int TEXT_ELEMENT = ASTNode.TEXT_ELEMENT;
+	public static final int ENHANCED_FOR_STATEMENT = ASTNode.ENHANCED_FOR_STATEMENT;
+	public static final int ENUM_DECLARATION = ASTNode.ENUM_DECLARATION;
+	public static final int ENUM_CONSTANT_DECLARATION = ASTNode.ENUM_CONSTANT_DECLARATION;
+	public static final int TYPE_PARAMETER = ASTNode.TYPE_PARAMETER; //Not inside a method.
+	public static final int MEMBER_VALUE_PAIR = ASTNode.MEMBER_VALUE_PAIR;
+	public static final int ANNOTATION_TYPE_DECLARATION = ASTNode.ANNOTATION_TYPE_DECLARATION;
+	public static final int ANNOTATION_TYPE_MEMBER_DECLARATION = ASTNode.ANNOTATION_TYPE_DECLARATION;
+}
