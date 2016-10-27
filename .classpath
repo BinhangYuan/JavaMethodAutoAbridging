@@ -2,13 +2,9 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/home/yuan/Desktop/PL research/eclipseWorkSpace/javaSrcCompress/external lib/GLPKSolverPack.jar"/>
-	<classpathentry kind="lib" path="/home/yuan/Desktop/PL research/eclipseWorkSpace/javaSrcCompress/external lib/LPSOLVESolverPack.jar"/>
-	<classpathentry kind="lib" path="/home/yuan/Desktop/PL research/eclipseWorkSpace/javaSrcCompress/external lib/SCPSolver.jar"/>
-	<classpathentry kind="lib" path="/home/yuan/Desktop/PL research/eclipseWorkSpace/javaSrcCompress/external lib/org.eclipse.jdt.core-3.10.0.jar" sourcepath="/home/yuan/Desktop/PL research/eclipseWorkSpace/javaSrcCompress/external lib/org.eclipse.jdt.core-3.10.0-sources.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/home/yuan/Desktop/PL%20research/eclipseWorkSpace/javaSrcCompress/external%20lib/org.eclipse.jdt.core-3.10.0-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="lib" path="/Users/binhangYuan1/Documents/javaSourceCodeCompress/javaSrcCompress/external lib/GLPKSolverPack.jar"/>
+	<classpathentry kind="lib" path="/Users/binhangYuan1/Documents/javaSourceCodeCompress/javaSrcCompress/external lib/LPSOLVESolverPack.jar"/>
+	<classpathentry kind="lib" path="/Users/binhangYuan1/Documents/javaSourceCodeCompress/javaSrcCompress/external lib/org.eclipse.jdt.core-3.10.0.jar"/>
+	<classpathentry kind="lib" path="/Users/binhangYuan1/Documents/javaSourceCodeCompress/javaSrcCompress/external lib/SCPSolver.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
