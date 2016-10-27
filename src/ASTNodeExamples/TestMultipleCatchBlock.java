@@ -1,3 +1,4 @@
+package ASTNodeExamples;
 public class TestMultipleCatchBlock{
 	
 	public static void main(String args[]){
