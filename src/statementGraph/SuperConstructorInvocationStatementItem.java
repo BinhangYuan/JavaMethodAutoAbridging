@@ -2,7 +2,7 @@ package statementGraph;
 
 import java.util.List;
 
-public class AssertStatement extends ElementItem{
+public class SuperConstructorInvocationStatementItem extends ElementItem{
 
 	private List<ElementItem> successors;
 	

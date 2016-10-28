@@ -52,12 +52,50 @@ public abstract class ElementItem {
 	public static final int MEMBER_VALUE_PAIR = ASTNode.MEMBER_VALUE_PAIR;
 	public static final int ANNOTATION_TYPE_DECLARATION = ASTNode.ANNOTATION_TYPE_DECLARATION;
 	public static final int ANNOTATION_TYPE_MEMBER_DECLARATION = ASTNode.ANNOTATION_TYPE_DECLARATION;
+
+	
+	public static boolean isAstStatement(ASTNode node){
+		int nodeType = node.getNodeType();
+		return nodeType == ASSERT_STATEMENT||
+			   nodeType == BLOCK||
+			   nodeType == BREAK_STATEMENT||
+			   nodeType ==CONSTRUCTOR_INVOCATION||
+			   nodeType == CONTINUE_STATEMENT||
+			   nodeType == DO_STATEMENT||
+			   nodeType == EMPTY_STATEMENT||
+			   nodeType == ENHANCED_FOR_STATEMENT||
+			   nodeType == EXPRESSION_STATEMENT||
+			   nodeType == FOR_STATEMENT||
+			   nodeType == IF_STATEMENT||
+			   nodeType == LABELED_STATEMENT||
+			   nodeType == RETURN_STATEMENT||
+			   nodeType == SUPER_CONSTRUCTOR_INVOCATION||
+			   nodeType == SWITCH_CASE||
+			   nodeType == SWITCH_STATEMENT|| 
+			   nodeType == SYNCHRONIZED_STATEMENT||
+			   nodeType == THROW_STATEMENT||
+			   nodeType == TRY_STATEMENT||
+			   nodeType == TYPE_DECLARATION_STATEMENT||
+			   nodeType == VARIABLE_DECLARATION_STATEMENT||
+			   nodeType == WHILE_STATEMENT;
+	}
+	
 	
 	private int itemType;
+	
 	
 	public int getType(){
 		return this.itemType;
 	}
 	
+	
 	public abstract List<ElementItem> getSuccessors();
+	
+	
+	private int lineCount;
+	
+	
+	public int getLineCount(){
+		return this.lineCount;
+	}
 }
