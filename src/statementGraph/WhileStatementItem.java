@@ -7,9 +7,9 @@ public class WhileStatementItem extends ElementItem{
 	private WhileStatement astNode; 
 	
 	public WhileStatementItem(WhileStatement astNode){
+		this.astNode = astNode;
 		super.setType(astNode.getNodeType());
 		this.setLineCount(astNode.toString());
-		this.astNode = astNode;
 	}
 	
 	public WhileStatement getASTNode(){
@@ -20,5 +20,10 @@ public class WhileStatementItem extends ElementItem{
 	protected void setLineCount(String code) {
 		//It should be the length excluding the body.
 		super.lineCount = code.split(System.getProperty("line.separator")).length;
+	}
+
+	@Override
+	protected void print() {
+		System.out.print("While Statement: "+astNode.toString());
 	}
 }

@@ -9,9 +9,9 @@ public class ConstructorInvocationStatementItem extends ElementItem{
 	
 	
 	public ConstructorInvocationStatementItem(ConstructorInvocation astNode){
+		this.astNode = astNode;
 		super.setType(astNode.getNodeType());
 		this.setLineCount(astNode.toString());
-		this.astNode = astNode;
 	}
 	
 	public ConstructorInvocation getASTNode(){
@@ -21,6 +21,11 @@ public class ConstructorInvocationStatementItem extends ElementItem{
 	@Override
 	protected void setLineCount(String code) {
 		super.lineCount = code.split(System.getProperty("line.separator")).length;	
+	}
+
+	@Override
+	protected void print() {
+		System.out.print("Constructor Invocation Statement: "+astNode.toString());
 	}
 }
 

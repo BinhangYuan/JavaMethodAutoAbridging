@@ -9,9 +9,9 @@ public class AssertStatementItem extends ElementItem{
 	
 	
 	public AssertStatementItem(AssertStatement astNode){
+		this.astNode = astNode;
 		super.setType(astNode.getNodeType());
 		this.setLineCount(astNode.toString());
-		this.astNode = astNode;
 	}
 	
 	public AssertStatement getASTNode(){
@@ -21,5 +21,10 @@ public class AssertStatementItem extends ElementItem{
 	@Override
 	protected void setLineCount(String code) {
 		super.lineCount = code.split(System.getProperty("line.separator")).length;
+	}
+
+	@Override
+	protected void print() {
+		System.out.print("Assert Statement: "+astNode.toString());
 	}
 }

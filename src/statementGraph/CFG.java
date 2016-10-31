@@ -41,6 +41,7 @@ public class CFG {
 		buildGraphNodes(astNode);
 	}
 	
+	
 	private void buildGraphNodes(ASTNode node){
 		int nodeType = node.getNodeType();
 		if(nodeType == ElementItem.METHOD_DECLARATION){
@@ -220,4 +221,13 @@ public class CFG {
 	}
 	
 	
+	public void printCFG(){
+		System.out.println("Nodes:");
+		for(int i=0 ; i < nodes.size(); i++){
+			ElementItem item = nodes.get(i);
+			System.out.println("Node "+i+": <========");
+			item.print();
+			System.out.println("========>");
+		}
+	}
 }

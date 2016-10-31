@@ -8,9 +8,9 @@ public class SynchronizedStatementItem extends ElementItem{
 	private SynchronizedStatement astNode; 
 	
 	public SynchronizedStatementItem(SynchronizedStatement astNode){
+		this.astNode = astNode;
 		super.setType(astNode.getNodeType());
 		this.setLineCount(astNode.toString());
-		this.astNode = astNode;
 	}
 	
 	public SynchronizedStatement getASTNode(){
@@ -23,4 +23,8 @@ public class SynchronizedStatementItem extends ElementItem{
 		super.lineCount = 1; //This may be problematic.
 	}
 
+	@Override
+	protected void print() {
+		System.out.print("Synchronized Statement: "+astNode.toString());
+	}
 }

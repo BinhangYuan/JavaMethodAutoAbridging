@@ -9,9 +9,9 @@ public class BreakStatementItem extends ElementItem{
 	
 	
 	public BreakStatementItem(BreakStatement astNode){
+		this.astNode = astNode;
 		super.setType(astNode.getNodeType());
 		this.setLineCount(astNode.toString());
-		this.astNode = astNode;
 	}
 	
 	public BreakStatement getASTNode(){
@@ -23,5 +23,9 @@ public class BreakStatementItem extends ElementItem{
 		super.lineCount = code.split(System.getProperty("line.separator")).length;
 	}
 
+	@Override
+	protected void print() {
+		System.out.print("Break Statement: "+astNode.toString());
+	}
 }
 

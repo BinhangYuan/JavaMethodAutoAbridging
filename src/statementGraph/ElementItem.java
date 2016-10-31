@@ -108,4 +108,7 @@ public abstract class ElementItem {
 	public int getLineCount(){
 		return this.lineCount;
 	}
+	
+	
+	protected abstract void print();
 }

@@ -8,9 +8,9 @@ public class EnhancedForStatementItem extends ElementItem{
 	private EnhancedForStatement astNode; 
 	
 	public EnhancedForStatementItem(EnhancedForStatement astNode){
+		this.astNode = astNode;
 		super.setType(astNode.getNodeType());
 		this.setLineCount(astNode.toString());
-		this.astNode = astNode;
 	}
 	
 	public EnhancedForStatement getASTNode(){
@@ -23,6 +23,11 @@ public class EnhancedForStatementItem extends ElementItem{
 		int total = code.split(System.getProperty("line.separator")).length;
 		int body = astNode.getBody().toString().split(System.getProperty("line.separator")).length;
 		super.lineCount = total - body; //Maybe problematic, check again! 
+	}
+
+	@Override
+	protected void print() {
+		System.out.print("Enhanced For Statement: "+astNode.toString());
 	}
 }
 

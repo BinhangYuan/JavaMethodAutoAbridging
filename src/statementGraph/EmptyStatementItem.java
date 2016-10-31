@@ -9,9 +9,9 @@ public class EmptyStatementItem extends ElementItem{
 	
 	
 	public EmptyStatementItem(EmptyStatement astNode){
+		this.astNode = astNode;
 		super.setType(astNode.getNodeType());
 		this.setLineCount(astNode.toString());
-		this.astNode = astNode;
 	}
 	
 	public EmptyStatement getASTNode(){
@@ -24,6 +24,9 @@ public class EmptyStatementItem extends ElementItem{
 		super.lineCount = 0;
 	}
 
-
+	@Override
+	protected void print() {
+		System.out.print("Empty Statement: "+astNode.toString());
+	}
 }
 

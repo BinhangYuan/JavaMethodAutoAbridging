@@ -7,9 +7,9 @@ public class DoStatementItem extends ElementItem{
 	private DoStatement astNode; 
 	
 	public DoStatementItem(DoStatement astNode){
+		this.astNode = astNode;
 		super.setType(astNode.getNodeType());
 		this.setLineCount(astNode.toString());
-		this.astNode = astNode;
 	}
 	
 	public DoStatement getASTNode(){
@@ -22,6 +22,11 @@ public class DoStatementItem extends ElementItem{
 		int total = code.split(System.getProperty("line.separator")).length;
 		int body = astNode.getBody().toString().split(System.getProperty("line.separator")).length;
 		super.lineCount = total - body; //Maybe problematic, check again! 
+	}
+
+	@Override
+	protected void print() {
+		System.out.print("Do Statement: "+astNode.toString());
 	}
 }
 

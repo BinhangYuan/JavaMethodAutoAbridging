@@ -9,9 +9,9 @@ public class ForStatementItem extends ElementItem{
 	private ForStatement astNode; 
 	
 	public ForStatementItem(ForStatement astNode){
+		this.astNode = astNode;
 		super.setType(astNode.getNodeType());
 		this.setLineCount(astNode.toString());
-		this.astNode = astNode;
 	}
 	
 	public ForStatement getASTNode(){
@@ -24,6 +24,11 @@ public class ForStatementItem extends ElementItem{
 		int total = code.split(System.getProperty("line.separator")).length;
 		int body = astNode.getBody().toString().split(System.getProperty("line.separator")).length;
 		super.lineCount = total - body; //Maybe problematic, check again! 
+	}
+
+	@Override
+	protected void print() {
+		System.out.print("For Statement: "+astNode.toString());
 	}
 }
 

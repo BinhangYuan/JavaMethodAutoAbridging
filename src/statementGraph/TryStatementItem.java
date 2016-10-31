@@ -8,9 +8,9 @@ public class TryStatementItem extends ElementItem{
 	private TryStatement astNode; 
 	
 	public TryStatementItem(TryStatement astNode){
+		this.astNode = astNode;
 		super.setType(astNode.getNodeType());
 		this.setLineCount(astNode.toString());
-		this.astNode = astNode;
 	}
 	
 	public TryStatement getASTNode(){
@@ -21,6 +21,11 @@ public class TryStatementItem extends ElementItem{
 	protected void setLineCount(String code) {
 		//It should be the length excluding the body.
 		super.lineCount = code.split(System.getProperty("line.separator")).length;
+	}
+
+	@Override
+	protected void print() {
+		System.out.print("Try Statement: "+astNode.toString());
 	}
 
 }
