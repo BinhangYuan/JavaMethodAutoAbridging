@@ -1,15 +1,25 @@
 package statementGraph;
 
-import java.util.List;
+import org.eclipse.jdt.core.dom.SuperConstructorInvocation;
 
+//[ Expression . ] super( [ Expression { , Expression } ] ) ;
 public class SuperConstructorInvocationStatementItem extends ElementItem{
 
-	private List<ElementItem> successors;
+	private SuperConstructorInvocation astNode; 
+	
+	
+	public SuperConstructorInvocationStatementItem(SuperConstructorInvocation astNode){
+		super.setType(astNode.getNodeType());
+		this.setLineCount(astNode.toString());
+		this.astNode = astNode;
+	}
+	
+	public SuperConstructorInvocation getASTNode(){
+		return this.astNode;
+	}
 	
 	@Override
-	public List<ElementItem> getSuccessors() {
-		// TODO Auto-generated method stub
-		return successors;
+	protected void setLineCount(String code) {
+		super.lineCount = code.split(System.getProperty("line.separator")).length;	
 	}
-
 }

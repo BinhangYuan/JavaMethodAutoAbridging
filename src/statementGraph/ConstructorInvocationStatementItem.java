@@ -1,16 +1,26 @@
 package statementGraph;
 
-import java.util.List;
+import org.eclipse.jdt.core.dom.ConstructorInvocation;
 
+//this ( [ Expression { , Expression } ] ) ;
 public class ConstructorInvocationStatementItem extends ElementItem{
 
-	private List<ElementItem> successors;
+	private ConstructorInvocation astNode; 
+	
+	
+	public ConstructorInvocationStatementItem(ConstructorInvocation astNode){
+		super.setType(astNode.getNodeType());
+		this.setLineCount(astNode.toString());
+		this.astNode = astNode;
+	}
+	
+	public ConstructorInvocation getASTNode(){
+		return this.astNode;
+	}
 	
 	@Override
-	public List<ElementItem> getSuccessors() {
-		// TODO Auto-generated method stub
-		return successors;
+	protected void setLineCount(String code) {
+		super.lineCount = code.split(System.getProperty("line.separator")).length;	
 	}
-
 }
 

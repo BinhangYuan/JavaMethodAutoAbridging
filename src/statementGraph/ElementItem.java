@@ -1,8 +1,8 @@
 package statementGraph;
 
 import java.util.List;
-
 import org.eclipse.jdt.core.dom.ASTNode;
+
 
 public abstract class ElementItem {
 	//Statement:
@@ -28,7 +28,6 @@ public abstract class ElementItem {
 	public static final int TYPE_DECLARATION_STATEMENT = ASTNode.TYPE_DECLARATION_STATEMENT;
 	public static final int VARIABLE_DECLARATION_STATEMENT = ASTNode.VARIABLE_DECLARATION_STATEMENT;
 	public static final int WHILE_STATEMENT = ASTNode.WHILE_STATEMENT;
-	
 	//Declaration:
 	public static final int CATCH_CLAUSE = ASTNode.CATCH_CLAUSE;
 	public static final int COMPILATION_UNIT = ASTNode.COMPILATION_UNIT; //Not inside a method.
@@ -38,14 +37,11 @@ public abstract class ElementItem {
 	public static final int JAVADOC = ASTNode.JAVADOC;
 	public static final int METHOD_DECLARATION = ASTNode.METHOD_DECLARATION;
 	public static final int PACKAGE_DECLARATION = ASTNode.PACKAGE_DECLARATION;
-	
-	
-	
+	//Undecided
 	public static final int LINE_COMMENT = ASTNode.LINE_COMMENT;
 	public static final int BLOCK_COMMENT = ASTNode.BLOCK_COMMENT;
 	public static final int TAG_ELEMENT = ASTNode.TAG_ELEMENT;
 	public static final int TEXT_ELEMENT = ASTNode.TEXT_ELEMENT;
-	
 	public static final int ENUM_DECLARATION = ASTNode.ENUM_DECLARATION;
 	public static final int ENUM_CONSTANT_DECLARATION = ASTNode.ENUM_CONSTANT_DECLARATION;
 	public static final int TYPE_PARAMETER = ASTNode.TYPE_PARAMETER; //Not inside a method.
@@ -82,6 +78,13 @@ public abstract class ElementItem {
 	
 	
 	private int itemType;
+	protected int lineCount;
+	private List<ElementItem> successors;
+	
+	
+	protected void setType(int type){
+		this.itemType = type;
+	}
 	
 	
 	public int getType(){
@@ -89,10 +92,17 @@ public abstract class ElementItem {
 	}
 	
 	
-	public abstract List<ElementItem> getSuccessors();
+	public List<ElementItem> getSuccessors(){
+		return this.successors;
+	}
 	
 	
-	private int lineCount;
+	protected void addSuccessors(ElementItem item){
+		this.successors.add(item);
+	}
+	
+	
+	protected abstract void setLineCount(String code);
 	
 	
 	public int getLineCount(){

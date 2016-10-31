@@ -1,27 +1,26 @@
 package statementGraph;
 
-import org.eclipse.jdt.core.dom.BreakStatement;
+import org.eclipse.jdt.core.dom.TryStatement;
 
 
-public class BreakStatementItem extends ElementItem{
+public class TryStatementItem extends ElementItem{
 
-	private BreakStatement astNode; 
+	private TryStatement astNode; 
 	
-	
-	public BreakStatementItem(BreakStatement astNode){
+	public TryStatementItem(TryStatement astNode){
 		super.setType(astNode.getNodeType());
 		this.setLineCount(astNode.toString());
 		this.astNode = astNode;
 	}
 	
-	public BreakStatement getASTNode(){
+	public TryStatement getASTNode(){
 		return this.astNode;
 	}
 	
 	@Override
 	protected void setLineCount(String code) {
+		//It should be the length excluding the body.
 		super.lineCount = code.split(System.getProperty("line.separator")).length;
 	}
 
 }
-

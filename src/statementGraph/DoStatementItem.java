@@ -1,16 +1,27 @@
 package statementGraph;
 
-import java.util.List;
+import org.eclipse.jdt.core.dom.DoStatement;
 
 public class DoStatementItem extends ElementItem{
-
-	private List<ElementItem> successors;
+	
+	private DoStatement astNode; 
+	
+	public DoStatementItem(DoStatement astNode){
+		super.setType(astNode.getNodeType());
+		this.setLineCount(astNode.toString());
+		this.astNode = astNode;
+	}
+	
+	public DoStatement getASTNode(){
+		return this.astNode;
+	}
 	
 	@Override
-	public List<ElementItem> getSuccessors() {
-		// TODO Auto-generated method stub
-		return successors;
+	protected void setLineCount(String code) {
+		//It should be the length excluding the body.
+		int total = code.split(System.getProperty("line.separator")).length;
+		int body = astNode.getBody().toString().split(System.getProperty("line.separator")).length;
+		super.lineCount = total - body; //Maybe problematic, check again! 
 	}
-
 }
 

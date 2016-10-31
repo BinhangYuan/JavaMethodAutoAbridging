@@ -1,16 +1,29 @@
 package statementGraph;
 
-import java.util.List;
+import org.eclipse.jdt.core.dom.EmptyStatement;
 
+//;
 public class EmptyStatementItem extends ElementItem{
 
-	private List<ElementItem> successors;
+	private EmptyStatement astNode; 
+	
+	
+	public EmptyStatementItem(EmptyStatement astNode){
+		super.setType(astNode.getNodeType());
+		this.setLineCount(astNode.toString());
+		this.astNode = astNode;
+	}
+	
+	public EmptyStatement getASTNode(){
+		return this.astNode;
+	}
 	
 	@Override
-	public List<ElementItem> getSuccessors() {
-		// TODO Auto-generated method stub
-		return successors;
+	protected void setLineCount(String code) {
+		//This may be problematic
+		super.lineCount = 0;
 	}
+
 
 }
 

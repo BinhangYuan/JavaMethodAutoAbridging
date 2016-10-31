@@ -1,19 +1,18 @@
 package statementGraph;
 
-import org.eclipse.jdt.core.dom.SynchronizedStatement;
+import org.eclipse.jdt.core.dom.LabeledStatement;
 
-//synchronized ( Expression ) Block
-public class SynchronizedStatementItem extends ElementItem{
+public class LabeledStatementItem extends ElementItem{
 
-	private SynchronizedStatement astNode; 
+	private LabeledStatement astNode; 
 	
-	public SynchronizedStatementItem(SynchronizedStatement astNode){
+	public LabeledStatementItem(LabeledStatement astNode){
 		super.setType(astNode.getNodeType());
 		this.setLineCount(astNode.toString());
 		this.astNode = astNode;
 	}
 	
-	public SynchronizedStatement getASTNode(){
+	public LabeledStatement getASTNode(){
 		return this.astNode;
 	}
 	
@@ -22,5 +21,5 @@ public class SynchronizedStatementItem extends ElementItem{
 		//It should be the length excluding the body.
 		super.lineCount = 1; //This may be problematic.
 	}
-
 }
+

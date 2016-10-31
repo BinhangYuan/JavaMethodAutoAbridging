@@ -1,16 +1,26 @@
 package statementGraph;
 
-import java.util.List;
+import org.eclipse.jdt.core.dom.ReturnStatement;
+
 
 public class ReturnStatementItem extends ElementItem{
 
-	private List<ElementItem> successors;
+	private ReturnStatement astNode; 
 	
-	@Override
-	public List<ElementItem> getSuccessors() {
-		// TODO Auto-generated method stub
-		return successors;
+	
+	public ReturnStatementItem(ReturnStatement astNode){
+		super.setType(astNode.getNodeType());
+		this.setLineCount(astNode.toString());
+		this.astNode = astNode;
+	}
+	
+	public ReturnStatement getASTNode(){
+		return this.astNode;
 	}
 
+	@Override
+	protected void setLineCount(String code) {
+		super.lineCount = code.split(System.getProperty("line.separator")).length;
+	}
 }
 
