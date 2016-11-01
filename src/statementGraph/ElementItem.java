@@ -76,6 +76,21 @@ public abstract class ElementItem {
 			   nodeType == WHILE_STATEMENT;
 	}
 	
+	public static boolean isSimpleStatement(ASTNode node){
+		int nodeType = node.getNodeType();
+		return nodeType == ElementItem.ASSERT_STATEMENT ||
+			   nodeType == ElementItem.BREAK_STATEMENT ||
+			   nodeType == ElementItem.CONSTRUCTOR_INVOCATION ||
+			   nodeType == ElementItem.EMPTY_STATEMENT ||
+			   nodeType == ElementItem.EXPRESSION_STATEMENT ||
+			   nodeType == ElementItem.RETURN_STATEMENT || 
+			   nodeType == ElementItem.SUPER_CONSTRUCTOR_INVOCATION ||
+			   nodeType == ElementItem.SWITCH_CASE ||
+			   nodeType == ElementItem.THROW_STATEMENT ||
+			   nodeType == ElementItem.TYPE_DECLARATION_STATEMENT ||
+			   nodeType == ElementItem.VARIABLE_DECLARATION_STATEMENT;
+	}
+	
 	
 	private int itemType;
 	protected int lineCount;

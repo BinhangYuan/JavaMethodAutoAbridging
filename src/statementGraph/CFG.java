@@ -26,19 +26,23 @@ import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
 
 public class CFG {
+	private int entryIndex = -1;
+	
 	private ElementItemFactory factory = new ElementItemFactory();
 	
 	private MethodDeclaration methodASTNode;
 	
-	private HashMap<ASTNode,ElementItem> astMap = new HashMap<ASTNode,ElementItem>();
+	private HashMap<ASTNode,Integer> astMap = new HashMap<ASTNode,Integer>();
 	
 	private List<ElementItem> nodes = new ArrayList<ElementItem>();
+	private List<EdgeItem> edges = new ArrayList<EdgeItem>();
 	
 	
 	public CFG(MethodDeclaration astNode){
 		this.astMap.clear();
 		this.methodASTNode = astNode;
 		buildGraphNodes(astNode);
+		buildGraphEdges(astNode);
 	}
 	
 	
@@ -61,22 +65,22 @@ public class CFG {
 		}
 		else if(nodeType == ElementItem.ASSERT_STATEMENT){
 			AssertStatementItem item = (AssertStatementItem) this.factory.createElementItem(node);
-			astMap.put(node, item);
+			astMap.put(node, nodes.size());
 			nodes.add(item);
 		}
 		else if(nodeType == ElementItem.BREAK_STATEMENT){
 			BreakStatementItem item = (BreakStatementItem) this.factory.createElementItem(node);
-			astMap.put(node, item);
+			astMap.put(node, nodes.size());
 			nodes.add(item);
 		}
 		else if(nodeType == ElementItem.CONSTRUCTOR_INVOCATION){
 			ConstructorInvocationStatementItem item = (ConstructorInvocationStatementItem) this.factory.createElementItem(node);
-			astMap.put(node, item);
+			astMap.put(node, nodes.size());
 			nodes.add(item);
 		}
 		else if(nodeType == ElementItem.DO_STATEMENT){
 			DoStatementItem item = (DoStatementItem) this.factory.createElementItem(node);;
-			astMap.put(node, item);
+			astMap.put(node, nodes.size());
 			nodes.add(item);
 			if(((DoStatement)node).getBody().getNodeType() != ElementItem.BLOCK){
 				buildGraphNodes((ASTNode)(((DoStatement)node).getBody()));
@@ -90,12 +94,12 @@ public class CFG {
 		}
 		else if(nodeType == ElementItem.EMPTY_STATEMENT){
 			EmptyStatementItem item = (EmptyStatementItem) this.factory.createElementItem(node);
-			astMap.put(node, item);
+			astMap.put(node, nodes.size());
 			nodes.add(item);
 		}
 		else if(nodeType == ElementItem.ENHANCED_FOR_STATEMENT){
 			EnhancedForStatementItem item = (EnhancedForStatementItem) this.factory.createElementItem(node);;
-			astMap.put(node, item);
+			astMap.put(node, nodes.size());
 			nodes.add(item);
 			if(((EnhancedForStatement)node).getBody().getNodeType() != ElementItem.BLOCK){
 				buildGraphNodes((ASTNode)(((DoStatement)node).getBody()));
@@ -109,12 +113,12 @@ public class CFG {
 		}
 		else if(nodeType == ElementItem.EXPRESSION_STATEMENT){
 			ExpressionStatementItem item = (ExpressionStatementItem) this.factory.createElementItem(node);
-			astMap.put(node, item);
+			astMap.put(node, nodes.size());
 			nodes.add(item);
 		}
 		else if(nodeType == ElementItem.FOR_STATEMENT){
 			ForStatementItem item = (ForStatementItem) this.factory.createElementItem(node);;
-			astMap.put(node, item);
+			astMap.put(node, nodes.size());
 			nodes.add(item);
 			if(((ForStatement)node).getBody().getNodeType() != ElementItem.BLOCK){
 				buildGraphNodes((ASTNode)(((ForStatement)node).getBody()));
@@ -128,7 +132,7 @@ public class CFG {
 		}
 		else if(nodeType == ElementItem.IF_STATEMENT){
 			IfStatementItem item = (IfStatementItem) this.factory.createElementItem(node);
-			astMap.put(node, item);
+			astMap.put(node, nodes.size());
 			nodes.add(item);
 			buildGraphNodes((ASTNode)(((IfStatement)(node)).getThenStatement()));
 			if(((IfStatement)(node)).getElseStatement() != null){
@@ -137,28 +141,28 @@ public class CFG {
 		}
 		else if(nodeType == ElementItem.LABELED_STATEMENT){
 			LabeledStatementItem item = (LabeledStatementItem) this.factory.createElementItem(node);
-			astMap.put(node, item);
+			astMap.put(node, nodes.size());
 			nodes.add(item);
 			buildGraphNodes((ASTNode)(((LabeledStatement)(node)).getBody()));
 		}
 		else if(nodeType == ElementItem.RETURN_STATEMENT){
 			ReturnStatementItem item = (ReturnStatementItem) this.factory.createElementItem(node);
-			astMap.put(node,item);
+			astMap.put(node,nodes.size());
 			nodes.add(item);
 		}
 		else if(nodeType == ElementItem.SUPER_CONSTRUCTOR_INVOCATION){
 			SuperConstructorInvocationStatementItem item = (SuperConstructorInvocationStatementItem) this.factory.createElementItem(node);
-			astMap.put(node, item);
+			astMap.put(node, nodes.size());
 			nodes.add(item);
 		}
 		else if(nodeType == ElementItem.SWITCH_CASE){
 			SwitchCaseStatementItem item = (SwitchCaseStatementItem) this.factory.createElementItem(node);
-			astMap.put(node,item);
+			astMap.put(node,nodes.size());
 			nodes.add(item);
 		}
 		else if(nodeType == ElementItem.SWITCH_STATEMENT){
 			SwitchStatementItem item = (SwitchStatementItem) this.factory.createElementItem(node);
-			astMap.put(node,item);
+			astMap.put(node,nodes.size());
 			nodes.add(item);
 			for(Object statement:((SwitchStatement)node).statements()){
 				buildGraphNodes((ASTNode)statement);
@@ -166,7 +170,7 @@ public class CFG {
 		}
 		else if(nodeType == ElementItem.SYNCHRONIZED_STATEMENT){
 			SynchronizedStatementItem item = (SynchronizedStatementItem) this.factory.createElementItem(node);
-			astMap.put(node, item);
+			astMap.put(node, nodes.size());
 			nodes.add(item);
 			Block body = (Block)((SynchronizedStatement)node).getBody();
 			for(Object statement: body.statements()){
@@ -175,12 +179,12 @@ public class CFG {
 		}
 		else if(nodeType == ElementItem.THROW_STATEMENT){
 			ThrowStatementItem item = (ThrowStatementItem) this.factory.createElementItem(node);
-			astMap.put(node, item);
+			astMap.put(node, nodes.size());
 			nodes.add(item);
 		}
 		else if(nodeType == ElementItem.TRY_STATEMENT){
 			TryStatementItem item = (TryStatementItem) this.factory.createElementItem(node);
-			astMap.put(node, item);
+			astMap.put(node, nodes.size());
 			nodes.add(item);
 			Block body = (Block)((TryStatement)node).getBody();
 			for(Object statement: body.statements()){
@@ -193,17 +197,17 @@ public class CFG {
 		}
 		else if(nodeType == ElementItem.TYPE_DECLARATION_STATEMENT){
 			TypeDeclarationStatementItem item = (TypeDeclarationStatementItem) this.factory.createElementItem(node);
-			astMap.put(node, item);
+			astMap.put(node, nodes.size());
 			nodes.add(item);
 		}
 		else if(nodeType == ElementItem.VARIABLE_DECLARATION_STATEMENT){
 			VariableDeclarationStatementItem item = (VariableDeclarationStatementItem) this.factory.createElementItem(node);
-			astMap.put(node, item);
+			astMap.put(node, nodes.size());
 			nodes.add(item);
 		}
 		else if(nodeType == ElementItem.WHILE_STATEMENT){
 			WhileStatementItem item = (WhileStatementItem) this.factory.createElementItem(node);;
-			astMap.put(node, item);
+			astMap.put(node, nodes.size());
 			nodes.add(item);
 			if(((WhileStatement)node).getBody().getNodeType() != ElementItem.BLOCK){
 				buildGraphNodes((ASTNode)(((WhileStatement)node).getBody()));
@@ -218,6 +222,97 @@ public class CFG {
 		else{
 			System.out.println("Unexpected Type in CFG!");
 		}
+	}
+	
+	
+	private void buildGraphEdges(ASTNode node){
+		int nodeType = node.getNodeType();
+		if(nodeType == ElementItem.METHOD_DECLARATION){
+			if(((MethodDeclaration)node).getBody()==null){
+				return;
+			}
+			else{
+				Block methodBody = ((MethodDeclaration)node).getBody();
+				assert(astMap.get(methodBody.statements().get(0))==0);
+				this.entryIndex = 0;
+				buildGraphEdges((ASTNode)methodBody.statements().get(0));
+				for(int i=1; i< methodBody.statements().size();i++){
+					ElementItem start = nodes.get(astMap.get(methodBody.statements().get(i-1)));
+					ElementItem end = nodes.get(astMap.get(methodBody.statements().get(i)));
+					EdgeItem edge = new EdgeItem(start,end,1);
+					edges.add(edge);
+					start.addSuccessors(end);
+					buildGraphEdges((ASTNode)methodBody.statements().get(i));
+				}
+			}
+		}
+		else if(nodeType == ElementItem.BLOCK){
+			//This is not determined yet! Currently assume it will not occur;
+		}
+		else if(nodeType == ElementItem.ASSERT_STATEMENT){
+			return;
+		}
+		else if(nodeType == ElementItem.BREAK_STATEMENT){
+			
+		}
+		else if(nodeType == ElementItem.CONSTRUCTOR_INVOCATION){
+			
+		}
+		else if(nodeType == ElementItem.DO_STATEMENT){
+			
+		}
+		else if(nodeType == ElementItem.EMPTY_STATEMENT){
+			
+		}
+		else if(nodeType == ElementItem.ENHANCED_FOR_STATEMENT){
+			
+		}
+		else if(nodeType == ElementItem.EXPRESSION_STATEMENT){
+			
+		}
+		else if(nodeType == ElementItem.FOR_STATEMENT){
+			
+		}
+		else if(nodeType == ElementItem.IF_STATEMENT){
+			
+		}
+		else if(nodeType == ElementItem.LABELED_STATEMENT){
+			
+		}
+		else if(nodeType == ElementItem.RETURN_STATEMENT){
+			
+		}
+		else if(nodeType == ElementItem.SUPER_CONSTRUCTOR_INVOCATION){
+			
+		}
+		else if(nodeType == ElementItem.SWITCH_CASE){
+			
+		}
+		else if(nodeType == ElementItem.SWITCH_STATEMENT){
+			
+		}
+		else if(nodeType == ElementItem.SYNCHRONIZED_STATEMENT){
+			
+		}
+		else if(nodeType == ElementItem.THROW_STATEMENT){
+			
+		}
+		else if(nodeType == ElementItem.TRY_STATEMENT){
+			
+		}
+		else if(nodeType == ElementItem.TYPE_DECLARATION_STATEMENT){
+			
+		}
+		else if(nodeType == ElementItem.VARIABLE_DECLARATION_STATEMENT){
+			
+		}
+		else if(nodeType == ElementItem.WHILE_STATEMENT){
+			
+		}
+		else{
+			System.out.println("Unexpected Type in CFG!");
+		}
+		
 	}
 	
 	
