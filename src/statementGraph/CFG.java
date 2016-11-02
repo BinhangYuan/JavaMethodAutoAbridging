@@ -10,6 +10,7 @@ import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.BreakStatement;
 import org.eclipse.jdt.core.dom.ConstructorInvocation;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.DoStatement;
 import org.eclipse.jdt.core.dom.EnhancedForStatement;
 import org.eclipse.jdt.core.dom.ForStatement;
@@ -280,12 +281,9 @@ public class CFG {
 				while(!ElementItem.isLoopStatement(ancestor) && ancestor.getNodeType()!=ElementItem.SWITCH_STATEMENT){
 					ancestor = ancestor.getParent();
 				}
-				if(ElementItem.isLoopStatement(ancestor)){
-					ElementItem start = nodes.get(astMap.get(node));
-					ElementItem end = nodes.get(astMap.get(ancestor)).getSeqSuccessor();
-					start.setSeqSuccessor(end);
-				}
-				//Handle the break inside switch statements inside the branch for switch statements;
+				ElementItem start = nodes.get(astMap.get(node));
+				ElementItem end = nodes.get(astMap.get(ancestor)).getSeqSuccessor();
+				start.setSeqSuccessor(end);
 			}
 		}
 		else if(nodeType == ElementItem.CONSTRUCTOR_INVOCATION){
@@ -386,7 +384,53 @@ public class CFG {
 		}
 		else if(nodeType == ElementItem.IF_STATEMENT){
 			IfStatement ifnode = (IfStatement)node;
-			
+			IfStatementItem ifItem = (IfStatementItem)nodes.get(astMap.get(ifnode));
+			ASTNode thenNode = ifnode.getThenStatement();
+			ASTNode elseNode = ifnode.getThenStatement();
+			if(thenNode.getNodeType() == ElementItem.BLOCK){
+				Block thenBlock = (Block)thenNode;
+				if(thenBlock.statements().size()==0){
+					return;
+				}
+				ASTNode firstStatement = (ASTNode) thenBlock.statements().get(0);
+				ASTNode lastStatement = (ASTNode) thenBlock.statements().get(thenBlock.statements().size()-1);
+				ElementItem firstItem = nodes.get(astMap.get(firstStatement));
+				ElementItem lastItem = nodes.get(astMap.get(lastStatement));
+				lastItem.setSeqSuccessor(ifItem.getSeqSuccessor());
+				ifItem.setThenEntry(firstItem);
+				//Recursive
+				buildGraphEdges(thenBlock);
+			}
+			else{
+				ASTNode bodyStatement = (ASTNode)thenNode;
+				ElementItem bodyItem = nodes.get(astMap.get(bodyStatement));
+				bodyItem.setSeqSuccessor(ifItem.getSeqSuccessor());
+				ifItem.setThenEntry(bodyItem);
+				buildGraphEdges(bodyStatement);
+			}
+			if(elseNode != null){//Only cares then branch
+				if(elseNode.getNodeType() == ElementItem.BLOCK){
+					Block elseBlock = (Block)elseNode;
+					if(elseBlock.statements().size()==0){
+						return;
+					}
+					ASTNode firstStatement = (ASTNode) elseBlock.statements().get(0);
+					ASTNode lastStatement = (ASTNode) elseBlock.statements().get(elseBlock.statements().size()-1);
+					ElementItem firstItem = nodes.get(astMap.get(firstStatement));
+					ElementItem lastItem = nodes.get(astMap.get(lastStatement));
+					lastItem.setSeqSuccessor(ifItem.getSeqSuccessor());
+					ifItem.setElseEntry(firstItem);
+					//Recursive
+					buildGraphEdges(elseBlock);
+				}
+				else{
+					ASTNode bodyStatement = (ASTNode)elseNode;
+					ElementItem bodyItem = nodes.get(astMap.get(bodyStatement));
+					bodyItem.setSeqSuccessor(ifItem.getSeqSuccessor());
+					ifItem.setElseEntry(bodyItem);
+					buildGraphEdges(bodyStatement);
+				}
+			}
 		}
 		else if(nodeType == ElementItem.LABELED_STATEMENT){
 			return;
@@ -401,10 +445,31 @@ public class CFG {
 			return;
 		}
 		else if(nodeType == ElementItem.SWITCH_CASE){
-			
+			return;//This may be problematic;
 		}
 		else if(nodeType == ElementItem.SWITCH_STATEMENT){
-			
+			List<Statement> branchNodes = ((SwitchStatement)node).statements();
+			SwitchStatementItem  switchItem =  (SwitchStatementItem) nodes.get(astMap.get(node));
+			int i = 0;
+			for(; i<branchNodes.size()-1 ;i++){
+				Statement branchNode = branchNodes.get(i);
+				ElementItem branchNodeItem = nodes.get(astMap.get(branchNode));
+				if(branchNode.getNodeType()==ElementItem.SWITCH_CASE){
+					SwitchCaseStatementItem caseItem = (SwitchCaseStatementItem) branchNodeItem;
+					switchItem.addBranchEntries(caseItem);
+				}
+				ElementItem nextBranchNodeItem = nodes.get(astMap.get(branchNodes.get(i+1)));
+				branchNodeItem.setSeqSuccessor(nextBranchNodeItem);
+				buildGraphEdges(branchNode);
+			}
+			Statement lastBranchNode = branchNodes.get(i);
+			ElementItem lastBranchNodeItem = nodes.get(astMap.get(lastBranchNode));
+			if(lastBranchNode.getNodeType()==ElementItem.SWITCH_CASE){
+				SwitchCaseStatementItem caseItem = (SwitchCaseStatementItem) lastBranchNodeItem;
+				switchItem.addBranchEntries(caseItem);
+			}
+			lastBranchNodeItem.setSeqSuccessor(switchItem.getSeqSuccessor());
+			buildGraphEdges(lastBranchNode);
 		}
 		else if(nodeType == ElementItem.SYNCHRONIZED_STATEMENT){
 			//This may not be handled correctly!

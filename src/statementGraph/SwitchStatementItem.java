@@ -1,11 +1,23 @@
 package statementGraph;
 
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.jdt.core.dom.SwitchStatement;
 
 public class SwitchStatementItem extends ElementItem{
 
 	private SwitchStatement astNode; 
+	private List<ElementItem> branchEntries = new LinkedList<ElementItem>();
+	
+	public void addBranchEntries(ElementItem item){
+		this.branchEntries.add(item);
+	}
+	
+	public List<ElementItem> getBranchEntries(){
+		return this.branchEntries;
+	}
 	
 	public SwitchStatementItem(SwitchStatement astNode){
 		this.astNode = astNode;
@@ -28,4 +40,3 @@ public class SwitchStatementItem extends ElementItem{
 		System.out.print("Switch Statement: "+astNode.toString());
 	}
 }
-
