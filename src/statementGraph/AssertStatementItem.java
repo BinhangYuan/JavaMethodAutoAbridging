@@ -7,7 +7,6 @@ public class AssertStatementItem extends ElementItem{
 	
 	private AssertStatement astNode; 
 	
-	
 	public AssertStatementItem(AssertStatement astNode){
 		this.astNode = astNode;
 		super.setType(astNode.getNodeType());

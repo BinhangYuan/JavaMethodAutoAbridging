@@ -6,6 +6,25 @@ public class IfStatementItem extends ElementItem{
 
 	private IfStatement astNode; 
 	
+	private ElementItem thenEntry = null;
+	private ElementItem elseEntry = null;
+	
+	public void setThenEntry(ElementItem item){
+		this.thenEntry = item;
+	}
+	
+	public ElementItem getThenEntry(){
+		return this.thenEntry;
+	}
+	
+	public void setElseEntry(ElementItem item){
+		this.elseEntry = item;
+	}
+	
+	public ElementItem getElseEntry(){
+		return this.elseEntry;
+	}
+	
 	public IfStatementItem(IfStatement astNode){
 		this.astNode = astNode;
 		super.setType(astNode.getNodeType());

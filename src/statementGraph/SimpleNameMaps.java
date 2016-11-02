@@ -11,8 +11,8 @@ import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
 public class SimpleNameMaps {
-	private Map<SimpleName, ASTNode> definition = new HashMap<SimpleName, ASTNode>();
-	private Map<SimpleName, List<ASTNode>> utils = new HashMap<SimpleName, List<ASTNode>>();
+	private Map<String, ASTNode> definition = new HashMap<String, ASTNode>();
+	private Map<String, List<ASTNode>> utils = new HashMap<String, List<ASTNode>>();
 	
 	public SimpleNameMaps(MethodDeclaration methodASTNode){
 		
@@ -23,16 +23,23 @@ public class SimpleNameMaps {
 				System.out.println("Declaration of '"+name + "' at pos " + node.getStartPosition());
 				ASTNode parent = node.getParent();
 				assert(parent.getNodeType() == ElementItem.VARIABLE_DECLARATION_STATEMENT);
-				definition.put(name,parent);
 				return false;
 			}
 			
 			public boolean visit(SimpleName node){
-				if(definition.containsKey(node)){
-					System.out.println("Usage of '" + node + "' at pos " + node.getStartPosition());
+				if(definition.containsKey(node.getIdentifier())){
+					System.out.println("Usage of '" + node.getIdentifier() + "' at pos " + node.getStartPosition());
 				}
 				else{
-					System.out.println("This is not supposed to happen!");
+					System.out.println("Declaration of '"+node.getIdentifier() + "' at pos " + node.getStartPosition());
+					definition.put(node.getIdentifier(), null);
+					if(node.getParent().getNodeType() == ASTNode.METHOD_DECLARATION){
+						System.out.println("In Method Declaration");
+					}
+					else if(node.getParent().getNodeType() == ASTNode.SINGLE_VARIABLE_DECLARATION){
+						System.out.println("In Single Variable Declaration");
+					}
+					System.out.println(node.getParent());
 				}
 				return true;
 			}

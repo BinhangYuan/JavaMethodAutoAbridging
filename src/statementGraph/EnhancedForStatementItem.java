@@ -7,6 +7,16 @@ public class EnhancedForStatementItem extends ElementItem{
 
 	private EnhancedForStatement astNode; 
 	
+	private ElementItem bodyEntry;
+	
+	public void setBodyEntry(ElementItem item){
+		this.bodyEntry = item;
+	}
+	
+	public ElementItem getBodyEntry(){
+		return this.bodyEntry;
+	}
+	
 	public EnhancedForStatementItem(EnhancedForStatement astNode){
 		this.astNode = astNode;
 		super.setType(astNode.getNodeType());

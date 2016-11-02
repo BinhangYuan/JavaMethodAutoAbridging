@@ -6,6 +6,16 @@ public class WhileStatementItem extends ElementItem{
 
 	private WhileStatement astNode; 
 	
+	private ElementItem bodyEntry;
+	
+	public void setBodyEntry(ElementItem item){
+		this.bodyEntry = item;
+	}
+	
+	public ElementItem getBodyEntry(){
+		return this.bodyEntry;
+	}
+	
 	public WhileStatementItem(WhileStatement astNode){
 		this.astNode = astNode;
 		super.setType(astNode.getNodeType());

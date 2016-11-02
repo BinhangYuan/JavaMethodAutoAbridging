@@ -1,5 +1,6 @@
 package statementGraph;
 
+import java.util.LinkedList;
 import java.util.List;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -91,39 +92,60 @@ public abstract class ElementItem {
 			   nodeType == ElementItem.VARIABLE_DECLARATION_STATEMENT;
 	}
 	
+	public static boolean isLoopStatement(ASTNode node){
+		int nodeType = node.getNodeType();
+		return nodeType == ElementItem.DO_STATEMENT ||
+			   nodeType == ElementItem.WHILE_STATEMENT ||
+			   nodeType == ElementItem.FOR_STATEMENT ||
+			   nodeType == ElementItem.ENHANCED_FOR_STATEMENT;
+	}
 	
 	private int itemType;
 	protected int lineCount;
-	private List<ElementItem> successors;
+	
+	private ElementItem seqSuccessor = null;
+	
+	private List<ElementItem> successors = new LinkedList<ElementItem>();
+	private List<ElementItem> predecessor = new LinkedList<ElementItem>();
 	
 	
 	protected void setType(int type){
 		this.itemType = type;
 	}
 	
-	
 	public int getType(){
 		return this.itemType;
 	}
 	
+	public void setSeqSuccessor(ElementItem item){
+		this.seqSuccessor = item;
+	}
+	
+	public ElementItem getSeqSuccessor(){
+		return this.seqSuccessor;
+	}
+	
+	public List<ElementItem> getPredecessor(){
+		return this.predecessor;
+	}
+	
+	protected void addPredecessor(ElementItem item){
+		this.predecessor.add(item);
+	}
 	
 	public List<ElementItem> getSuccessors(){
 		return this.successors;
 	}
 	
-	
 	protected void addSuccessors(ElementItem item){
 		this.successors.add(item);
 	}
 	
-	
 	protected abstract void setLineCount(String code);
-	
 	
 	public int getLineCount(){
 		return this.lineCount;
 	}
-	
 	
 	protected abstract void print();
 }

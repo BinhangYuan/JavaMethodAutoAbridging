@@ -8,6 +8,16 @@ public class ForStatementItem extends ElementItem{
 
 	private ForStatement astNode; 
 	
+	private ElementItem bodyEntry;
+	
+	public void setBodyEntry(ElementItem item){
+		this.bodyEntry = item;
+	}
+	
+	public ElementItem getBodyEntry(){
+		return this.bodyEntry;
+	}
+	
 	public ForStatementItem(ForStatement astNode){
 		this.astNode = astNode;
 		super.setType(astNode.getNodeType());

@@ -5,7 +5,8 @@ public class EdgeItem {
 	public ElementItem end;
 	/*
 	 *	Priority = 1 means sequential order;
-	 *	Priority = 2 means the last statement in a block linked back to the start point;  
+	 *	Priority = 2 means the last statement in a block linked back to the start point;
+	 *	Priority = 3 means the break jump with a labeled statement.   
 	 */
 	int priority;
 	

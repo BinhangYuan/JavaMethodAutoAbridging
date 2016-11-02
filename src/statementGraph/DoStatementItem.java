@@ -6,6 +6,16 @@ public class DoStatementItem extends ElementItem{
 	
 	private DoStatement astNode; 
 	
+	private ElementItem bodyEntry = null;
+	
+	public void setBodyEntry(ElementItem item){
+		this.bodyEntry = item;
+	}
+	
+	public ElementItem getBodyEntry(){
+		return this.bodyEntry;
+	}
+	
 	public DoStatementItem(DoStatement astNode){
 		this.astNode = astNode;
 		super.setType(astNode.getNodeType());

@@ -99,7 +99,7 @@ public class ASTParserUtils {
 	
 	public static void main(String[] args) throws IOException {
 		//ParseFilesInDir();
-		String filePath = "/home/yuan/Desktop/PL research/eclipseWorkSpace/javaSrcCompress/src/testCodes/Solution326.java";
+		String filePath = "/home/yuan/Desktop/PL research/eclipseWorkSpace/javaSrcCompress/src/testCodes/Solution350.java";
 		parse(readFileToString(filePath));
 	}	
 }
