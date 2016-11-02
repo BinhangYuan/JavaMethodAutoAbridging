@@ -23,8 +23,20 @@ public class LabeledStatementItem extends ElementItem{
 	}
 
 	@Override
-	protected void print() {
+	protected void printName() {
 		System.out.print("Labeled Statement: "+astNode.toString());
+	}
+	
+	@Override
+	protected void printDebug() {
+		System.out.print("Labeled Statement: "+astNode.toString());
+		System.out.println("Successor: -->");
+		if(super.getSeqSuccessor() == null){
+			System.out.println("null");
+		}
+		else{
+			super.getSeqSuccessor().printName();
+		}
 	}
 }
 

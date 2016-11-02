@@ -25,8 +25,20 @@ public class EmptyStatementItem extends ElementItem{
 	}
 
 	@Override
-	protected void print() {
+	protected void printName() {
 		System.out.print("Empty Statement: "+astNode.toString());
+	}
+	
+	@Override
+	protected void printDebug() {
+		System.out.print("Empty Statement: "+astNode.toString());
+		System.out.println("Successor: -->");
+		if(super.getSeqSuccessor() == null){
+			System.out.println("null");
+		}
+		else{
+			super.getSeqSuccessor().printName();
+		}
 	}
 }
 

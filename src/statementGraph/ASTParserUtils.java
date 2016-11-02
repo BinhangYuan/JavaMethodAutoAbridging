@@ -53,9 +53,9 @@ public class ASTParserUtils {
 			System.out.println("Method Declaration of: '"+node.getName()+ "' at line" +cu.getLineNumber(node.getStartPosition()));
 			System.out.println(node.toString());
 			System.out.println("Generate CFG:");
-			SimpleNameMaps maps = new SimpleNameMaps(node);
-			//CFG cfg = new CFG(node);
-			//cfg.printCFG();
+			//SimpleNameMaps maps = new SimpleNameMaps(node);
+			CFG cfg = new CFG(node);
+			cfg.printCFG();
 		}
 	}
 	 

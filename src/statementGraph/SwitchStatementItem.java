@@ -34,9 +34,25 @@ public class SwitchStatementItem extends ElementItem{
 		//It should be the length excluding the body.
 		super.lineCount = code.split(System.getProperty("line.separator")).length; 
 	}
+	
+	@Override
+	protected void printName() {
+		System.out.print("Switch Statement: "+astNode.toString());
+	}
 
 	@Override
-	protected void print() {
+	protected void printDebug() {
 		System.out.print("Switch Statement: "+astNode.toString());
+		System.out.println("Successor: -->");
+		if(super.getSeqSuccessor() == null){
+			System.out.println("null");
+		}
+		else{
+			super.getSeqSuccessor().printName();
+		}
+		for(ElementItem e:this.branchEntries){
+			System.out.println("Body entry: ");
+			e.printName();
+		}
 	}
 }

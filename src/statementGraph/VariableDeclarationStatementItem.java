@@ -24,7 +24,19 @@ public class VariableDeclarationStatementItem extends ElementItem{
 	}
 
 	@Override
-	protected void print() {
+	protected void printName() {
 		System.out.print("Variable Declaration Statement: "+astNode.toString());
+	}
+	
+	@Override
+	protected void printDebug() {
+		System.out.print("Variable Declaration Statement: "+astNode.toString());
+		System.out.println("Successor: -->");
+		if(super.getSeqSuccessor() == null){
+			System.out.println("null");
+		}
+		else{
+			super.getSeqSuccessor().printName();
+		}
 	}
 }

@@ -33,7 +33,25 @@ public class WhileStatementItem extends ElementItem{
 	}
 
 	@Override
-	protected void print() {
+	protected void printName() {
 		System.out.print("While Statement: "+astNode.toString());
+	}	
+		
+	@Override
+	protected void printDebug() {
+		System.out.print("While Statement: "+astNode.toString());
+		System.out.println("Successor: -->");
+		if(super.getSeqSuccessor() == null){
+			System.out.println("null");
+		}
+		else{
+			super.getSeqSuccessor().printName();
+		}
+		System.out.println("Body entry: -->");
+		if(bodyEntry == null){
+			System.out.println("null");
+		}else{
+			this.bodyEntry.printName();
+		}
 	}
 }

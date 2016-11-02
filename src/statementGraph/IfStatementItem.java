@@ -43,11 +43,34 @@ public class IfStatementItem extends ElementItem{
 		int elseblock = (astNode.getElseStatement()==null ? 0 : astNode.getElseStatement().toString().split(System.getProperty("line.separator")).length);
 		super.lineCount = total - thenblock - elseblock; //Maybe problematic, check again! 
 	}
-
+	
 	@Override
-	protected void print() {
+	protected void printName() {
 		System.out.print("If Statement: "+astNode.toString());
 	}
 
+	@Override
+	protected void printDebug() {
+		System.out.print("If Statement: "+astNode.toString());
+		System.out.println("Successor: -->");
+		if(super.getSeqSuccessor() == null){
+			System.out.println("null");
+		}
+		else{
+			super.getSeqSuccessor().printName();
+		}
+		System.out.println("Then entry: -->");
+		if(thenEntry == null){
+			System.out.println("null");
+		}else{
+			this.thenEntry.printName();
+		}
+		System.out.println("Else entry: -->");
+		if(elseEntry == null){
+			System.out.println("null");
+		}else{
+			this.elseEntry.printName();
+		}
+	}
 }
 

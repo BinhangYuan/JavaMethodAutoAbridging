@@ -22,10 +22,22 @@ public class ReturnStatementItem extends ElementItem{
 	protected void setLineCount(String code) {
 		super.lineCount = code.split(System.getProperty("line.separator")).length;
 	}
+	
+	@Override
+	protected void printName() {
+		System.out.print("Return Statement: "+astNode.toString());
+	}
 
 	@Override
-	protected void print() {
+	protected void printDebug() {
 		System.out.print("Return Statement: "+astNode.toString());
+		System.out.println("Successor: -->");
+		if(super.getSeqSuccessor() == null){
+			System.out.println("null");
+		}
+		else{
+			super.getSeqSuccessor().printName();
+		}
 	}
 }
 

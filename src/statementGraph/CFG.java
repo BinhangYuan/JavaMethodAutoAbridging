@@ -229,7 +229,7 @@ public class CFG {
 	private void buildGraphEdges(ASTNode node){
 		int nodeType = node.getNodeType();
 		if(nodeType == ElementItem.METHOD_DECLARATION){
-			if(((MethodDeclaration)node).getBody()==null){
+			if(((MethodDeclaration)node).getBody()!=null){
 				Block methodBody = ((MethodDeclaration)node).getBody();
 				assert(astMap.get(methodBody.statements().get(0))==0);
 				this.entryIndex = 0;
@@ -386,7 +386,7 @@ public class CFG {
 			IfStatement ifnode = (IfStatement)node;
 			IfStatementItem ifItem = (IfStatementItem)nodes.get(astMap.get(ifnode));
 			ASTNode thenNode = ifnode.getThenStatement();
-			ASTNode elseNode = ifnode.getThenStatement();
+			ASTNode elseNode = ifnode.getElseStatement();
 			if(thenNode.getNodeType() == ElementItem.BLOCK){
 				Block thenBlock = (Block)thenNode;
 				if(thenBlock.statements().size()==0){
@@ -543,7 +543,7 @@ public class CFG {
 		for(int i=0 ; i < nodes.size(); i++){
 			ElementItem item = nodes.get(i);
 			System.out.println("Node "+i+": <========");
-			item.print();
+			item.printDebug();
 			System.out.println("========>");
 		}
 	}

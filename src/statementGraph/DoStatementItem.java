@@ -33,10 +33,28 @@ public class DoStatementItem extends ElementItem{
 		int body = astNode.getBody().toString().split(System.getProperty("line.separator")).length;
 		super.lineCount = total - body; //Maybe problematic, check again! 
 	}
+	
+	@Override
+	protected void printName() {
+		System.out.print("Do Statement: "+astNode.toString());
+	}
 
 	@Override
-	protected void print() {
+	protected void printDebug() {
 		System.out.print("Do Statement: "+astNode.toString());
+		System.out.println("Successor: -->");
+		if(super.getSeqSuccessor() == null){
+			System.out.println("null");
+		}
+		else{
+			super.getSeqSuccessor().printName();
+		}
+		System.out.println("Body entry: -->");
+		if(bodyEntry == null){
+			System.out.println("null");
+		}else{
+			this.bodyEntry.printName();
+		}
 	}
 }
 

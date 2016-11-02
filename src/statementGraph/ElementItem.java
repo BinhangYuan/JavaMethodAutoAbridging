@@ -147,5 +147,7 @@ public abstract class ElementItem {
 		return this.lineCount;
 	}
 	
-	protected abstract void print();
+	protected abstract void printDebug();
+	
+	protected abstract void printName();
 }

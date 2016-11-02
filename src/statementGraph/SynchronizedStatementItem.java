@@ -24,7 +24,19 @@ public class SynchronizedStatementItem extends ElementItem{
 	}
 
 	@Override
-	protected void print() {
+	protected void printName() {
 		System.out.print("Synchronized Statement: "+astNode.toString());
+	}
+	
+	@Override
+	protected void printDebug() {
+		System.out.print("Synchronized Statement: "+astNode.toString());
+		System.out.println("Successor: -->");
+		if(super.getSeqSuccessor() == null){
+			System.out.println("null");
+		}
+		else{
+			super.getSeqSuccessor().printName();
+		}
 	}
 }
