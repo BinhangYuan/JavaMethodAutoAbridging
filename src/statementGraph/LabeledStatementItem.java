@@ -31,11 +31,11 @@ public class LabeledStatementItem extends ElementItem{
 	protected void printDebug() {
 		System.out.print("Labeled Statement: "+astNode.toString());
 		System.out.println("Successor: -->");
-		if(super.getSeqSuccessor() == null){
+		if(super.getCFGSeqSuccessor() == null){
 			System.out.println("null");
 		}
 		else{
-			super.getSeqSuccessor().printName();
+			super.getCFGSeqSuccessor().printName();
 		}
 	}
 }

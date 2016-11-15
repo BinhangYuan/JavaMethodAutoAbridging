@@ -41,11 +41,11 @@ public class WhileStatementItem extends ElementItem{
 	protected void printDebug() {
 		System.out.print("While Statement: "+astNode.toString());
 		System.out.println("Successor: -->");
-		if(super.getSeqSuccessor() == null){
+		if(super.getCFGSeqSuccessor() == null){
 			System.out.println("null");
 		}
 		else{
-			super.getSeqSuccessor().printName();
+			super.getCFGSeqSuccessor().printName();
 		}
 		System.out.println("Body entry: -->");
 		if(bodyEntry == null){

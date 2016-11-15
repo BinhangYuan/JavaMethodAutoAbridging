@@ -1,7 +1,10 @@
 package statementGraph;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+
 import org.eclipse.jdt.core.dom.ASTNode;
 
 
@@ -103,11 +106,16 @@ public abstract class ElementItem {
 	private int itemType;
 	protected int lineCount;
 	
-	private ElementItem seqSuccessor = null;
+	private ElementItem cfgSeqSuccessor = null;
 	
-	private List<ElementItem> successors = new LinkedList<ElementItem>();
-	private List<ElementItem> predecessor = new LinkedList<ElementItem>();
+	private List<ElementItem> cfgSuccessors = new LinkedList<ElementItem>();
+	private List<ElementItem> cfgPredecessor = new LinkedList<ElementItem>();
 	
+	private List<ElementItem> ddgDefinedPredecessor = new LinkedList<ElementItem>();
+	private List<ElementItem> ddgUsageSuccessor = new LinkedList<ElementItem>();
+	
+	private Set<String> usageVariables = new HashSet<String>();
+	private Set<String> definedVariables = new HashSet<String>();
 	
 	protected void setType(int type){
 		this.itemType = type;
@@ -117,28 +125,60 @@ public abstract class ElementItem {
 		return this.itemType;
 	}
 	
-	public void setSeqSuccessor(ElementItem item){
-		this.seqSuccessor = item;
+	public void setCFGSeqSuccessor(ElementItem item){
+		this.cfgSeqSuccessor = item;
 	}
 	
-	public ElementItem getSeqSuccessor(){
-		return this.seqSuccessor;
+	public ElementItem getCFGSeqSuccessor(){
+		return this.cfgSeqSuccessor;
 	}
 	
-	public List<ElementItem> getPredecessor(){
-		return this.predecessor;
+	public List<ElementItem> getCFGPredecessor(){
+		return this.cfgPredecessor;
 	}
 	
-	protected void addPredecessor(ElementItem item){
-		this.predecessor.add(item);
+	protected void addCFGPredecessor(ElementItem item){
+		this.cfgPredecessor.add(item);
 	}
 	
-	public List<ElementItem> getSuccessors(){
-		return this.successors;
+	public List<ElementItem> getCFGSuccessors(){
+		return this.cfgSuccessors;
 	}
 	
-	protected void addSuccessors(ElementItem item){
-		this.successors.add(item);
+	protected void addCFGSuccessors(ElementItem item){
+		this.cfgSuccessors.add(item);
+	}
+	
+	public List<ElementItem> getDDGDefinedPredecessor(){
+		return this.ddgDefinedPredecessor;
+	}
+	
+	public List<ElementItem> getDDGUsageSuccessor(){
+		return this.ddgUsageSuccessor;
+	}
+	
+	protected void addDDGDefinedPredecessor(ElementItem item){
+		this.ddgDefinedPredecessor.add(item);
+	}
+	
+	protected void addDDGUsageSuccessor(ElementItem item){
+		this.ddgUsageSuccessor.add(item);
+	}
+	
+	protected void addUsageVariables(String identifier){
+		this.usageVariables.add(identifier);
+	}
+	
+	protected Set<String> getUsageVariables(){
+		return this.usageVariables;
+	}
+	
+	protected void addDefinedVariables(String identifier){
+		this.definedVariables.add(identifier);
+	}
+	
+	protected Set<String> getDefinedVariables(){
+		return this.definedVariables;
 	}
 	
 	protected abstract void setLineCount(String code);

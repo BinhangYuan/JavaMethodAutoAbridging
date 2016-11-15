@@ -36,7 +36,7 @@ public class CFG {
 	private HashMap<ASTNode,Integer> astMap = new HashMap<ASTNode,Integer>();
 	
 	private List<ElementItem> nodes = new ArrayList<ElementItem>();
-	private List<EdgeItem> edges = new ArrayList<EdgeItem>();
+	//private List<EdgeItem> edges = new ArrayList<EdgeItem>();
 	
 	
 	public CFG(MethodDeclaration astNode){
@@ -244,7 +244,7 @@ public class CFG {
 				ElementItem start = nodes.get(astMap.get(body.statements().get(i)));
 				ElementItem end = nodes.get(astMap.get(body.statements().get(i+1)));
 				if(start.getType() != ElementItem.RETURN_STATEMENT){
-					start.setSeqSuccessor(end);
+					start.setCFGSeqSuccessor(end);
 				}
 				buildGraphEdges((ASTNode)body.statements().get(i));
 			}
@@ -265,7 +265,7 @@ public class CFG {
 						if(labelItem.getASTNode().getLabel().getIdentifier().equals(breakNode.getLabel().getIdentifier())){
 							flag = true;
 							ElementItem start = nodes.get(astMap.get(node));
-							start.setSeqSuccessor(labelItem);
+							start.setCFGSeqSuccessor(labelItem);
 							break;
 						}
 					}
@@ -282,8 +282,8 @@ public class CFG {
 					ancestor = ancestor.getParent();
 				}
 				ElementItem start = nodes.get(astMap.get(node));
-				ElementItem end = nodes.get(astMap.get(ancestor)).getSeqSuccessor();
-				start.setSeqSuccessor(end);
+				ElementItem end = nodes.get(astMap.get(ancestor)).getCFGSeqSuccessor();
+				start.setCFGSeqSuccessor(end);
 			}
 		}
 		else if(nodeType == ElementItem.CONSTRUCTOR_INVOCATION){
@@ -305,7 +305,7 @@ public class CFG {
 				
 				ASTNode lastStatement = (ASTNode) loopBlock.statements().get(loopBlock.statements().size()-1);
 				ElementItem lastItem = nodes.get(astMap.get(lastStatement));
-				lastItem.setSeqSuccessor(doItem);
+				lastItem.setCFGSeqSuccessor(doItem);
 				//Recursive
 				buildGraphEdges(loopBlock);
 			}
@@ -313,7 +313,7 @@ public class CFG {
 				ASTNode bodyStatement = doNode.getBody();
 				ElementItem bodyItem = nodes.get(astMap.get(bodyStatement));
 				DoStatementItem doItem = (DoStatementItem)nodes.get(astMap.get(node));
-				bodyItem.setSeqSuccessor(doItem);
+				bodyItem.setCFGSeqSuccessor(doItem);
 				doItem.setBodyEntry(bodyItem);
 				buildGraphEdges(bodyStatement);
 			}
@@ -337,7 +337,7 @@ public class CFG {
 				
 				ASTNode lastStatement = (ASTNode) loopBlock.statements().get(loopBlock.statements().size()-1);
 				ElementItem lastItem = nodes.get(astMap.get(lastStatement));
-				lastItem.setSeqSuccessor(enforItem);
+				lastItem.setCFGSeqSuccessor(enforItem);
 				//Recursive
 				buildGraphEdges(loopBlock);
 			}
@@ -345,7 +345,7 @@ public class CFG {
 				ASTNode bodyStatement = enforNode.getBody();
 				ElementItem bodyItem = nodes.get(astMap.get(bodyStatement));
 				EnhancedForStatementItem enforItem = (EnhancedForStatementItem)nodes.get(astMap.get(node));
-				bodyItem.setSeqSuccessor(enforItem);
+				bodyItem.setCFGSeqSuccessor(enforItem);
 				enforItem.setBodyEntry(bodyItem);
 				buildGraphEdges(bodyStatement);
 			}
@@ -369,7 +369,7 @@ public class CFG {
 				
 				ASTNode lastStatement = (ASTNode) loopBlock.statements().get(loopBlock.statements().size()-1);
 				ElementItem lastItem = nodes.get(astMap.get(lastStatement));
-				lastItem.setSeqSuccessor(forItem);
+				lastItem.setCFGSeqSuccessor(forItem);
 				//Recursive
 				buildGraphEdges(loopBlock);
 			}
@@ -377,7 +377,7 @@ public class CFG {
 				ASTNode bodyStatement = forNode.getBody();
 				ElementItem bodyItem = nodes.get(astMap.get(bodyStatement));
 				ForStatementItem forItem = (ForStatementItem)nodes.get(astMap.get(node));
-				bodyItem.setSeqSuccessor(forItem);
+				bodyItem.setCFGSeqSuccessor(forItem);
 				forItem.setBodyEntry(bodyItem);
 				buildGraphEdges(bodyStatement);
 			}
@@ -396,7 +396,7 @@ public class CFG {
 				ASTNode lastStatement = (ASTNode) thenBlock.statements().get(thenBlock.statements().size()-1);
 				ElementItem firstItem = nodes.get(astMap.get(firstStatement));
 				ElementItem lastItem = nodes.get(astMap.get(lastStatement));
-				lastItem.setSeqSuccessor(ifItem.getSeqSuccessor());
+				lastItem.setCFGSeqSuccessor(ifItem.getCFGSeqSuccessor());
 				ifItem.setThenEntry(firstItem);
 				//Recursive
 				buildGraphEdges(thenBlock);
@@ -404,7 +404,7 @@ public class CFG {
 			else{
 				ASTNode bodyStatement = (ASTNode)thenNode;
 				ElementItem bodyItem = nodes.get(astMap.get(bodyStatement));
-				bodyItem.setSeqSuccessor(ifItem.getSeqSuccessor());
+				bodyItem.setCFGSeqSuccessor(ifItem.getCFGSeqSuccessor());
 				ifItem.setThenEntry(bodyItem);
 				buildGraphEdges(bodyStatement);
 			}
@@ -418,7 +418,7 @@ public class CFG {
 					ASTNode lastStatement = (ASTNode) elseBlock.statements().get(elseBlock.statements().size()-1);
 					ElementItem firstItem = nodes.get(astMap.get(firstStatement));
 					ElementItem lastItem = nodes.get(astMap.get(lastStatement));
-					lastItem.setSeqSuccessor(ifItem.getSeqSuccessor());
+					lastItem.setCFGSeqSuccessor(ifItem.getCFGSeqSuccessor());
 					ifItem.setElseEntry(firstItem);
 					//Recursive
 					buildGraphEdges(elseBlock);
@@ -426,7 +426,7 @@ public class CFG {
 				else{
 					ASTNode bodyStatement = (ASTNode)elseNode;
 					ElementItem bodyItem = nodes.get(astMap.get(bodyStatement));
-					bodyItem.setSeqSuccessor(ifItem.getSeqSuccessor());
+					bodyItem.setCFGSeqSuccessor(ifItem.getCFGSeqSuccessor());
 					ifItem.setElseEntry(bodyItem);
 					buildGraphEdges(bodyStatement);
 				}
@@ -437,8 +437,8 @@ public class CFG {
 		}
 		else if(nodeType == ElementItem.RETURN_STATEMENT){
 			ReturnStatementItem returnItem = (ReturnStatementItem) nodes.get(astMap.get(node));
-			if(returnItem.getSeqSuccessor()!=null){
-				returnItem.setSeqSuccessor(null);
+			if(returnItem.getCFGSeqSuccessor()!=null){
+				returnItem.setCFGSeqSuccessor(null);
 			}
 		}
 		else if(nodeType == ElementItem.SUPER_CONSTRUCTOR_INVOCATION){
@@ -459,7 +459,7 @@ public class CFG {
 					switchItem.addBranchEntries(caseItem);
 				}
 				ElementItem nextBranchNodeItem = nodes.get(astMap.get(branchNodes.get(i+1)));
-				branchNodeItem.setSeqSuccessor(nextBranchNodeItem);
+				branchNodeItem.setCFGSeqSuccessor(nextBranchNodeItem);
 				buildGraphEdges(branchNode);
 			}
 			Statement lastBranchNode = branchNodes.get(i);
@@ -468,7 +468,7 @@ public class CFG {
 				SwitchCaseStatementItem caseItem = (SwitchCaseStatementItem) lastBranchNodeItem;
 				switchItem.addBranchEntries(caseItem);
 			}
-			lastBranchNodeItem.setSeqSuccessor(switchItem.getSeqSuccessor());
+			lastBranchNodeItem.setCFGSeqSuccessor(switchItem.getCFGSeqSuccessor());
 			buildGraphEdges(lastBranchNode);
 		}
 		else if(nodeType == ElementItem.SYNCHRONIZED_STATEMENT){
@@ -492,8 +492,8 @@ public class CFG {
 			TryStatementItem tryItem = (TryStatementItem)nodes.get(astMap.get(node));
 			ElementItem firstItem = nodes.get(astMap.get(firstStatement));
 			ElementItem lastItem = nodes.get(astMap.get(lastStatement));
-			lastItem.setSeqSuccessor(tryItem.getSeqSuccessor());
-			tryItem.setSeqSuccessor(firstItem);
+			lastItem.setCFGSeqSuccessor(tryItem.getCFGSeqSuccessor());
+			tryItem.setCFGSeqSuccessor(firstItem);
 			//Recursive
 			buildGraphEdges(tryBlock);
 		}
@@ -519,7 +519,7 @@ public class CFG {
 				
 				ASTNode lastStatement = (ASTNode) loopBlock.statements().get(loopBlock.statements().size()-1);
 				ElementItem lastItem = nodes.get(astMap.get(lastStatement));
-				lastItem.setSeqSuccessor(whileItem);
+				lastItem.setCFGSeqSuccessor(whileItem);
 				//Recursive
 				buildGraphEdges(loopBlock);
 			}
@@ -527,7 +527,7 @@ public class CFG {
 				ASTNode bodyStatement = whileNode.getBody();
 				ElementItem bodyItem = nodes.get(astMap.get(bodyStatement));
 				WhileStatementItem whileItem = (WhileStatementItem)nodes.get(astMap.get(node));
-				bodyItem.setSeqSuccessor(whileItem);
+				bodyItem.setCFGSeqSuccessor(whileItem);
 				whileItem.setBodyEntry(bodyItem);
 				buildGraphEdges(bodyStatement);
 			}
@@ -537,6 +537,13 @@ public class CFG {
 		}
 	}
 	
+	public MethodDeclaration getMethodDeclaration(){
+		return this.methodASTNode;
+	}
+	
+	public List<ElementItem> getNodes(){
+		return this.nodes;
+	}
 	
 	public void printCFG(){
 		System.out.println("Nodes:");

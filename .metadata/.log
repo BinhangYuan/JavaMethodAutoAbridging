@@ -34,3 +34,27 @@ Command-line arguments:  -data /home/yuan/Desktop/PL research/eclipseWorkSpace/j
 !MESSAGE The 'org.eclipse.ui.startup' extension from 'com.drgarbage.bytecodevisualizer.plugin' does not provide a 'class' attribute.
 This usage is deprecated and a 'class' attribute should be provided.
 The release after Mars (4.5) will no longer support the deprecated usage!
+!SESSION 2016-11-13 20:21:48.013 -----------------------------------------------
+eclipse.buildId=4.5.2.M20160212-1500
+java.version=1.8.0_111
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -data /home/yuan/Desktop/PL research/eclipseWorkSpace/javaSrcCompress -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY org.eclipse.ui 2 0 2016-11-13 20:21:54.089
+!MESSAGE The 'org.eclipse.ui.startup' extension from 'com.drgarbage.bytecodevisualizer.plugin' does not provide a 'class' attribute.
+This usage is deprecated and a 'class' attribute should be provided.
+The release after Mars (4.5) will no longer support the deprecated usage!
+!SESSION 2016-11-13 20:22:08.661 -----------------------------------------------
+eclipse.buildId=4.5.2.M20160212-1500
+java.version=1.8.0_111
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -data /home/yuan/Desktop/PL research/eclipseWorkSpace/javaSrcCompress -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY org.eclipse.ui 2 0 2016-11-13 20:22:15.049
+!MESSAGE The 'org.eclipse.ui.startup' extension from 'com.drgarbage.bytecodevisualizer.plugin' does not provide a 'class' attribute.
+This usage is deprecated and a 'class' attribute should be provided.
+The release after Mars (4.5) will no longer support the deprecated usage!
