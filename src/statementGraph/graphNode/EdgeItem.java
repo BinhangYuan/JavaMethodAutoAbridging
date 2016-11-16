@@ -1,4 +1,4 @@
-package statementGraph;
+package statementGraph.graphNode;
 
 public class EdgeItem {
 	public ElementItem start;

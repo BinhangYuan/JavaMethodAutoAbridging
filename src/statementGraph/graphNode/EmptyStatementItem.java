@@ -1,4 +1,4 @@
-package statementGraph;
+package statementGraph.graphNode;
 
 import org.eclipse.jdt.core.dom.EmptyStatement;
 
@@ -25,12 +25,12 @@ public class EmptyStatementItem extends ElementItem{
 	}
 
 	@Override
-	protected void printName() {
+	public void printName() {
 		System.out.print("Empty Statement: "+astNode.toString());
 	}
 	
 	@Override
-	protected void printDebug() {
+	public void printDebug() {
 		System.out.print("Empty Statement: "+astNode.toString());
 		System.out.println("Successor: -->");
 		if(super.getCFGSeqSuccessor() == null){

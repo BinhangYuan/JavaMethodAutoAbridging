@@ -1,4 +1,4 @@
-package statementGraph;
+package statementGraph.graphNode;
 
 
 import org.eclipse.jdt.core.dom.EnhancedForStatement;
@@ -36,12 +36,12 @@ public class EnhancedForStatementItem extends ElementItem{
 	}
 	
 	@Override
-	protected void printName() {
+	public void printName() {
 		System.out.print("Enhanced For Statement: "+astNode.toString());
 	}
 
 	@Override
-	protected void printDebug() {
+	public void printDebug() {
 		System.out.print("Enhanced For Statement: "+astNode.toString());
 		System.out.println("Successor: -->");
 		if(super.getCFGSeqSuccessor() == null){

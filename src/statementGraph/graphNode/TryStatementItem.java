@@ -1,36 +1,36 @@
-package statementGraph;
+package statementGraph.graphNode;
 
-import org.eclipse.jdt.core.dom.ReturnStatement;
+import org.eclipse.jdt.core.dom.TryStatement;
 
 
-public class ReturnStatementItem extends ElementItem{
+public class TryStatementItem extends ElementItem{
 
-	private ReturnStatement astNode; 
+	private TryStatement astNode; 
 	
-	
-	public ReturnStatementItem(ReturnStatement astNode){
+	public TryStatementItem(TryStatement astNode){
 		this.astNode = astNode;
 		super.setType(astNode.getNodeType());
 		this.setLineCount(astNode.toString());
 	}
 	
-	public ReturnStatement getASTNode(){
+	public TryStatement getASTNode(){
 		return this.astNode;
-	}
-
-	@Override
-	protected void setLineCount(String code) {
-		super.lineCount = code.split(System.getProperty("line.separator")).length;
 	}
 	
 	@Override
-	protected void printName() {
-		System.out.print("Return Statement: "+astNode.toString());
+	protected void setLineCount(String code) {
+		//It should be the length excluding the body.
+		super.lineCount = code.split(System.getProperty("line.separator")).length;
 	}
 
 	@Override
-	protected void printDebug() {
-		System.out.print("Return Statement: "+astNode.toString());
+	public void printName() {
+		System.out.print("Try Statement: "+astNode.toString());
+	}
+	
+	@Override
+	public void printDebug() {
+		System.out.print("Try Statement: "+astNode.toString());
 		System.out.println("Successor: -->");
 		if(super.getCFGSeqSuccessor() == null){
 			System.out.println("null");
@@ -39,5 +39,5 @@ public class ReturnStatementItem extends ElementItem{
 			super.getCFGSeqSuccessor().printName();
 		}
 	}
-}
 
+}

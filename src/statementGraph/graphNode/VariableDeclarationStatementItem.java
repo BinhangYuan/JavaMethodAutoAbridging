@@ -1,4 +1,4 @@
-package statementGraph;
+package statementGraph.graphNode;
 
 
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
@@ -24,12 +24,12 @@ public class VariableDeclarationStatementItem extends ElementItem{
 	}
 
 	@Override
-	protected void printName() {
+	public void printName() {
 		System.out.print("Variable Declaration Statement: "+astNode.toString());
 	}
 	
 	@Override
-	protected void printDebug() {
+	public void printDebug() {
 		System.out.print("Variable Declaration Statement: "+astNode.toString());
 		System.out.println("Successor: -->");
 		if(super.getCFGSeqSuccessor() == null){

@@ -1,10 +1,12 @@
-package statementGraph;
+package statementGraph.graphNode;
 
-import org.eclipse.jdt.core.dom.WhileStatement;
 
-public class WhileStatementItem extends ElementItem{
+import org.eclipse.jdt.core.dom.ForStatement;
 
-	private WhileStatement astNode; 
+
+public class ForStatementItem extends ElementItem{
+
+	private ForStatement astNode; 
 	
 	private ElementItem bodyEntry;
 	
@@ -16,30 +18,32 @@ public class WhileStatementItem extends ElementItem{
 		return this.bodyEntry;
 	}
 	
-	public WhileStatementItem(WhileStatement astNode){
+	public ForStatementItem(ForStatement astNode){
 		this.astNode = astNode;
 		super.setType(astNode.getNodeType());
 		this.setLineCount(astNode.toString());
 	}
 	
-	public WhileStatement getASTNode(){
+	public ForStatement getASTNode(){
 		return this.astNode;
 	}
 	
 	@Override
 	protected void setLineCount(String code) {
 		//It should be the length excluding the body.
-		super.lineCount = code.split(System.getProperty("line.separator")).length;
+		int total = code.split(System.getProperty("line.separator")).length;
+		int body = astNode.getBody().toString().split(System.getProperty("line.separator")).length;
+		super.lineCount = total - body; //Maybe problematic, check again! 
+	}
+	
+	@Override
+	public void printName() {
+		System.out.print("For Statement: "+astNode.toString());
 	}
 
 	@Override
-	protected void printName() {
-		System.out.print("While Statement: "+astNode.toString());
-	}	
-		
-	@Override
-	protected void printDebug() {
-		System.out.print("While Statement: "+astNode.toString());
+	public void printDebug() {
+		System.out.print("For Statement: "+astNode.toString());
 		System.out.println("Successor: -->");
 		if(super.getCFGSeqSuccessor() == null){
 			System.out.println("null");
@@ -55,3 +59,4 @@ public class WhileStatementItem extends ElementItem{
 		}
 	}
 }
+

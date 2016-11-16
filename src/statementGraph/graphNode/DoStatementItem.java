@@ -1,14 +1,12 @@
-package statementGraph;
+package statementGraph.graphNode;
 
+import org.eclipse.jdt.core.dom.DoStatement;
 
-import org.eclipse.jdt.core.dom.ForStatement;
-
-
-public class ForStatementItem extends ElementItem{
-
-	private ForStatement astNode; 
+public class DoStatementItem extends ElementItem{
 	
-	private ElementItem bodyEntry;
+	private DoStatement astNode; 
+	
+	private ElementItem bodyEntry = null;
 	
 	public void setBodyEntry(ElementItem item){
 		this.bodyEntry = item;
@@ -18,13 +16,13 @@ public class ForStatementItem extends ElementItem{
 		return this.bodyEntry;
 	}
 	
-	public ForStatementItem(ForStatement astNode){
+	public DoStatementItem(DoStatement astNode){
 		this.astNode = astNode;
 		super.setType(astNode.getNodeType());
 		this.setLineCount(astNode.toString());
 	}
 	
-	public ForStatement getASTNode(){
+	public DoStatement getASTNode(){
 		return this.astNode;
 	}
 	
@@ -37,13 +35,13 @@ public class ForStatementItem extends ElementItem{
 	}
 	
 	@Override
-	protected void printName() {
-		System.out.print("For Statement: "+astNode.toString());
+	public void printName() {
+		System.out.print("Do Statement: "+astNode.toString());
 	}
 
 	@Override
-	protected void printDebug() {
-		System.out.print("For Statement: "+astNode.toString());
+	public void printDebug() {
+		System.out.print("Do Statement: "+astNode.toString());
 		System.out.println("Successor: -->");
 		if(super.getCFGSeqSuccessor() == null){
 			System.out.println("null");

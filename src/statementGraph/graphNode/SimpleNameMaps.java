@@ -1,4 +1,4 @@
-package statementGraph;
+package statementGraph.graphNode;
 
 import java.util.HashMap;
 import java.util.List;

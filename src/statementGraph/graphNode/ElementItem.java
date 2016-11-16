@@ -1,4 +1,4 @@
-package statementGraph;
+package statementGraph.graphNode;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -187,7 +187,7 @@ public abstract class ElementItem {
 		return this.lineCount;
 	}
 	
-	protected abstract void printDebug();
+	public abstract void printDebug();
 	
-	protected abstract void printName();
+	public abstract void printName();
 }

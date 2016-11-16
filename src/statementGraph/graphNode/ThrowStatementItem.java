@@ -1,19 +1,18 @@
-package statementGraph;
+package statementGraph.graphNode;
 
-import org.eclipse.jdt.core.dom.TryStatement;
+import org.eclipse.jdt.core.dom.ThrowStatement;
 
+public class ThrowStatementItem extends ElementItem{
 
-public class TryStatementItem extends ElementItem{
-
-	private TryStatement astNode; 
+	private ThrowStatement astNode; 
 	
-	public TryStatementItem(TryStatement astNode){
+	public ThrowStatementItem(ThrowStatement astNode){
 		this.astNode = astNode;
 		super.setType(astNode.getNodeType());
 		this.setLineCount(astNode.toString());
 	}
 	
-	public TryStatement getASTNode(){
+	public ThrowStatement getASTNode(){
 		return this.astNode;
 	}
 	
@@ -22,15 +21,15 @@ public class TryStatementItem extends ElementItem{
 		//It should be the length excluding the body.
 		super.lineCount = code.split(System.getProperty("line.separator")).length;
 	}
-
-	@Override
-	protected void printName() {
-		System.out.print("Try Statement: "+astNode.toString());
-	}
 	
 	@Override
-	protected void printDebug() {
-		System.out.print("Try Statement: "+astNode.toString());
+	public void printName() {
+		System.out.print("Throw Statement: "+astNode.toString());
+	}
+
+	@Override
+	public void printDebug() {
+		System.out.print("Throw Statement: "+astNode.toString());
 		System.out.println("Successor: -->");
 		if(super.getCFGSeqSuccessor() == null){
 			System.out.println("null");

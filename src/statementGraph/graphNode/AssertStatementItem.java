@@ -1,4 +1,4 @@
-package statementGraph;
+package statementGraph.graphNode;
 
 import org.eclipse.jdt.core.dom.AssertStatement;
 
@@ -23,12 +23,12 @@ public class AssertStatementItem extends ElementItem{
 	}
 	
 	@Override
-	protected void printName() {
+	public void printName() {
 		System.out.print("Assert Statement: "+astNode.toString());
 	}
 
 	@Override
-	protected void printDebug() {
+	public void printDebug() {
 		System.out.print("Assert Statement: "+astNode.toString());
 		System.out.println("Successor: -->");
 		if(super.getCFGSeqSuccessor() == null){

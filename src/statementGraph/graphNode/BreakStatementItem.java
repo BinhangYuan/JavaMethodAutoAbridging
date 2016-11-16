@@ -1,19 +1,20 @@
-package statementGraph;
+package statementGraph.graphNode;
 
-import org.eclipse.jdt.core.dom.ExpressionStatement;
+import org.eclipse.jdt.core.dom.BreakStatement;
 
-public class ExpressionStatementItem extends ElementItem{
 
-	private ExpressionStatement astNode; 
+public class BreakStatementItem extends ElementItem{
+
+	private BreakStatement astNode; 
 	
 	
-	public ExpressionStatementItem(ExpressionStatement astNode){
+	public BreakStatementItem(BreakStatement astNode){
 		this.astNode = astNode;
 		super.setType(astNode.getNodeType());
 		this.setLineCount(astNode.toString());
 	}
 	
-	public ExpressionStatement getASTNode(){
+	public BreakStatement getASTNode(){
 		return this.astNode;
 	}
 	
@@ -23,13 +24,13 @@ public class ExpressionStatementItem extends ElementItem{
 	}
 	
 	@Override
-	protected void printName() {
-		System.out.print("Expression Statement: "+astNode.toString());
+	public void printName() {
+		System.out.print("Break Statement: "+astNode.toString());
 	}
 
 	@Override
-	protected void printDebug() {
-		System.out.print("Expression Statement: "+astNode.toString());	
+	public void printDebug() {
+		System.out.print("Break Statement: "+astNode.toString());
 		System.out.println("Successor: -->");
 		if(super.getCFGSeqSuccessor() == null){
 			System.out.println("null");

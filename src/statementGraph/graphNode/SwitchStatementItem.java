@@ -1,4 +1,4 @@
-package statementGraph;
+package statementGraph.graphNode;
 
 
 import java.util.LinkedList;
@@ -36,12 +36,12 @@ public class SwitchStatementItem extends ElementItem{
 	}
 	
 	@Override
-	protected void printName() {
+	public void printName() {
 		System.out.print("Switch Statement: "+astNode.toString());
 	}
 
 	@Override
-	protected void printDebug() {
+	public void printDebug() {
 		System.out.print("Switch Statement: "+astNode.toString());
 		System.out.println("Successor: -->");
 		if(super.getCFGSeqSuccessor() == null){

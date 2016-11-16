@@ -56,6 +56,8 @@ public class ASTParserUtils {
 			//SimpleNameMaps maps = new SimpleNameMaps(node);
 			CFG cfg = new CFG(node);
 			cfg.printCFG();
+			DDG ddg = new DDG(cfg);
+			ddg.printDDG();
 		}
 	}
 	 

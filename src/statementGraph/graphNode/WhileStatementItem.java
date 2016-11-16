@@ -1,12 +1,12 @@
-package statementGraph;
+package statementGraph.graphNode;
 
-import org.eclipse.jdt.core.dom.DoStatement;
+import org.eclipse.jdt.core.dom.WhileStatement;
 
-public class DoStatementItem extends ElementItem{
+public class WhileStatementItem extends ElementItem{
+
+	private WhileStatement astNode; 
 	
-	private DoStatement astNode; 
-	
-	private ElementItem bodyEntry = null;
+	private ElementItem bodyEntry;
 	
 	public void setBodyEntry(ElementItem item){
 		this.bodyEntry = item;
@@ -16,32 +16,30 @@ public class DoStatementItem extends ElementItem{
 		return this.bodyEntry;
 	}
 	
-	public DoStatementItem(DoStatement astNode){
+	public WhileStatementItem(WhileStatement astNode){
 		this.astNode = astNode;
 		super.setType(astNode.getNodeType());
 		this.setLineCount(astNode.toString());
 	}
 	
-	public DoStatement getASTNode(){
+	public WhileStatement getASTNode(){
 		return this.astNode;
 	}
 	
 	@Override
 	protected void setLineCount(String code) {
 		//It should be the length excluding the body.
-		int total = code.split(System.getProperty("line.separator")).length;
-		int body = astNode.getBody().toString().split(System.getProperty("line.separator")).length;
-		super.lineCount = total - body; //Maybe problematic, check again! 
-	}
-	
-	@Override
-	protected void printName() {
-		System.out.print("Do Statement: "+astNode.toString());
+		super.lineCount = code.split(System.getProperty("line.separator")).length;
 	}
 
 	@Override
-	protected void printDebug() {
-		System.out.print("Do Statement: "+astNode.toString());
+	public void printName() {
+		System.out.print("While Statement: "+astNode.toString());
+	}	
+		
+	@Override
+	public void printDebug() {
+		System.out.print("While Statement: "+astNode.toString());
 		System.out.println("Successor: -->");
 		if(super.getCFGSeqSuccessor() == null){
 			System.out.println("null");
@@ -57,4 +55,3 @@ public class DoStatementItem extends ElementItem{
 		}
 	}
 }
-

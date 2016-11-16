@@ -26,6 +26,29 @@ import org.eclipse.jdt.core.dom.TypeDeclarationStatement;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
 
+import statementGraph.graphNode.AssertStatementItem;
+import statementGraph.graphNode.BreakStatementItem;
+import statementGraph.graphNode.ConstructorInvocationStatementItem;
+import statementGraph.graphNode.DoStatementItem;
+import statementGraph.graphNode.ElementItem;
+import statementGraph.graphNode.ElementItemFactory;
+import statementGraph.graphNode.EmptyStatementItem;
+import statementGraph.graphNode.EnhancedForStatementItem;
+import statementGraph.graphNode.ExpressionStatementItem;
+import statementGraph.graphNode.ForStatementItem;
+import statementGraph.graphNode.IfStatementItem;
+import statementGraph.graphNode.LabeledStatementItem;
+import statementGraph.graphNode.ReturnStatementItem;
+import statementGraph.graphNode.SuperConstructorInvocationStatementItem;
+import statementGraph.graphNode.SwitchCaseStatementItem;
+import statementGraph.graphNode.SwitchStatementItem;
+import statementGraph.graphNode.SynchronizedStatementItem;
+import statementGraph.graphNode.ThrowStatementItem;
+import statementGraph.graphNode.TryStatementItem;
+import statementGraph.graphNode.TypeDeclarationStatementItem;
+import statementGraph.graphNode.VariableDeclarationStatementItem;
+import statementGraph.graphNode.WhileStatementItem;
+
 public class CFG {
 	private int entryIndex = -1;
 	

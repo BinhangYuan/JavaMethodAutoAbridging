@@ -7,10 +7,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+
+import statementGraph.graphNode.ElementItem;
+import statementGraph.graphNode.ExpressionStatementItem;
+import statementGraph.graphNode.VariableDeclarationStatementItem;
+
 
 public class DDG {
 	private CFG cfg;
@@ -46,10 +52,19 @@ public class DDG {
 					this.allVariables.get(vName).add(item);
 				}
 			}
+			else if(item.getType()==ElementItem.EXPRESSION_STATEMENT){
+				Expression exp = ((ExpressionStatementItem)item).getASTNode().getExpression();
+				//if(exp instanceof )
+			}
 		}
 	}
 	
 	public void printDDG(){
-		
+		for(String key: this.allVariables.keySet()){
+			if(this.allVariables.get(key)!=null){
+				System.out.println(key+": <"+this.allVariables.get(key).size()+">");
+				this.allVariables.get(key).forEach((item)->{item.printName();});
+			}
+		}	
 	}
 }
