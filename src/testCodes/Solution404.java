@@ -17,7 +17,7 @@ public class Solution404 {
         if(root==null){
             return 0;
         }
-        int sum = leftLeaveValue(root);
+        int sum = leftLeaveValue(root), foo=0;
         TreeNode current = root.left;
         while(current!=null){
             sum += sumOfLeftLeaves(current.right);

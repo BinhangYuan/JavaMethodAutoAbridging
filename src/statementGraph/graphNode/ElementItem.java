@@ -6,6 +6,11 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.AssertStatement;
+import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.Statement;
+
+import statementGraph.expressionWrapper.ExpressionExtractor;
 
 
 public abstract class ElementItem {
@@ -32,6 +37,37 @@ public abstract class ElementItem {
 	public static final int TYPE_DECLARATION_STATEMENT = ASTNode.TYPE_DECLARATION_STATEMENT;
 	public static final int VARIABLE_DECLARATION_STATEMENT = ASTNode.VARIABLE_DECLARATION_STATEMENT;
 	public static final int WHILE_STATEMENT = ASTNode.WHILE_STATEMENT;
+	//Expression:
+	public static final int MARKER_ANNOTATION = ASTNode.MARKER_ANNOTATION;
+	public static final int NORMAL_ANNOTATION = ASTNode.NORMAL_ANNOTATION;
+	public static final int SINGLE_MEMBER_ANNOTATION = ASTNode.SINGLE_MEMBER_ANNOTATION;
+	public static final int ARRAY_ACCESS = ASTNode.ARRAY_ACCESS;
+	public static final int ARRAY_CREATION = ASTNode.ARRAY_CREATION;
+	public static final int ARRAY_INITIALIZER = ASTNode.ARRAY_INITIALIZER;
+	public static final int ASSIGNMENT = ASTNode.ASSIGNMENT;
+	public static final int BOOLEAN_LITERAL = ASTNode.BOOLEAN_LITERAL;
+	public static final int CAST_EXPRESSION = ASTNode.CAST_EXPRESSION;
+	public static final int CHARACTER_LITERAL = ASTNode.CHARACTER_LITERAL;
+	public static final int CLASS_INSTANCE_CREATION = ASTNode.CLASS_INSTANCE_CREATION;
+	public static final int CONDITIONAL_EXPRESSION = ASTNode.CONDITIONAL_EXPRESSION;
+	public static final int FIELD_ACCESS = ASTNode.FIELD_ACCESS;
+	public static final int INFIX_EXPRESSION = ASTNode.INFIX_EXPRESSION;
+	public static final int INSTANCEOF_EXPRESSION = ASTNode.INSTANCEOF_EXPRESSION;
+	public static final int METHOD_INVOCATION = ASTNode.METHOD_INVOCATION;
+	public static final int QUALIFIED_NAME = ASTNode.QUALIFIED_NAME;
+	public static final int SIMPLE_NAME = ASTNode.SIMPLE_NAME;
+	public static final int NULL_LITERAL = ASTNode.NULL_LITERAL;
+	public static final int NUMBER_LITERAL = ASTNode.NUMBER_LITERAL;
+	public static final int PARENTHESIZED_EXPRESSION = ASTNode.PARENTHESIZED_EXPRESSION;
+	public static final int POSTFIX_EXPRESSION = ASTNode.POSTFIX_EXPRESSION;
+	public static final int PREFIX_EXPRESSION = ASTNode.PREFIX_EXPRESSION;
+	public static final int STRING_LITERAL = ASTNode.STRING_LITERAL;
+	public static final int SUPER_FIELD_ACCESS = ASTNode.SUPER_FIELD_ACCESS;
+	public static final int SUPER_METHOD_INVOCATION = ASTNode.SUPER_METHOD_INVOCATION;
+	public static final int THIS_EXPRESSION = ASTNode.THIS_EXPRESSION;
+	public static final int TYPE_LITERAL = ASTNode.TYPE_LITERAL;
+	public static final int VARIABLE_DECLARATION_EXPRESSION = ASTNode.VARIABLE_DECLARATION_EXPRESSION;
+	
 	//Declaration:
 	public static final int CATCH_CLAUSE = ASTNode.CATCH_CLAUSE;
 	public static final int COMPILATION_UNIT = ASTNode.COMPILATION_UNIT; //Not inside a method.
@@ -103,6 +139,76 @@ public abstract class ElementItem {
 			   nodeType == ElementItem.ENHANCED_FOR_STATEMENT;
 	}
 	
+	
+	public static Statement getASTNodeStatement(ElementItem item){
+		int nodeType = item.getType();
+		Statement statement = null;
+		if(nodeType == ElementItem.ASSERT_STATEMENT){
+			statement = ((AssertStatementItem)item).getASTNode();
+		}
+		else if(nodeType == ElementItem.BREAK_STATEMENT){
+			statement = ((BreakStatementItem)item).getASTNode();
+		}
+		else if(nodeType == ElementItem.CONSTRUCTOR_INVOCATION){
+			statement = ((ConstructorInvocationStatementItem)item).getASTNode();
+		}
+		else if(nodeType == ElementItem.DO_STATEMENT){
+			statement = ((DoStatementItem)item).getASTNode();
+		}
+		else if(nodeType == ElementItem.EMPTY_STATEMENT){
+			statement = ((EmptyStatementItem)item).getASTNode();
+		}
+		else if(nodeType == ElementItem.ENHANCED_FOR_STATEMENT){
+			statement = ((EnhancedForStatementItem)item).getASTNode();
+		}
+		else if(nodeType == ElementItem.EXPRESSION_STATEMENT){
+			statement = ((ExpressionStatementItem)item).getASTNode();	
+		}
+		else if(nodeType == ElementItem.FOR_STATEMENT){
+			statement = ((ForStatementItem)item).getASTNode();
+		}
+		else if(nodeType == ElementItem.IF_STATEMENT){
+			statement = ((IfStatementItem)item).getASTNode();	
+		}
+		else if(nodeType == ElementItem.LABELED_STATEMENT){
+			statement = ((LabeledStatementItem)item).getASTNode();		
+		}
+		else if(nodeType == ElementItem.RETURN_STATEMENT){
+			 statement = ((ReturnStatementItem)item).getASTNode();	
+		}
+		else if(nodeType == ElementItem.SUPER_CONSTRUCTOR_INVOCATION){
+			statement = ((SuperConstructorInvocationStatementItem)item).getASTNode();		
+		}
+		else if(nodeType == ElementItem.SWITCH_CASE){
+			statement = ((SwitchCaseStatementItem)item).getASTNode();
+		}
+		else if(nodeType == ElementItem.SWITCH_STATEMENT){
+			statement = ((SwitchStatementItem)item).getASTNode();
+		}
+		else if(nodeType == ElementItem.SYNCHRONIZED_STATEMENT){
+			statement = ((SynchronizedStatementItem)item).getASTNode();
+		}
+		else if(nodeType == ElementItem.THROW_STATEMENT){
+			statement = ((ThrowStatementItem)item).getASTNode();
+		}
+		else if(nodeType == ElementItem.TRY_STATEMENT){
+			statement = ((TryStatementItem)item).getASTNode();
+		}
+		else if(nodeType == ElementItem.TYPE_DECLARATION_STATEMENT){
+			statement = ((TypeDeclarationStatementItem)item).getASTNode();
+		}
+		else if(nodeType == ElementItem.VARIABLE_DECLARATION_STATEMENT){
+			statement = ((VariableDeclarationStatementItem)item).getASTNode();
+		}
+		else if(nodeType == ElementItem.WHILE_STATEMENT){
+			statement = ((WhileStatementItem)item).getASTNode();
+		}
+		else{
+			System.out.println("Unexpected Type in CFG!");
+		}
+		return statement;
+	}
+	
 	private int itemType;
 	protected int lineCount;
 	
@@ -114,8 +220,8 @@ public abstract class ElementItem {
 	private List<ElementItem> ddgDefinedPredecessor = new LinkedList<ElementItem>();
 	private List<ElementItem> ddgUsageSuccessor = new LinkedList<ElementItem>();
 	
-	private Set<String> usageVariables = new HashSet<String>();
-	private Set<String> definedVariables = new HashSet<String>();
+	private List<SimpleName> usageVariables = new LinkedList<SimpleName>();
+	private List<SimpleName> definedVariables = new LinkedList<SimpleName>();
 	
 	protected void setType(int type){
 		this.itemType = type;
@@ -165,19 +271,28 @@ public abstract class ElementItem {
 		this.ddgUsageSuccessor.add(item);
 	}
 	
-	protected void addUsageVariables(String identifier){
+	public void addUsageVariables(SimpleName identifier){
 		this.usageVariables.add(identifier);
 	}
 	
-	protected Set<String> getUsageVariables(){
+	public void addUsageVariables(List<SimpleName> identifiers){
+		this.usageVariables.addAll(identifiers);
+	}
+	
+	
+	public List<SimpleName> getUsageVariables(){
 		return this.usageVariables;
 	}
 	
-	protected void addDefinedVariables(String identifier){
+	public void addDefinedVariables(SimpleName identifier){
 		this.definedVariables.add(identifier);
 	}
 	
-	protected Set<String> getDefinedVariables(){
+	public void addDefinedVariables(List<SimpleName> identifiers){
+		this.definedVariables.addAll(identifiers);
+	}
+	
+	public List<SimpleName> getDefinedVariables(){
 		return this.definedVariables;
 	}
 	

@@ -3,6 +3,8 @@ package statementGraph.expressionWrapper;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.Assert;
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
 import org.eclipse.jdt.core.dom.ArrayAccess;
 import org.eclipse.jdt.core.dom.ArrayCreation;
@@ -26,6 +28,7 @@ import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.ForStatement;
+import org.eclipse.jdt.core.dom.IBinding;
 import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.InfixExpression;
 import org.eclipse.jdt.core.dom.InstanceofExpression;
@@ -60,6 +63,7 @@ import org.eclipse.jdt.core.dom.WhileStatement;
 
 
 public class ExpressionExtractor {
+	//This is copied from jextract
 	public static List<Expression> getExpressions(Statement statement, ExpressionInstanceChecker instanceChecker) {
 		List<Expression> expressionList = new ArrayList<Expression>();
 		if(statement instanceof Block) {
@@ -167,12 +171,12 @@ public class ExpressionExtractor {
 		}
 		else if(statement instanceof TryStatement) {
 			TryStatement tryStatement = (TryStatement)statement;
-			/*
-			List<VariableDeclarationExpression> resources = tryStatement.resources();
-			for(VariableDeclarationExpression expression : resources) {
-				expressionList.addAll(getExpressions(expression,instanceChecker));
-			}
-			*/
+			
+			//List<VariableDeclarationExpression> resources = tryStatement.resources();
+			//for(VariableDeclarationExpression expression : resources) {
+			//	expressionList.addAll(getExpressions(expression,instanceChecker));
+			//}
+			
 			expressionList.addAll(getExpressions(tryStatement.getBody(),instanceChecker));
 			@SuppressWarnings("unchecked")
 			List<CatchClause> catchClauses = tryStatement.catchClauses();
@@ -200,32 +204,37 @@ public class ExpressionExtractor {
 			ConstructorInvocation constructorInvocation = (ConstructorInvocation)statement;
 			@SuppressWarnings("unchecked")
 			List<Expression> arguments = constructorInvocation.arguments();
-			for(Expression argument : arguments)
+			for(Expression argument : arguments){
 				expressionList.addAll(getExpressions(argument,instanceChecker));
+			}
 		}
 		else if(statement instanceof SuperConstructorInvocation) {
 			SuperConstructorInvocation superConstructorInvocation = (SuperConstructorInvocation)statement;
-			if(superConstructorInvocation.getExpression() != null)
+			if(superConstructorInvocation.getExpression() != null){
 				expressionList.addAll(getExpressions(superConstructorInvocation.getExpression(),instanceChecker));
+			}
 			@SuppressWarnings("unchecked")
 			List<Expression> arguments = superConstructorInvocation.arguments();
-			for(Expression argument : arguments)
+			for(Expression argument : arguments){
 				expressionList.addAll(getExpressions(argument,instanceChecker));
+			}
 		}
 		else if(statement instanceof BreakStatement) {
 			BreakStatement breakStatement = (BreakStatement)statement;
-			if(breakStatement.getLabel() != null)
+			if(breakStatement.getLabel() != null){
 				expressionList.addAll(getExpressions(breakStatement.getLabel(),instanceChecker));
+			}
 		}
 		else if(statement instanceof ContinueStatement) {
 			ContinueStatement continueStatement = (ContinueStatement)statement;
-			if(continueStatement.getLabel() != null)
+			if(continueStatement.getLabel() != null){
 				expressionList.addAll(getExpressions(continueStatement.getLabel(),instanceChecker));
+			}
 		}
-		
 		return expressionList;
 	}
 	
+	//This is copied from jextract
 	public static List<Expression> getExpressions(Expression expression, ExpressionInstanceChecker instanceChecker) {
 		List<Expression> expressionList = new ArrayList<Expression>();
 		if(expression instanceof MethodInvocation) {
@@ -280,15 +289,17 @@ public class ExpressionExtractor {
 			expressionList.addAll(getExpressions(conditionalExpression.getExpression(),instanceChecker));
 			expressionList.addAll(getExpressions(conditionalExpression.getThenExpression(),instanceChecker));
 			expressionList.addAll(getExpressions(conditionalExpression.getElseExpression(),instanceChecker));
-			if(instanceChecker.instanceOf(conditionalExpression))
+			if(instanceChecker.instanceOf(conditionalExpression)){
 				expressionList.add(conditionalExpression);
+			}
 		}
 		else if(expression instanceof FieldAccess) {
 			FieldAccess fieldAccess = (FieldAccess)expression;
 			expressionList.addAll(getExpressions(fieldAccess.getExpression(),instanceChecker));
 			expressionList.addAll(getExpressions(fieldAccess.getName(),instanceChecker));
-			if(instanceChecker.instanceOf(fieldAccess))
+			if(instanceChecker.instanceOf(fieldAccess)){
 				expressionList.add(fieldAccess);
+			}
 		}
 		else if(expression instanceof InfixExpression) {
 			InfixExpression infixExpression = (InfixExpression)expression;
@@ -296,43 +307,51 @@ public class ExpressionExtractor {
 			expressionList.addAll(getExpressions(infixExpression.getRightOperand(),instanceChecker));
 			@SuppressWarnings("unchecked")
 			List<Expression> extendedOperands = infixExpression.extendedOperands();
-			for(Expression operand : extendedOperands)
+			for(Expression operand : extendedOperands){
 				expressionList.addAll(getExpressions(operand,instanceChecker));
-			if(instanceChecker.instanceOf(infixExpression))
+			}
+			if(instanceChecker.instanceOf(infixExpression)){
 				expressionList.add(infixExpression);
+			}
 		}
 		else if(expression instanceof InstanceofExpression) {
 			InstanceofExpression instanceofExpression = (InstanceofExpression)expression;
 			expressionList.addAll(getExpressions(instanceofExpression.getLeftOperand(),instanceChecker));
-			if(instanceChecker.instanceOf(instanceofExpression))
+			if(instanceChecker.instanceOf(instanceofExpression)){
 				expressionList.add(instanceofExpression);
+			}
 		}
 		else if(expression instanceof ParenthesizedExpression) {
 			ParenthesizedExpression parenthesizedExpression = (ParenthesizedExpression)expression;
 			expressionList.addAll(getExpressions(parenthesizedExpression.getExpression(),instanceChecker));
-			if(instanceChecker.instanceOf(parenthesizedExpression))
+			if(instanceChecker.instanceOf(parenthesizedExpression)){
 				expressionList.add(parenthesizedExpression);
+			}
 		}
 		else if(expression instanceof PostfixExpression) {
 			PostfixExpression postfixExpression = (PostfixExpression)expression;
 			expressionList.addAll(getExpressions(postfixExpression.getOperand(),instanceChecker));
-			if(instanceChecker.instanceOf(postfixExpression))
+			if(instanceChecker.instanceOf(postfixExpression)){
 				expressionList.add(postfixExpression);
+			}
 		}
 		else if(expression instanceof PrefixExpression) {
 			PrefixExpression prefixExpression = (PrefixExpression)expression;
 			expressionList.addAll(getExpressions(prefixExpression.getOperand(),instanceChecker));
-			if(instanceChecker.instanceOf(prefixExpression))
+			if(instanceChecker.instanceOf(prefixExpression)){
 				expressionList.add(prefixExpression);
+			}
 		}
 		else if(expression instanceof SuperMethodInvocation) {
 			SuperMethodInvocation superMethodInvocation = (SuperMethodInvocation)expression;
 			@SuppressWarnings("unchecked")
 			List<Expression> arguments = superMethodInvocation.arguments();
-			for(Expression argument : arguments)
+			for(Expression argument : arguments){
 				expressionList.addAll(getExpressions(argument,instanceChecker));
-			if(instanceChecker.instanceOf(superMethodInvocation))
+			}
+			if(instanceChecker.instanceOf(superMethodInvocation)){
 				expressionList.add(superMethodInvocation);
+			}
 		}
 		else if(expression instanceof VariableDeclarationExpression) {
 			VariableDeclarationExpression variableDeclarationExpression = (VariableDeclarationExpression)expression;
@@ -344,93 +363,111 @@ public class ExpressionExtractor {
 				Expression initializerExpression = fragment.getInitializer();
 				expressionList.addAll(getExpressions(initializerExpression,instanceChecker));
 			}
-			if(instanceChecker.instanceOf(variableDeclarationExpression))
+			if(instanceChecker.instanceOf(variableDeclarationExpression)){
 				expressionList.add(variableDeclarationExpression);
+			}
 		}
 		else if(expression instanceof ArrayAccess) {
 			ArrayAccess arrayAccess = (ArrayAccess)expression;
 			expressionList.addAll(getExpressions(arrayAccess.getArray(),instanceChecker));
 			expressionList.addAll(getExpressions(arrayAccess.getIndex(),instanceChecker));
-			if(instanceChecker.instanceOf(arrayAccess))
+			if(instanceChecker.instanceOf(arrayAccess)){
 				expressionList.add(arrayAccess);
+			}
 		}
 		else if(expression instanceof ArrayCreation) {
 			ArrayCreation arrayCreation = (ArrayCreation)expression;
 			@SuppressWarnings("unchecked")
 			List<Expression> dimensions = arrayCreation.dimensions();
-			for(Expression dimension : dimensions)
+			for(Expression dimension : dimensions){
 				expressionList.addAll(getExpressions(dimension,instanceChecker));
+			}
 			expressionList.addAll(getExpressions(arrayCreation.getInitializer(),instanceChecker));
-			if(instanceChecker.instanceOf(arrayCreation))
+			if(instanceChecker.instanceOf(arrayCreation)){
 				expressionList.add(arrayCreation);
+			}
 		}
 		else if(expression instanceof ArrayInitializer) {
 			ArrayInitializer arrayInitializer = (ArrayInitializer)expression;
 			@SuppressWarnings("unchecked")
 			List<Expression> expressions = arrayInitializer.expressions();
-			for(Expression arrayInitializerExpression : expressions)
+			for(Expression arrayInitializerExpression : expressions){
 				expressionList.addAll(getExpressions(arrayInitializerExpression,instanceChecker));
-			if(instanceChecker.instanceOf(arrayInitializer))
+			}
+			if(instanceChecker.instanceOf(arrayInitializer)){
 				expressionList.add(arrayInitializer);
+			}
 		}
 		else if(expression instanceof SimpleName) {
 			SimpleName simpleName = (SimpleName)expression;
-			if(instanceChecker.instanceOf(simpleName))
+			if(instanceChecker.instanceOf(simpleName)){
 				expressionList.add(simpleName);
+			}
 		}
 		else if(expression instanceof QualifiedName) {
 			QualifiedName qualifiedName = (QualifiedName)expression;
 			expressionList.addAll(getExpressions(qualifiedName.getQualifier(),instanceChecker));
 			expressionList.addAll(getExpressions(qualifiedName.getName(),instanceChecker));
-			if(instanceChecker.instanceOf(qualifiedName))
+			if(instanceChecker.instanceOf(qualifiedName)){
 				expressionList.add(qualifiedName);
+			}
 		}
 		else if(expression instanceof SuperFieldAccess) {
 			SuperFieldAccess superFieldAccess = (SuperFieldAccess)expression;
 			expressionList.addAll(getExpressions(superFieldAccess.getName(),instanceChecker));
-			if(instanceChecker.instanceOf(superFieldAccess))
+			if(instanceChecker.instanceOf(superFieldAccess)){
 				expressionList.add(superFieldAccess);
+			}
 		}
 		else if(expression instanceof ThisExpression) {
 			ThisExpression thisExpression = (ThisExpression)expression;
-			if(thisExpression.getQualifier() != null)
+			if(thisExpression.getQualifier() != null){
 				expressionList.addAll(getExpressions(thisExpression.getQualifier(),instanceChecker));
-			if(instanceChecker.instanceOf(thisExpression))
+			}
+			if(instanceChecker.instanceOf(thisExpression)){
 				expressionList.add(thisExpression);
+			}
 		}
 		else if(expression instanceof TypeLiteral) {
 			TypeLiteral typeLiteral = (TypeLiteral)expression;
-			if(instanceChecker.instanceOf(typeLiteral))
+			if(instanceChecker.instanceOf(typeLiteral)){
 				expressionList.add(typeLiteral);
+			}
 		}
 		else if(expression instanceof StringLiteral) {
 			StringLiteral stringLiteral = (StringLiteral)expression;
-			if(instanceChecker.instanceOf(stringLiteral))
+			if(instanceChecker.instanceOf(stringLiteral)){
 				expressionList.add(stringLiteral);
+			}
 		}
 		else if(expression instanceof NullLiteral) {
 			NullLiteral nullLiteral = (NullLiteral)expression;
-			if(instanceChecker.instanceOf(nullLiteral))
+			if(instanceChecker.instanceOf(nullLiteral)){
 				expressionList.add(nullLiteral);
+			}
 		}
 		else if(expression instanceof NumberLiteral) {
 			NumberLiteral numberLiteral = (NumberLiteral)expression;
-			if(instanceChecker.instanceOf(numberLiteral))
+			if(instanceChecker.instanceOf(numberLiteral)){
 				expressionList.add(numberLiteral);
+			}
 		}
 		else if(expression instanceof BooleanLiteral) {
 			BooleanLiteral booleanLiteral = (BooleanLiteral)expression;
-			if(instanceChecker.instanceOf(booleanLiteral))
+			if(instanceChecker.instanceOf(booleanLiteral)){
 				expressionList.add(booleanLiteral);
+			}
 		}
 		else if(expression instanceof CharacterLiteral) {
 			CharacterLiteral characterLiteral = (CharacterLiteral)expression;
-			if(instanceChecker.instanceOf(characterLiteral))
+			if(instanceChecker.instanceOf(characterLiteral)){
 				expressionList.add(characterLiteral);
+			}
 		}
 		return expressionList;
 	}
 	
+	//This is copied from jextract
 	public static List<Expression> getExpressions(AnonymousClassDeclaration anonymousClassDeclaration, ExpressionInstanceChecker instanceChecker) {
 		List<Expression> expressionList = new ArrayList<Expression>();
 		@SuppressWarnings("unchecked")
@@ -450,7 +487,8 @@ public class ExpressionExtractor {
 		}
 		return expressionList;
 	}
-	
+		
+	//This is copied from jextract
 	public static SimpleName getRightMostSimpleName(Expression expression) {
 		SimpleName simpleName = null;
 		if(expression instanceof SimpleName) {
@@ -480,5 +518,323 @@ public class ExpressionExtractor {
 			}
 		}
 		return simpleName;
+	}
+
+	//Modified by myself
+	public static List<SimpleName> getVariableSimpleNames(Expression expression, boolean isDeclaration) {
+		List<SimpleName> variableList = new ArrayList<SimpleName>();
+		if(expression instanceof MethodInvocation) {
+			MethodInvocation methodInvocation = (MethodInvocation)expression;
+			if(methodInvocation.getExpression() != null){
+				variableList.addAll(getVariableSimpleNames(methodInvocation.getExpression(),isDeclaration));
+			}
+			@SuppressWarnings("unchecked")
+			List<Expression> arguments = methodInvocation.arguments();
+			for(Expression argument : arguments){
+				variableList.addAll(getVariableSimpleNames(argument,isDeclaration));
+			}
+		}
+		else if(expression instanceof Assignment) {
+			Assignment assignment = (Assignment)expression;
+			variableList.addAll(getVariableSimpleNames(assignment.getLeftHandSide(),isDeclaration));
+			variableList.addAll(getVariableSimpleNames(assignment.getRightHandSide(),isDeclaration));
+		}
+		else if(expression instanceof CastExpression) {
+			CastExpression castExpression = (CastExpression)expression;
+			variableList.addAll(getVariableSimpleNames(castExpression.getExpression(),isDeclaration));
+		}
+		else if(expression instanceof ClassInstanceCreation) {
+			ClassInstanceCreation classInstanceCreation = (ClassInstanceCreation)expression;
+			if(classInstanceCreation.getExpression() != null){
+				variableList.addAll(getVariableSimpleNames(classInstanceCreation.getExpression(),isDeclaration));
+			}
+			@SuppressWarnings("unchecked")
+			List<Expression> arguments = classInstanceCreation.arguments();
+			for(Expression argument : arguments){
+				variableList.addAll(getVariableSimpleNames(argument,isDeclaration));
+			}
+			/*
+			//We ignore this for now!
+			AnonymousClassDeclaration anonymousClassDeclaration = classInstanceCreation.getAnonymousClassDeclaration();
+			if(anonymousClassDeclaration != null) {
+				variableList.addAll(getVariableSimpleNames(anonymousClassDeclaration,isDeclaration));
+			}
+			*/
+		}
+		else if(expression instanceof ConditionalExpression) {
+			ConditionalExpression conditionalExpression = (ConditionalExpression)expression;
+			variableList.addAll(getVariableSimpleNames(conditionalExpression.getExpression(),isDeclaration));
+			variableList.addAll(getVariableSimpleNames(conditionalExpression.getThenExpression(),isDeclaration));
+			variableList.addAll(getVariableSimpleNames(conditionalExpression.getElseExpression(),isDeclaration));
+		}
+		else if(expression instanceof FieldAccess) {
+			FieldAccess fieldAccess = (FieldAccess)expression;
+			variableList.addAll(getVariableSimpleNames(fieldAccess.getExpression(),isDeclaration));
+			variableList.addAll(getVariableSimpleNames(fieldAccess.getName(),isDeclaration));
+		}
+		else if(expression instanceof InfixExpression) {
+			InfixExpression infixExpression = (InfixExpression)expression;
+			variableList.addAll(getVariableSimpleNames(infixExpression.getLeftOperand(),isDeclaration));
+			variableList.addAll(getVariableSimpleNames(infixExpression.getRightOperand(),isDeclaration));
+			@SuppressWarnings("unchecked")
+			List<Expression> extendedOperands = infixExpression.extendedOperands();
+			for(Expression operand : extendedOperands){
+				variableList.addAll(getVariableSimpleNames(operand,isDeclaration));
+			}
+		}
+		else if(expression instanceof InstanceofExpression) {
+			InstanceofExpression instanceofExpression = (InstanceofExpression)expression;
+			variableList.addAll(getVariableSimpleNames(instanceofExpression.getLeftOperand(),isDeclaration));
+		}
+		else if(expression instanceof ParenthesizedExpression) {
+			ParenthesizedExpression parenthesizedExpression = (ParenthesizedExpression)expression;
+			variableList.addAll(getVariableSimpleNames(parenthesizedExpression.getExpression(),isDeclaration));
+		}
+		else if(expression instanceof PostfixExpression) {
+			PostfixExpression postfixExpression = (PostfixExpression)expression;
+			variableList.addAll(getVariableSimpleNames(postfixExpression.getOperand(),isDeclaration));
+		}
+		else if(expression instanceof PrefixExpression) {
+			PrefixExpression prefixExpression = (PrefixExpression)expression;
+			variableList.addAll(getVariableSimpleNames(prefixExpression.getOperand(),isDeclaration));
+		}
+		else if(expression instanceof SuperMethodInvocation) {
+			SuperMethodInvocation superMethodInvocation = (SuperMethodInvocation)expression;
+			@SuppressWarnings("unchecked")
+			List<Expression> arguments = superMethodInvocation.arguments();
+			for(Expression argument : arguments){
+				variableList.addAll(getVariableSimpleNames(argument,isDeclaration));
+			}
+		}
+		else if(expression instanceof VariableDeclarationExpression) {
+			VariableDeclarationExpression variableDeclarationExpression = (VariableDeclarationExpression)expression;
+			@SuppressWarnings("unchecked")
+			List<VariableDeclarationFragment> fragments = variableDeclarationExpression.fragments();
+			for(VariableDeclarationFragment fragment : fragments) {
+				Expression nameExpression = fragment.getName();
+				variableList.addAll(getVariableSimpleNames(nameExpression,isDeclaration));
+				Expression initializerExpression = fragment.getInitializer();
+				variableList.addAll(getVariableSimpleNames(initializerExpression,isDeclaration));
+			}
+		}
+		else if(expression instanceof ArrayAccess) {
+			ArrayAccess arrayAccess = (ArrayAccess)expression;
+			variableList.addAll(getVariableSimpleNames(arrayAccess.getArray(),isDeclaration));
+			variableList.addAll(getVariableSimpleNames(arrayAccess.getIndex(),isDeclaration));
+		}
+		else if(expression instanceof ArrayCreation) {
+			ArrayCreation arrayCreation = (ArrayCreation)expression;
+			@SuppressWarnings("unchecked")
+			List<Expression> dimensions = arrayCreation.dimensions();
+			for(Expression dimension : dimensions){
+				variableList.addAll(getVariableSimpleNames(dimension,isDeclaration));
+			}
+			variableList.addAll(getVariableSimpleNames(arrayCreation.getInitializer(),isDeclaration));
+		}
+		else if(expression instanceof ArrayInitializer) {
+			ArrayInitializer arrayInitializer = (ArrayInitializer)expression;
+			@SuppressWarnings("unchecked")
+			List<Expression> expressions = arrayInitializer.expressions();
+			for(Expression arrayInitializerExpression : expressions){
+				variableList.addAll(getVariableSimpleNames(arrayInitializerExpression,isDeclaration));
+			}
+		}
+		else if(expression instanceof QualifiedName) {
+			QualifiedName qualifiedName = (QualifiedName)expression;
+			variableList.addAll(getVariableSimpleNames(qualifiedName.getQualifier(),isDeclaration));
+			variableList.addAll(getVariableSimpleNames(qualifiedName.getName(),isDeclaration));
+		}
+		else if(expression instanceof SuperFieldAccess) {
+			SuperFieldAccess superFieldAccess = (SuperFieldAccess)expression;
+			variableList.addAll(getVariableSimpleNames(superFieldAccess.getName(),isDeclaration));
+		}
+		else if(expression instanceof ThisExpression) {
+			ThisExpression thisExpression = (ThisExpression)expression;
+			if(thisExpression.getQualifier() != null){
+				variableList.addAll(getVariableSimpleNames(thisExpression.getQualifier(),isDeclaration));
+			}
+		}
+		else if(expression instanceof SimpleName) {
+			SimpleName simpleName = (SimpleName)expression;
+			Assert.isNotNull(simpleName.resolveBinding());
+			if(simpleName.resolveBinding().getKind()==IBinding.VARIABLE && simpleName.isDeclaration()==isDeclaration){
+				variableList.add(simpleName);
+			}
+		}
+		return variableList;
+	}
+
+	//Modified by myself
+	public static List<SimpleName> getVariableSimpleNames(Statement statement, boolean isDeclaration) {
+		List<SimpleName> variableList = new ArrayList<SimpleName>();
+		if(statement instanceof IfStatement) {
+			IfStatement ifStatement = (IfStatement)statement;
+			Expression expression = ifStatement.getExpression();
+			variableList.addAll(getVariableSimpleNames(expression,isDeclaration));
+			variableList.addAll(getVariableSimpleNames(ifStatement.getThenStatement(),isDeclaration));
+			if(ifStatement.getElseStatement() != null) {
+				variableList.addAll(getVariableSimpleNames(ifStatement.getElseStatement(),isDeclaration));
+			}
+		}
+		else if(statement instanceof ForStatement) {
+			ForStatement forStatement = (ForStatement)statement;
+			@SuppressWarnings("unchecked")
+			List<Expression> initializers = forStatement.initializers();
+			for(Expression initializer : initializers){
+				variableList.addAll(getVariableSimpleNames(initializer,isDeclaration));
+			}
+			Expression expression = forStatement.getExpression();
+			if(expression != null){
+				variableList.addAll(getVariableSimpleNames(expression,isDeclaration));
+			}
+			@SuppressWarnings("unchecked")
+			List<Expression> updaters = forStatement.updaters();
+			for(Expression updater : updaters){
+				variableList.addAll(getVariableSimpleNames(updater,isDeclaration));
+			}
+			//In my implementation, body will be taken care of in other place.
+		}
+		else if(statement instanceof EnhancedForStatement) {
+			EnhancedForStatement enhancedForStatement = (EnhancedForStatement)statement;
+			Expression expression = enhancedForStatement.getExpression();
+			SingleVariableDeclaration variableDeclaration = enhancedForStatement.getParameter();
+			variableList.addAll(getVariableSimpleNames(variableDeclaration.getName(),isDeclaration));
+			if(variableDeclaration.getInitializer() != null){
+				variableList.addAll(getVariableSimpleNames(variableDeclaration.getInitializer(),isDeclaration));
+			}
+			variableList.addAll(getVariableSimpleNames(expression,isDeclaration));
+			//In my implementation, body will be taken care of in other place.
+		}
+		else if(statement instanceof WhileStatement) {
+			WhileStatement whileStatement = (WhileStatement)statement;
+			Expression expression = whileStatement.getExpression();
+			variableList.addAll(getVariableSimpleNames(expression,isDeclaration));
+			//In my implementation, body will be taken care of in other place.
+		}
+		else if(statement instanceof DoStatement) {
+			DoStatement doStatement = (DoStatement)statement;
+			Expression expression = doStatement.getExpression();
+			variableList.addAll(getVariableSimpleNames(expression,isDeclaration));
+			//In my implementation, body will be taken care of in other place.
+		}
+		else if(statement instanceof ExpressionStatement) {
+			ExpressionStatement expressionStatement = (ExpressionStatement)statement;
+			Expression expression = expressionStatement.getExpression();
+			variableList.addAll(getVariableSimpleNames(expression,isDeclaration));
+		}
+		else if(statement instanceof SwitchStatement) {
+			SwitchStatement switchStatement = (SwitchStatement)statement;
+			Expression expression = switchStatement.getExpression();
+			variableList.addAll(getVariableSimpleNames(expression,isDeclaration));
+			@SuppressWarnings("unchecked")
+			List<Statement> switchStatements = switchStatement.statements();
+			for(Statement switchStatement2 : switchStatements){
+				variableList.addAll(getVariableSimpleNames(switchStatement2,isDeclaration));
+			}
+		}
+		else if(statement instanceof SwitchCase) {
+			SwitchCase switchCase = (SwitchCase)statement;
+			Expression expression = switchCase.getExpression();
+			if(expression != null){
+				variableList.addAll(getVariableSimpleNames(expression,isDeclaration));
+			}
+		}
+		else if(statement instanceof AssertStatement) {
+			AssertStatement assertStatement = (AssertStatement)statement;
+			Expression expression = assertStatement.getExpression();
+			variableList.addAll(getVariableSimpleNames(expression,isDeclaration));
+			Expression message = assertStatement.getMessage();
+			if(message != null){
+				variableList.addAll(getVariableSimpleNames(message,isDeclaration));
+			}
+		}
+		else if(statement instanceof LabeledStatement) {
+			LabeledStatement labeledStatement = (LabeledStatement)statement;
+			if(labeledStatement.getLabel() != null){
+				variableList.addAll(getVariableSimpleNames(labeledStatement.getLabel(),isDeclaration));
+			}
+			//In my implementation, body will be taken care of in other place.
+		}
+		else if(statement instanceof ReturnStatement) {
+			ReturnStatement returnStatement = (ReturnStatement)statement;
+			Expression expression = returnStatement.getExpression();
+			variableList.addAll(getVariableSimpleNames(expression,isDeclaration));	
+		}
+		else if(statement instanceof SynchronizedStatement) {
+			SynchronizedStatement synchronizedStatement = (SynchronizedStatement)statement;
+			Expression expression = synchronizedStatement.getExpression();
+			variableList.addAll(getVariableSimpleNames(expression,isDeclaration));
+			//In my implementation, body will be taken care of in other place.
+		}
+		else if(statement instanceof ThrowStatement) {
+			ThrowStatement throwStatement = (ThrowStatement)statement;
+			Expression expression = throwStatement.getExpression();
+			variableList.addAll(getVariableSimpleNames(expression,isDeclaration));
+		}
+		else if(statement instanceof TryStatement) {
+			TryStatement tryStatement = (TryStatement)statement;
+			
+			//List<VariableDeclarationExpression> resources = tryStatement.resources();
+			//for(VariableDeclarationExpression expression : resources) {
+			//	expressionList.addAll(getExpressions(expression,instanceChecker));
+			//}
+			
+			//In my implementation, body will be taken care of in other place.
+			@SuppressWarnings("unchecked")
+			List<CatchClause> catchClauses = tryStatement.catchClauses();
+			for(CatchClause catchClause : catchClauses) {
+				SingleVariableDeclaration variableDeclaration = catchClause.getException();
+				variableList.addAll(getVariableSimpleNames(variableDeclaration.getName(),isDeclaration));
+				if(variableDeclaration.getInitializer() != null){
+					variableList.addAll(getVariableSimpleNames(variableDeclaration.getInitializer(),isDeclaration));
+				}
+				//In my implementation, body will be taken care of in other place.
+			}
+			//In my implementation, body will be taken care of in other place.
+			//Block finallyBlock = tryStatement.getFinally();
+			//if(finallyBlock != null)
+			//	variableList.addAll(getVariableSimpleNames(finallyBlock,isDeclaration));
+		}
+		else if(statement instanceof VariableDeclarationStatement) {
+			VariableDeclarationStatement variableDeclarationStatement = (VariableDeclarationStatement)statement;
+			@SuppressWarnings("unchecked")
+			List<VariableDeclarationFragment> fragments = variableDeclarationStatement.fragments();
+			for(VariableDeclarationFragment fragment : fragments) {
+				variableList.addAll(getVariableSimpleNames(fragment.getName(),isDeclaration));
+				variableList.addAll(getVariableSimpleNames(fragment.getInitializer(),isDeclaration));
+			}
+		}
+		else if(statement instanceof ConstructorInvocation) {
+			ConstructorInvocation constructorInvocation = (ConstructorInvocation)statement;
+			@SuppressWarnings("unchecked")
+			List<Expression> arguments = constructorInvocation.arguments();
+			for(Expression argument : arguments){
+				variableList.addAll(getVariableSimpleNames(argument,isDeclaration));
+			}
+		}
+		else if(statement instanceof SuperConstructorInvocation) {
+			SuperConstructorInvocation superConstructorInvocation = (SuperConstructorInvocation)statement;
+			if(superConstructorInvocation.getExpression() != null){
+				variableList.addAll(getVariableSimpleNames(superConstructorInvocation.getExpression(),isDeclaration));
+			}
+			@SuppressWarnings("unchecked")
+			List<Expression> arguments = superConstructorInvocation.arguments();
+			for(Expression argument : arguments){
+				variableList.addAll(getVariableSimpleNames(argument,isDeclaration));
+			}
+		}
+		else if(statement instanceof BreakStatement) {
+			BreakStatement breakStatement = (BreakStatement)statement;
+			if(breakStatement.getLabel() != null){
+				variableList.addAll(getVariableSimpleNames(breakStatement.getLabel(),isDeclaration));
+			}
+		}
+		else if(statement instanceof ContinueStatement) {
+			ContinueStatement continueStatement = (ContinueStatement)statement;
+			if(continueStatement.getLabel() != null){
+				variableList.addAll(getVariableSimpleNames(continueStatement.getLabel(),isDeclaration));
+			}
+		}
+		return variableList;
 	}
 }

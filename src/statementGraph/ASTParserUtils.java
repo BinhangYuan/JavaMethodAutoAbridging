@@ -4,37 +4,27 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
-
 import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.DoStatement;
-import org.eclipse.jdt.core.dom.EnhancedForStatement;
-import org.eclipse.jdt.core.dom.ForStatement;
-import org.eclipse.jdt.core.dom.IfStatement;
-import org.eclipse.jdt.core.dom.LabeledStatement;
+import org.eclipse.jdt.core.dom.IBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.SimpleName;
-import org.eclipse.jdt.core.dom.SwitchStatement;
-import org.eclipse.jdt.core.dom.TryStatement;
-import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
-import org.eclipse.jdt.core.dom.WhileStatement;
 
 public class ASTParserUtils {
 	
 	//use ASTParse to parse string
-	public static void parse(String str) {
-		ASTParser parser = ASTParser.newParser(AST.JLS3);
+	public static void parse(String filePath, String fileName) throws IOException {
+		ASTParser parser = ASTParser.newParser(AST.JLS8);
+		//parser.setS
+		String str = readFileToString(filePath+fileName);
 		parser.setSource(str.toCharArray());
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		parser.setEnvironment(new String[]{filePath}, null, null, true);
+		parser.setUnitName("Anything");
+		parser.setResolveBindings(true);
+		
 		final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
 		ArrayList<MethodDeclaration> methods = new ArrayList<MethodDeclaration>();
 		
@@ -53,14 +43,55 @@ public class ASTParserUtils {
 			System.out.println("Method Declaration of: '"+node.getName()+ "' at line" +cu.getLineNumber(node.getStartPosition()));
 			System.out.println(node.toString());
 			System.out.println("Generate CFG:");
-			//SimpleNameMaps maps = new SimpleNameMaps(node);
 			CFG cfg = new CFG(node);
-			cfg.printCFG();
+			//cfg.printCFG();
 			DDG ddg = new DDG(cfg);
 			ddg.printDDG();
 		}
 	}
-	 
+	
+	
+	//This is used for a simple verification 
+	public static void parseVaraibleName(String filePath, String fileName) throws IOException {
+		ASTParser parser = ASTParser.newParser(AST.JLS8);
+		//parser.setS
+		String str = readFileToString(filePath+fileName);
+		parser.setSource(str.toCharArray());
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		parser.setEnvironment(new String[]{filePath}, null, null, true);
+		parser.setUnitName("Anything");
+		parser.setResolveBindings(true);
+		
+		final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
+		ArrayList<SimpleName> varaibles = new ArrayList<SimpleName>();
+			
+		cu.accept(new ASTVisitor() {
+				
+			public boolean visit(SimpleName node){
+				varaibles.add(node);
+				return true;
+			}
+		});
+			
+		System.out.println("All varabile declaration:");
+		for(SimpleName node: varaibles){
+			
+			if(node.resolveBinding().getKind()==IBinding.VARIABLE && node.isDeclaration()){
+				System.out.println("SimpleName: " + node.getIdentifier());
+				System.out.println("is variable and defined at line" +cu.getLineNumber(node.getStartPosition()));
+			}
+			else if(node.resolveBinding().getKind()==IBinding.VARIABLE && !node.isDeclaration()){
+				System.out.println("SimpleName: " + node.getIdentifier());
+				System.out.println("is variable and used at line" +cu.getLineNumber(node.getStartPosition()));
+			}
+			else{
+				System.out.println("SimpleName: " + node.getIdentifier());
+				System.out.println("is not variable!");
+			}
+		}
+	}
+	
+	
 	//read file content into a string
 	public static String readFileToString(String filePath) throws IOException {
 		StringBuilder fileData = new StringBuilder(1000);
@@ -93,7 +124,7 @@ public class ASTParserUtils {
 		for (File f : files ) {
 			filePath = f.getAbsolutePath();
 			if(f.isFile()){
-				parse(readFileToString(filePath));
+				//parse(readFileToString(filePath));
 			}
 		}
 	}
@@ -101,7 +132,9 @@ public class ASTParserUtils {
 	
 	public static void main(String[] args) throws IOException {
 		//ParseFilesInDir();
-		String filePath = "/home/yuan/Desktop/PL research/eclipseWorkSpace/javaSrcCompress/src/testCodes/Solution350.java";
-		parse(readFileToString(filePath));
+		String filePath = "/home/yuan/Desktop/PL research/eclipseWorkSpace/javaSrcCompress/src/testCodes/";
+		String fileName = "Solution350.java";
+		parse(filePath,fileName);
+		//parseVaraibleName(filePath,fileName);
 	}	
 }
