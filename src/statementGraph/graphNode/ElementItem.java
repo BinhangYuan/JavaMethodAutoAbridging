@@ -273,32 +273,50 @@ public abstract class ElementItem {
 	}
 	
 	private List<SimpleName> usageVariables = new LinkedList<SimpleName>();
+	private Set<String> usageVariableSet = new HashSet<String>();
 	
 	public void addUsageVariables(SimpleName identifier){
 		this.usageVariables.add(identifier);
+		this.usageVariableSet.add(identifier.getIdentifier());
 	}
 	
 	public void addUsageVariables(List<SimpleName> identifiers){
 		this.usageVariables.addAll(identifiers);
+		for(SimpleName simple:identifiers){
+			this.usageVariableSet.add(simple.getIdentifier());
+		}
 	}
 	
 	public List<SimpleName> getUsageVariables(){
 		return this.usageVariables;
 	}
 	
+	public Set<String> getUsageVariableSet(){
+		return this.usageVariableSet;
+	}
+	
 	//For the current implementation, this list should include only one element.
 	private List<SimpleName> definedVariables = new LinkedList<SimpleName>();
+	private Set<String> definedVariableSet = new HashSet<String>();
 	
 	public void addDefinedVariables(SimpleName identifier){
 		this.definedVariables.add(identifier);
+		this.definedVariableSet.add(identifier.getIdentifier());
 	}
 	
 	public void addDefinedVariables(List<SimpleName> identifiers){
 		this.definedVariables.addAll(identifiers);
+		for(SimpleName simple:identifiers){
+			this.definedVariableSet.add(simple.getIdentifier());
+		}
 	}
 	
 	public List<SimpleName> getDefinedVariables(){
 		return this.definedVariables;
+	}
+	
+	public Set<String> getDefinedVariableSet(){
+		return this.definedVariableSet;
 	}
 	
 	protected abstract void setLineCount(String code);
@@ -310,4 +328,21 @@ public abstract class ElementItem {
 	public abstract void printDebug();
 	
 	public abstract void printName();
+	
+	protected void printDDGPredecessor(){
+		System.out.println("DDG Predecessors: -->");
+		if(this.getDDGDefinedPredecessor().isEmpty()){
+			System.out.println("Empty");
+		}
+		else{
+			for(ElementItem item: this.getDDGDefinedPredecessor()){
+				if(item!=null){
+					item.printName();
+				}
+				else{
+					System.out.println("In Method Declaration");
+				}
+			}
+		}
+	}
 }

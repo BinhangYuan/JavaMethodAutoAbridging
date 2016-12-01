@@ -38,6 +38,7 @@ public class TryStatementItem extends ElementItem{
 		else{
 			super.getCFGSeqSuccessor().printName();
 		}
+		super.printDDGPredecessor();
 	}
 
 }

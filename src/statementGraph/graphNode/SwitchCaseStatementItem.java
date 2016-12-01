@@ -38,5 +38,6 @@ public class SwitchCaseStatementItem extends ElementItem{
 		else{
 			super.getCFGSeqSuccessor().printName();
 		}
+		super.printDDGPredecessor();
 	}
 }

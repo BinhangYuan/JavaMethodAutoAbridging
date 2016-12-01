@@ -38,6 +38,7 @@ public class BreakStatementItem extends ElementItem{
 		else{
 			super.getCFGSeqSuccessor().printName();
 		}
+		super.printDDGPredecessor();
 	}
 }
 

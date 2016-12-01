@@ -54,5 +54,6 @@ public class SwitchStatementItem extends ElementItem{
 			System.out.println("Body entry: ");
 			e.printName();
 		}
+		super.printDDGPredecessor();
 	}
 }

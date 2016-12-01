@@ -19,7 +19,10 @@ public class SimplifiedAST {
 	
 	public List<ElementItem> getSiblings(ElementItem item){
 		Statement state = ElementItem.getASTNodeStatement(item);
+		//System.out.println("GetSiblings: <state>"+state.toString());
 		ASTNode parent = state.getParent();
+		//System.out.println("GetSiblings: <parent>"+parent.toString());
+		
 		if(parent instanceof Block){
 			LinkedList<ElementItem> siblings = new LinkedList<ElementItem>();
 			Block block = (Block) parent;

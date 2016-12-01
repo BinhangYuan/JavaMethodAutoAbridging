@@ -38,5 +38,6 @@ public class SuperConstructorInvocationStatementItem extends ElementItem{
 		else{
 			super.getCFGSeqSuccessor().printName();
 		}
+		super.printDDGPredecessor();
 	}
 }

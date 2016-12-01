@@ -56,6 +56,7 @@ public class EnhancedForStatementItem extends ElementItem{
 		}else{
 			this.bodyEntry.printName();
 		}
+		super.printDDGPredecessor();
 	}
 }
 

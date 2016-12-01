@@ -71,6 +71,7 @@ public class IfStatementItem extends ElementItem{
 		}else{
 			this.elseEntry.printName();
 		}
+		super.printDDGPredecessor();
 	}
 }
 

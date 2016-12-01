@@ -1,57 +1,15 @@
 package statementGraph;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import org.eclipse.core.runtime.Assert;
-import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.AssertStatement;
-import org.eclipse.jdt.core.dom.Block;
-import org.eclipse.jdt.core.dom.DoStatement;
-import org.eclipse.jdt.core.dom.EnhancedForStatement;
-import org.eclipse.jdt.core.dom.Expression;
-import org.eclipse.jdt.core.dom.ForStatement;
-import org.eclipse.jdt.core.dom.IfStatement;
-import org.eclipse.jdt.core.dom.LabeledStatement;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.Statement;
-import org.eclipse.jdt.core.dom.SwitchStatement;
-import org.eclipse.jdt.core.dom.SynchronizedStatement;
-import org.eclipse.jdt.core.dom.TryStatement;
-import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
-import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
-import org.eclipse.jdt.core.dom.WhileStatement;
-
 import statementGraph.expressionWrapper.ExpressionExtractor;
-import statementGraph.expressionWrapper.ExpressionInstanceChecker;
-import statementGraph.graphNode.AssertStatementItem;
-import statementGraph.graphNode.BreakStatementItem;
-import statementGraph.graphNode.ConstructorInvocationStatementItem;
-import statementGraph.graphNode.DoStatementItem;
 import statementGraph.graphNode.ElementItem;
-import statementGraph.graphNode.EmptyStatementItem;
-import statementGraph.graphNode.EnhancedForStatementItem;
-import statementGraph.graphNode.ExpressionStatementItem;
-import statementGraph.graphNode.ForStatementItem;
-import statementGraph.graphNode.IfStatementItem;
-import statementGraph.graphNode.LabeledStatementItem;
-import statementGraph.graphNode.ReturnStatementItem;
-import statementGraph.graphNode.SuperConstructorInvocationStatementItem;
-import statementGraph.graphNode.SwitchCaseStatementItem;
-import statementGraph.graphNode.SwitchStatementItem;
-import statementGraph.graphNode.SynchronizedStatementItem;
-import statementGraph.graphNode.ThrowStatementItem;
-import statementGraph.graphNode.TryStatementItem;
-import statementGraph.graphNode.TypeDeclarationStatementItem;
-import statementGraph.graphNode.VariableDeclarationStatementItem;
-import statementGraph.graphNode.WhileStatementItem;
 
 
 public class DDG {
@@ -99,46 +57,51 @@ public class DDG {
 	private void buildEdges(){
 		for(ElementItem item: this.cfg.getNodes()){
 			if(!item.getUsageVariables().isEmpty()){
-				for(SimpleName var: item.getUsageVariables()){
-					if(this.variablesDecl.containsKey(var.getIdentifier())){//If the variable is declared out of the scope of the function, we ignore it for now.
-						if(this.variablesDecl.get(var.getIdentifier()).size()==1){//This is simple, only one declaration in the function scope
-							ElementItem preItem = this.variablesDecl.get(var.getIdentifier()).get(0);
-							item.addDDGDefinedPredecessor(preItem);
-							if(preItem!=null){
-								preItem.addDDGUsageSuccessor(item);
+				for(String var: item.getUsageVariableSet()){
+					if(this.variablesDecl.containsKey(var)){//If the variable is declared out of the scope of the function, we ignore it for now.
+						if(this.variablesDecl.get(var).size()==1){//This is simple, only one declaration in the function scope
+							ElementItem preItem = this.variablesDecl.get(var).get(0);
+							if(preItem!=item){
+								item.addDDGDefinedPredecessor(preItem);
+								if(preItem!=null){
+									preItem.addDDGUsageSuccessor(item);
+								}
 							}
 						}
 						else{//Little tricky here, we should consider the same name under different scope.
-							ElementItem current = item;
-							ElementItem parent = null;
-							List<ElementItem> siblings = null;
-							boolean done = false;
-							while(done){
-								siblings = this.astSkel.getSiblings(current);
-								for(ElementItem sibling: siblings){
-									if(sibling.getUsageVariables().contains(var.getIdentifier())){
-										ElementItem preItem = sibling;
-										item.addDDGDefinedPredecessor(preItem);
-										if(preItem!=null){
-											preItem.addDDGUsageSuccessor(item);
+							if(!item.getDefinedVariableSet().contains(var)){
+								ElementItem current = item;
+								ElementItem parent = null;
+								List<ElementItem> siblings = null;
+								boolean done = false;
+								while(!done){
+									siblings = this.astSkel.getSiblings(current);
+									for(ElementItem sibling: siblings){
+										if(sibling.getDefinedVariableSet().contains(var)){
+											ElementItem preItem = sibling;
+											item.addDDGDefinedPredecessor(preItem);
+											if(preItem!=null){
+												preItem.addDDGUsageSuccessor(item);
+											}
+											done = true;
+											break;
 										}
-										done = true;
-										break;
 									}
-								}
-								if(!done){
-									parent = this.astSkel.getParent(current);
-									if(parent.getUsageVariables().contains(var.getIdentifier())){
-										ElementItem preItem = parent;
-										item.addDDGDefinedPredecessor(preItem);
-										if(preItem!=null){
-											preItem.addDDGUsageSuccessor(item);
+									if(!done){
+										parent = this.astSkel.getParent(current);
+										System.out.println(parent.toString());
+										if(parent.getDefinedVariableSet().contains(var)){
+											ElementItem preItem = parent;
+											item.addDDGDefinedPredecessor(preItem);
+											if(preItem!=null){
+												preItem.addDDGUsageSuccessor(item);
+											}
+											done = true;
+											break;
 										}
-										done = true;
-										break;
-									}
-									else{
-										current = parent;
+										else{
+											current = parent;
+										}
 									}
 								}
 							}

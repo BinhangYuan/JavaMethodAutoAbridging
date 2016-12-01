@@ -38,6 +38,7 @@ public class TypeDeclarationStatementItem extends ElementItem{
 		else{
 			super.getCFGSeqSuccessor().printName();
 		}
+		super.printDDGPredecessor();
 	}
 
 }

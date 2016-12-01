@@ -57,6 +57,7 @@ public class ForStatementItem extends ElementItem{
 		}else{
 			this.bodyEntry.printName();
 		}
+		super.printDDGPredecessor();
 	}
 }
 

@@ -55,6 +55,7 @@ public class DoStatementItem extends ElementItem{
 		}else{
 			this.bodyEntry.printName();
 		}
+		super.printDDGPredecessor();
 	}
 }
 

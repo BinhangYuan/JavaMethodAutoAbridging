@@ -10,6 +10,8 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
+
+//This may not be used in the future, keep it here for now.
 public class SimpleNameMaps {
 	private Map<String, ASTNode> definition = new HashMap<String, ASTNode>();
 	private Map<String, List<ASTNode>> utils = new HashMap<String, List<ASTNode>>();
@@ -43,7 +45,6 @@ public class SimpleNameMaps {
 				}
 				return true;
 			}
-		
 		});
 		
 	}

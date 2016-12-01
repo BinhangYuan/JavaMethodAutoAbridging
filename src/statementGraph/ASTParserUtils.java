@@ -48,6 +48,8 @@ public class ASTParserUtils {
 			System.out.println("Generate DDG:");
 			DDG ddg = new DDG(cfg);
 			ddg.printDDG();
+			
+			cfg.printCFG();
 		}
 	}
 	
