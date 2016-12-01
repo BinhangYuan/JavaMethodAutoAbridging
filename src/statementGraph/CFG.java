@@ -69,6 +69,15 @@ public class CFG {
 		buildGraphEdges(astNode);
 	}
 	
+	public ElementItem getItem(ASTNode node){
+		if(this.astMap.containsKey(node)){
+			return this.nodes.get(this.astMap.get(node));
+		}
+		else{
+			return null;
+		}
+	}
+	
 	
 	private void buildGraphNodes(ASTNode node){
 		int nodeType = node.getNodeType();

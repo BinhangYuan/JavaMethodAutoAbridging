@@ -210,18 +210,6 @@ public abstract class ElementItem {
 	}
 	
 	private int itemType;
-	protected int lineCount;
-	
-	private ElementItem cfgSeqSuccessor = null;
-	
-	private List<ElementItem> cfgSuccessors = new LinkedList<ElementItem>();
-	private List<ElementItem> cfgPredecessor = new LinkedList<ElementItem>();
-	
-	private List<ElementItem> ddgDefinedPredecessor = new LinkedList<ElementItem>();
-	private List<ElementItem> ddgUsageSuccessor = new LinkedList<ElementItem>();
-	
-	private List<SimpleName> usageVariables = new LinkedList<SimpleName>();
-	private List<SimpleName> definedVariables = new LinkedList<SimpleName>();
 	
 	protected void setType(int type){
 		this.itemType = type;
@@ -231,6 +219,10 @@ public abstract class ElementItem {
 		return this.itemType;
 	}
 	
+	protected int lineCount;
+	
+	private ElementItem cfgSeqSuccessor = null;
+	
 	public void setCFGSeqSuccessor(ElementItem item){
 		this.cfgSeqSuccessor = item;
 	}
@@ -239,13 +231,7 @@ public abstract class ElementItem {
 		return this.cfgSeqSuccessor;
 	}
 	
-	public List<ElementItem> getCFGPredecessor(){
-		return this.cfgPredecessor;
-	}
-	
-	protected void addCFGPredecessor(ElementItem item){
-		this.cfgPredecessor.add(item);
-	}
+	private List<ElementItem> cfgSuccessors = new LinkedList<ElementItem>();
 	
 	public List<ElementItem> getCFGSuccessors(){
 		return this.cfgSuccessors;
@@ -255,21 +241,38 @@ public abstract class ElementItem {
 		this.cfgSuccessors.add(item);
 	}
 	
+	private List<ElementItem> cfgPredecessor = new LinkedList<ElementItem>();
+	
+	public List<ElementItem> getCFGPredecessor(){
+		return this.cfgPredecessor;
+	}
+	
+	protected void addCFGPredecessor(ElementItem item){
+		this.cfgPredecessor.add(item);
+	}
+	
+	//For the current implementation, this list should include only one element.
+	private List<ElementItem> ddgDefinedPredecessor = new LinkedList<ElementItem>();
+	
 	public List<ElementItem> getDDGDefinedPredecessor(){
 		return this.ddgDefinedPredecessor;
 	}
+	
+	public void addDDGDefinedPredecessor(ElementItem item){
+		this.ddgDefinedPredecessor.add(item);
+	}
+	
+	private List<ElementItem> ddgUsageSuccessor = new LinkedList<ElementItem>();
 	
 	public List<ElementItem> getDDGUsageSuccessor(){
 		return this.ddgUsageSuccessor;
 	}
 	
-	protected void addDDGDefinedPredecessor(ElementItem item){
-		this.ddgDefinedPredecessor.add(item);
-	}
-	
-	protected void addDDGUsageSuccessor(ElementItem item){
+	public void addDDGUsageSuccessor(ElementItem item){
 		this.ddgUsageSuccessor.add(item);
 	}
+	
+	private List<SimpleName> usageVariables = new LinkedList<SimpleName>();
 	
 	public void addUsageVariables(SimpleName identifier){
 		this.usageVariables.add(identifier);
@@ -279,10 +282,12 @@ public abstract class ElementItem {
 		this.usageVariables.addAll(identifiers);
 	}
 	
-	
 	public List<SimpleName> getUsageVariables(){
 		return this.usageVariables;
 	}
+	
+	//For the current implementation, this list should include only one element.
+	private List<SimpleName> definedVariables = new LinkedList<SimpleName>();
 	
 	public void addDefinedVariables(SimpleName identifier){
 		this.definedVariables.add(identifier);

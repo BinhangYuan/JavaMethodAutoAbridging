@@ -45,6 +45,7 @@ public class ASTParserUtils {
 			System.out.println("Generate CFG:");
 			CFG cfg = new CFG(node);
 			//cfg.printCFG();
+			System.out.println("Generate DDG:");
 			DDG ddg = new DDG(cfg);
 			ddg.printDDG();
 		}
