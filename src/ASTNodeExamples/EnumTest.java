@@ -30,10 +30,10 @@ public class EnumTest {
             case SATURDAY: case SUNDAY:
                 System.out.println("Weekends are best.");
                 break;
-            /*            
+                      
             default:
                 System.out.println("Midweek days are so-so.");
-                break;*/
+                break;
         }
     }
     

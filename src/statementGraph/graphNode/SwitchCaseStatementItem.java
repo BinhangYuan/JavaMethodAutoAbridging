@@ -10,17 +10,10 @@ public class SwitchCaseStatementItem extends ElementItem{
 	public SwitchCaseStatementItem(SwitchCase astNode){
 		this.astNode = astNode;
 		super.setType(astNode.getNodeType());
-		this.setLineCount(astNode.toString());
 	}
 	
 	public SwitchCase getASTNode(){
 		return this.astNode;
-	}
-	
-	@Override
-	protected void setLineCount(String code) {
-		//It should be the length excluding the body.
-		super.lineCount = code.split(System.getProperty("line.separator")).length; 
 	}
 
 	@Override
@@ -39,5 +32,17 @@ public class SwitchCaseStatementItem extends ElementItem{
 			super.getCFGSeqSuccessor().printName();
 		}
 		super.printDDGPredecessor();
+	}
+
+	@Override
+	public int getLineCount() {
+		return 1;
+	}
+
+	@Override
+	public String toString() {
+		return this.astNode.getExpression()==null?
+		"default :\n":
+		"case " + this.astNode.getExpression() + ": "; 
 	}
 }

@@ -1,5 +1,6 @@
 package statementGraph.graphNode;
 
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.IfStatement;
 
 public class IfStatementItem extends ElementItem{
@@ -8,6 +9,9 @@ public class IfStatementItem extends ElementItem{
 	
 	private ElementItem thenEntry = null;
 	private ElementItem elseEntry = null;
+	
+	private boolean thenIsBlock;
+	private boolean elseIsBlock;
 	
 	public void setThenEntry(ElementItem item){
 		this.thenEntry = item;
@@ -28,21 +32,19 @@ public class IfStatementItem extends ElementItem{
 	public IfStatementItem(IfStatement astNode){
 		this.astNode = astNode;
 		super.setType(astNode.getNodeType());
-		this.setLineCount(astNode.toString());
+		if(this.astNode.getElseStatement()==null){
+			this.elseIsBlock = false;
+		}
+		else{
+			this.elseIsBlock = this.astNode.getElseStatement().getNodeType() == ASTNode.BLOCK;
+		}
+		this.thenIsBlock = this.astNode.getThenStatement().getNodeType() == ASTNode.BLOCK;
 	}
 	
 	public IfStatement getASTNode(){
 		return this.astNode;
 	}
 	
-	@Override
-	protected void setLineCount(String code) {
-		//It should be the length excluding the body.
-		int total = code.split(System.getProperty("line.separator")).length;
-		int thenblock = (astNode.getThenStatement()==null ? 0 : astNode.getThenStatement().toString().split(System.getProperty("line.separator")).length);
-		int elseblock = (astNode.getElseStatement()==null ? 0 : astNode.getElseStatement().toString().split(System.getProperty("line.separator")).length);
-		super.lineCount = total - thenblock - elseblock; //Maybe problematic, check again! 
-	}
 	
 	@Override
 	public void printName() {
@@ -72,6 +74,32 @@ public class IfStatementItem extends ElementItem{
 			this.elseEntry.printName();
 		}
 		super.printDDGPredecessor();
+	}
+
+	@Override
+	public int getLineCount() {
+		int count = this.toString().split(System.getProperty("line.separator")).length;
+		if(this.thenIsBlock && this.astNode.getElseStatement()==null){
+			count += 1;
+		}
+		else if(!this.thenIsBlock && this.astNode.getElseStatement()==null){
+			//Nothing to be done;
+		}
+		else if(this.astNode.getElseStatement()!=null){
+			count += (this.elseIsBlock?2:1);
+		}
+		return count;
+	}
+
+	@Override
+	public String toString() {
+		//This may be updated later;
+		String result = new String();
+		result = "if("+ this.astNode.getExpression().toString() +")";
+		if(this.thenIsBlock){
+			result += "{";
+		}
+		return result;
 	}
 }
 

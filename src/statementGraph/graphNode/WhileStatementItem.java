@@ -8,6 +8,8 @@ public class WhileStatementItem extends ElementItem{
 	
 	private ElementItem bodyEntry;
 	
+	private boolean bodyIsBlock;
+	
 	public void setBodyEntry(ElementItem item){
 		this.bodyEntry = item;
 	}

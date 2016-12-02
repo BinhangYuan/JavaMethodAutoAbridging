@@ -9,18 +9,12 @@ public class LabeledStatementItem extends ElementItem{
 	public LabeledStatementItem(LabeledStatement astNode){
 		this.astNode = astNode;
 		super.setType(astNode.getNodeType());
-		this.setLineCount(astNode.toString());
 	}
 	
 	public LabeledStatement getASTNode(){
 		return this.astNode;
 	}
 	
-	@Override
-	protected void setLineCount(String code) {
-		//It should be the length excluding the body.
-		super.lineCount = 1; //This may be problematic.
-	}
 
 	@Override
 	public void printName() {
@@ -38,6 +32,16 @@ public class LabeledStatementItem extends ElementItem{
 			super.getCFGSeqSuccessor().printName();
 		}
 		super.printDDGPredecessor();
+	}
+
+	@Override
+	public int getLineCount() {
+		return 1;
+	}
+
+	@Override
+	public String toString() {
+		return this.astNode.getLabel().toString()+":\n";
 	}
 }
 

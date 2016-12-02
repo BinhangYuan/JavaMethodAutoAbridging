@@ -1,10 +1,13 @@
 package statementGraph.graphNode;
 
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.DoStatement;
 
 public class DoStatementItem extends ElementItem{
 	
-	private DoStatement astNode; 
+	private DoStatement astNode;
+	
+	private boolean bodyIsBlock;
 	
 	private ElementItem bodyEntry = null;
 	
@@ -19,19 +22,11 @@ public class DoStatementItem extends ElementItem{
 	public DoStatementItem(DoStatement astNode){
 		this.astNode = astNode;
 		super.setType(astNode.getNodeType());
-		this.setLineCount(astNode.toString());
+		this.bodyIsBlock = this.astNode.getBody().getNodeType() == ASTNode.BLOCK;
 	}
 	
 	public DoStatement getASTNode(){
 		return this.astNode;
-	}
-	
-	@Override
-	protected void setLineCount(String code) {
-		//It should be the length excluding the body.
-		int total = code.split(System.getProperty("line.separator")).length;
-		int body = astNode.getBody().toString().split(System.getProperty("line.separator")).length;
-		super.lineCount = total - body; //Maybe problematic, check again! 
 	}
 	
 	@Override
@@ -56,6 +51,18 @@ public class DoStatementItem extends ElementItem{
 			this.bodyEntry.printName();
 		}
 		super.printDDGPredecessor();
+	}
+	
+	@Override
+	public String toString() {
+		return this.bodyIsBlock?
+		"do{\n}while("+this.astNode.getExpression().toString()+")":
+		"do\nwhile("+this.astNode.getExpression().toString()+")";
+	}
+
+	@Override
+	public int getLineCount() {
+		return this.toString().split(System.getProperty("line.separator")).length;
 	}
 }
 
