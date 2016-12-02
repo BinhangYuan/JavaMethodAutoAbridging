@@ -1,6 +1,10 @@
 package statementGraph.graphNode;
 
 public class EdgeItem {
+	public static int DDGPrority = 1;
+	public static int ASTPrority = 1;
+	public static int CFGPrority = 1;
+	
 	public ElementItem start;
 	public ElementItem end;
 	/*

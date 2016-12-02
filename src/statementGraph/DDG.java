@@ -14,7 +14,7 @@ import statementGraph.graphNode.ElementItem;
 
 public class DDG {
 	private CFG cfg;
-	private SimplifiedAST astSkel;
+	public SimplifiedAST astSkel;
 	private List<SimpleName> methodParameters =  new LinkedList<SimpleName>();
 	private Map<String,List<ElementItem>> variablesDecl = new HashMap<String,List<ElementItem>>();
 	
@@ -89,7 +89,7 @@ public class DDG {
 									}
 									if(!done){
 										parent = this.astSkel.getParent(current);
-										System.out.println(parent.toString());
+										//System.out.println(parent.toString());
 										if(parent.getDefinedVariableSet().contains(var)){
 											ElementItem preItem = parent;
 											item.addDDGDefinedPredecessor(preItem);

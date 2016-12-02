@@ -47,9 +47,10 @@ public class ASTParserUtils {
 			//cfg.printCFG();
 			System.out.println("Generate DDG:");
 			DDG ddg = new DDG(cfg);
-			ddg.printDDG();
-			
-			cfg.printCFG();
+			//ddg.printDDG();
+			//cfg.printCFG();
+			ConstraintEncoder encoder = new ConstraintEncoder(cfg,ddg);
+			encoder.printConstraints();
 		}
 	}
 	
