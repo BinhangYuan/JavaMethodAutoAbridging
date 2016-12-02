@@ -9,6 +9,7 @@ import org.eclipse.jdt.core.dom.AssertStatement;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.BreakStatement;
 import org.eclipse.jdt.core.dom.ConstructorInvocation;
+import org.eclipse.jdt.core.dom.ContinueStatement;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.DoStatement;
@@ -29,6 +30,7 @@ import org.eclipse.jdt.core.dom.WhileStatement;
 import statementGraph.graphNode.AssertStatementItem;
 import statementGraph.graphNode.BreakStatementItem;
 import statementGraph.graphNode.ConstructorInvocationStatementItem;
+import statementGraph.graphNode.ContinueStatementItem;
 import statementGraph.graphNode.DoStatementItem;
 import statementGraph.graphNode.ElementItem;
 import statementGraph.graphNode.ElementItemFactory;
@@ -108,6 +110,11 @@ public class CFG {
 		}
 		else if(nodeType == ElementItem.CONSTRUCTOR_INVOCATION){
 			ConstructorInvocationStatementItem item = (ConstructorInvocationStatementItem) this.factory.createElementItem(node);
+			astMap.put(node, nodes.size());
+			nodes.add(item);
+		}
+		else if(nodeType == ElementItem.CONTINUE_STATEMENT){
+			ContinueStatementItem item = (ContinueStatementItem) this.factory.createElementItem(node);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
 		}
@@ -297,7 +304,7 @@ public class CFG {
 						if(labelItem.getASTNode().getLabel().getIdentifier().equals(breakNode.getLabel().getIdentifier())){
 							flag = true;
 							ElementItem start = nodes.get(astMap.get(node));
-							start.setCFGSeqSuccessor(labelItem);
+							start.setCFGSeqSuccessor(labelItem.getCFGSeqSuccessor());
 							break;
 						}
 					}
@@ -320,6 +327,39 @@ public class CFG {
 		}
 		else if(nodeType == ElementItem.CONSTRUCTOR_INVOCATION){
 			return;
+		}
+		else if(nodeType == ElementItem.CONTINUE_STATEMENT){
+			//This is a linear solution, should improve if necessary in the future;
+			ContinueStatement continueNode = (ContinueStatement) node; 
+			if(continueNode.getLabel()!=null){
+				boolean flag = false;
+				for(Object o : nodes){
+					ElementItem statementItem = (ElementItem) o;
+					if(statementItem.getType() == ElementItem.LABELED_STATEMENT){
+						LabeledStatementItem labelItem = ((LabeledStatementItem)(statementItem));
+						if(labelItem.getASTNode().getLabel().getIdentifier().equals(continueNode.getLabel().getIdentifier())){
+							flag = true;
+							ElementItem start = nodes.get(astMap.get(node));
+							start.setCFGSeqSuccessor(labelItem);
+							break;
+						}
+					}
+				}
+				if(!flag){
+					System.out.println("This is an error, can not find the label!");
+				}
+			}
+			// No label, link to the loop.
+			else{
+				//Find the most immediate loop;
+				ASTNode ancestor = node.getParent();
+				while(!ElementItem.isLoopStatement(ancestor)){
+					ancestor = ancestor.getParent();
+				}
+				ElementItem start = nodes.get(astMap.get(node));
+				ElementItem end = nodes.get(astMap.get(ancestor));//Different from break here.
+				start.setCFGSeqSuccessor(end);
+			}
 		}
 		else if(nodeType == ElementItem.DO_STATEMENT){
 			//This may be problematic 

@@ -11,17 +11,10 @@ public class EmptyStatementItem extends ElementItem{
 	public EmptyStatementItem(EmptyStatement astNode){
 		this.astNode = astNode;
 		super.setType(astNode.getNodeType());
-		this.setLineCount(astNode.toString());
 	}
 	
 	public EmptyStatement getASTNode(){
 		return this.astNode;
-	}
-	
-	@Override
-	protected void setLineCount(String code) {
-		//This may be problematic
-		super.lineCount = 0;
 	}
 
 	@Override
@@ -40,6 +33,16 @@ public class EmptyStatementItem extends ElementItem{
 			super.getCFGSeqSuccessor().printName();
 		}
 		super.printDDGPredecessor();
+	}
+	
+	@Override
+	public String toString() {
+		return astNode.toString();
+	}
+
+	@Override
+	public int getLineCount() {
+		return astNode.toString().split(System.getProperty("line.separator")).length;
 	}
 }
 

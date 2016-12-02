@@ -10,18 +10,12 @@ public class AssertStatementItem extends ElementItem{
 	public AssertStatementItem(AssertStatement astNode){
 		this.astNode = astNode;
 		super.setType(astNode.getNodeType());
-		this.setLineCount(astNode.toString());
 	}
 	
 	public AssertStatement getASTNode(){
 		return this.astNode;
 	}
 
-	@Override
-	protected void setLineCount(String code) {
-		super.lineCount = code.split(System.getProperty("line.separator")).length;
-	}
-	
 	@Override
 	public void printName() {
 		System.out.print("Assert Statement: "+astNode.toString());
@@ -38,5 +32,15 @@ public class AssertStatementItem extends ElementItem{
 			super.getCFGSeqSuccessor().printName();
 		}
 		super.printDDGPredecessor();
+	}
+	
+	@Override
+	public String toString() {
+		return astNode.toString();
+	}
+
+	@Override
+	public int getLineCount() {
+		return astNode.toString().split(System.getProperty("line.separator")).length;
 	}
 }

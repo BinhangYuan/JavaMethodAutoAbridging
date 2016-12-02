@@ -219,8 +219,6 @@ public abstract class ElementItem {
 		return this.itemType;
 	}
 	
-	protected int lineCount;
-	
 	private ElementItem cfgSeqSuccessor = null;
 	
 	public void setCFGSeqSuccessor(ElementItem item){
@@ -319,15 +317,13 @@ public abstract class ElementItem {
 		return this.definedVariableSet;
 	}
 	
-	protected abstract void setLineCount(String code);
-	
-	public int getLineCount(){
-		return this.lineCount;
-	}
+	public abstract int getLineCount();
 	
 	public abstract void printDebug();
 	
 	public abstract void printName();
+	
+	public abstract String toString();
 	
 	protected void printDDGPredecessor(){
 		System.out.println("DDG Predecessors: -->");

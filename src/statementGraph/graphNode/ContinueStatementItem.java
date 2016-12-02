@@ -1,29 +1,27 @@
 package statementGraph.graphNode;
+import org.eclipse.jdt.core.dom.ContinueStatement;
 
-import org.eclipse.jdt.core.dom.ExpressionStatement;
+public class ContinueStatementItem extends ElementItem{
 
-public class ExpressionStatementItem extends ElementItem{
-
-	private ExpressionStatement astNode; 
+	private ContinueStatement astNode; 
 	
-	
-	public ExpressionStatementItem(ExpressionStatement astNode){
+	public ContinueStatementItem(ContinueStatement astNode){
 		this.astNode = astNode;
 		super.setType(astNode.getNodeType());
 	}
 	
-	public ExpressionStatement getASTNode(){
+	public ContinueStatement getASTNode(){
 		return this.astNode;
 	}
 	
 	@Override
 	public void printName() {
-		System.out.print("Expression Statement: "+astNode.toString());
+		System.out.print("Break Statement: "+astNode.toString());
 	}
 
 	@Override
 	public void printDebug() {
-		System.out.print("Expression Statement: "+astNode.toString());	
+		System.out.print("Break Statement: "+astNode.toString());
 		System.out.println("Successor: -->");
 		if(super.getCFGSeqSuccessor() == null){
 			System.out.println("null");
@@ -33,7 +31,7 @@ public class ExpressionStatementItem extends ElementItem{
 		}
 		super.printDDGPredecessor();
 	}
-	
+
 	@Override
 	public String toString() {
 		return astNode.toString();
@@ -44,4 +42,3 @@ public class ExpressionStatementItem extends ElementItem{
 		return astNode.toString().split(System.getProperty("line.separator")).length;
 	}
 }
-

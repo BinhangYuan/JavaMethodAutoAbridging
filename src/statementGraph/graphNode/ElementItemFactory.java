@@ -4,6 +4,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.AssertStatement;
 import org.eclipse.jdt.core.dom.BreakStatement;
 import org.eclipse.jdt.core.dom.ConstructorInvocation;
+import org.eclipse.jdt.core.dom.ContinueStatement;
 import org.eclipse.jdt.core.dom.DoStatement;
 import org.eclipse.jdt.core.dom.EmptyStatement;
 import org.eclipse.jdt.core.dom.EnhancedForStatement;
@@ -33,6 +34,9 @@ public class ElementItemFactory {
 		}
 		else if(node.getNodeType() == ElementItem.CONSTRUCTOR_INVOCATION){
 			return new ConstructorInvocationStatementItem((ConstructorInvocation)(node));
+		}
+		else if(node.getNodeType() == ElementItem.CONTINUE_STATEMENT){
+			return new ContinueStatementItem((ContinueStatement)(node));
 		}
 		else if(node.getNodeType() == ElementItem.DO_STATEMENT){
 			return new DoStatementItem((DoStatement)(node));
