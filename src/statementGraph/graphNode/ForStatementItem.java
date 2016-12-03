@@ -4,7 +4,7 @@ package statementGraph.graphNode;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ForStatement;
 
-import com.sun.javafx.fxml.expression.Expression;
+import org.eclipse.jdt.core.dom.Expression;
 
 
 public class ForStatementItem extends ElementItem{

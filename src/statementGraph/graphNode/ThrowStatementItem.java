@@ -9,17 +9,10 @@ public class ThrowStatementItem extends ElementItem{
 	public ThrowStatementItem(ThrowStatement astNode){
 		this.astNode = astNode;
 		super.setType(astNode.getNodeType());
-		this.setLineCount(astNode.toString());
 	}
 	
 	public ThrowStatement getASTNode(){
 		return this.astNode;
-	}
-	
-	@Override
-	protected void setLineCount(String code) {
-		//It should be the length excluding the body.
-		super.lineCount = code.split(System.getProperty("line.separator")).length;
 	}
 	
 	@Override
@@ -38,6 +31,16 @@ public class ThrowStatementItem extends ElementItem{
 			super.getCFGSeqSuccessor().printName();
 		}
 		super.printDDGPredecessor();
+	}
+
+	@Override
+	public int getLineCount() {
+		return astNode.toString().split(System.getProperty("line.separator")).length;
+	}
+
+	@Override
+	public String toString() {
+		return astNode.toString();
 	}
 
 }

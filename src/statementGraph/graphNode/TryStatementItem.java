@@ -1,5 +1,6 @@
 package statementGraph.graphNode;
 
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.TryStatement;
 
 
@@ -10,17 +11,10 @@ public class TryStatementItem extends ElementItem{
 	public TryStatementItem(TryStatement astNode){
 		this.astNode = astNode;
 		super.setType(astNode.getNodeType());
-		this.setLineCount(astNode.toString());
 	}
 	
 	public TryStatement getASTNode(){
 		return this.astNode;
-	}
-	
-	@Override
-	protected void setLineCount(String code) {
-		//It should be the length excluding the body.
-		super.lineCount = code.split(System.getProperty("line.separator")).length;
 	}
 
 	@Override
@@ -41,4 +35,32 @@ public class TryStatementItem extends ElementItem{
 		super.printDDGPredecessor();
 	}
 
+	@Override
+	public int getLineCount() {
+		//stub for now, may not work;
+		int count = this.toString().split(System.getProperty("line.separator")).length;
+		count += this.astNode.catchClauses().size();
+		if(this.astNode.getFinally()!=null){
+			count += 1;
+		}
+		return count;
+	}
+
+	@Override
+	public String toString() {
+		//This may be problematic! stub here for now.
+		String result = new String();
+		if(this.astNode.resources().isEmpty()){
+			result = "try {\n";
+		}
+		else{
+			result = "try (";
+			for(Object o: this.astNode.resources()){
+				ASTNode node = (ASTNode) o;
+				result += node.toString(); 
+			}
+			result += "{\n";
+		}
+		return result;
+	}
 }

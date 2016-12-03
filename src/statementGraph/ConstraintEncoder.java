@@ -59,7 +59,9 @@ public class ConstraintEncoder {
 	public void printConstraints(){
 		for(int i=0; i<this.statementItems.size(); i++){
 			System.out.println("Node <"+i+">");
-			this.statementItems.get(i).printName();
+			System.out.println("<|" + this.statementItems.get(i).toString() +"|>");
+			System.out.println("Line count: "+ this.statementItems.get(i).getLineCount());
+			
 		}
 		System.out.println("DDG constraints:");
 		for(EdgeItem edge:this.ddgConstraints){

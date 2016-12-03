@@ -10,17 +10,10 @@ public class SynchronizedStatementItem extends ElementItem{
 	public SynchronizedStatementItem(SynchronizedStatement astNode){
 		this.astNode = astNode;
 		super.setType(astNode.getNodeType());
-		this.setLineCount(astNode.toString());
 	}
 	
 	public SynchronizedStatement getASTNode(){
 		return this.astNode;
-	}
-	
-	@Override
-	protected void setLineCount(String code) {
-		//It should be the length excluding the body.
-		super.lineCount = 1; //This may be problematic.
 	}
 
 	@Override
@@ -39,5 +32,15 @@ public class SynchronizedStatementItem extends ElementItem{
 			super.getCFGSeqSuccessor().printName();
 		}
 		super.printDDGPredecessor();
+	}
+
+	@Override
+	public int getLineCount() {
+		return 2;
+	}
+
+	@Override
+	public String toString() {
+		return "synchronized (" + this.astNode.getExpression().toString() + "){\n";
 	}
 }

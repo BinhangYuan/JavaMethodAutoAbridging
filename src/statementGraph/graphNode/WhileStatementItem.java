@@ -21,17 +21,10 @@ public class WhileStatementItem extends ElementItem{
 	public WhileStatementItem(WhileStatement astNode){
 		this.astNode = astNode;
 		super.setType(astNode.getNodeType());
-		this.setLineCount(astNode.toString());
 	}
 	
 	public WhileStatement getASTNode(){
 		return this.astNode;
-	}
-	
-	@Override
-	protected void setLineCount(String code) {
-		//It should be the length excluding the body.
-		super.lineCount = code.split(System.getProperty("line.separator")).length;
 	}
 
 	@Override
@@ -56,5 +49,17 @@ public class WhileStatementItem extends ElementItem{
 			this.bodyEntry.printName();
 		}
 		super.printDDGPredecessor();
+	}
+	
+	@Override
+	public String toString() {
+		return this.bodyIsBlock?
+		"while("+this.astNode.getExpression().toString()+"){":
+		"while("+this.astNode.getExpression().toString()+")";
+	}
+
+	@Override
+	public int getLineCount() {
+		return this.toString().split(System.getProperty("line.separator")).length + (this.bodyIsBlock?1:0);
 	}
 }

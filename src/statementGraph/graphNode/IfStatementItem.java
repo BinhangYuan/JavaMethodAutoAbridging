@@ -57,8 +57,7 @@ public class IfStatementItem extends ElementItem{
 		System.out.println("Successor: -->");
 		if(super.getCFGSeqSuccessor() == null){
 			System.out.println("null");
-		}
-		else{
+		}else{
 			super.getCFGSeqSuccessor().printName();
 		}
 		System.out.println("Then entry: -->");

@@ -52,13 +52,11 @@ public class SwitchStatementItem extends ElementItem{
 
 	@Override
 	public int getLineCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 2;
 	}
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return null;
+		return "switch (" + this.astNode.getExpression() + "){\n";
 	}
 }
