@@ -8,16 +8,24 @@ import java.util.Map;
 import statementGraph.graphNode.EdgeItem;
 import statementGraph.graphNode.ElementItem;
 
+
+
 public class ConstraintEncoder {
 	private CFG cfg;
 	private DDG ddg;
 	
 	private List<ElementItem> statementItems;
 	private Map<ElementItem,Integer> index = new HashMap<ElementItem,Integer>();
+	private List<Integer> lineCountConstraints = new LinkedList<Integer>();
 	
 	private List<EdgeItem> ddgConstraints = new LinkedList<EdgeItem>();
+	private List<DependencePair> ddgConstraintsSerializer = new LinkedList<DependencePair>();
+	
 	private List<EdgeItem> astConstraints = new LinkedList<EdgeItem>();
+	private List<DependencePair> astConstraintsSerializer = new LinkedList<DependencePair>();
+	
 	private List<EdgeItem> cfgConstraints = new LinkedList<EdgeItem>();
+	private List<DependencePair> cfgConstraintsSerializer = new LinkedList<DependencePair>();
 	
 	
 	public ConstraintEncoder(CFG cfg, DDG ddg){
@@ -26,9 +34,9 @@ public class ConstraintEncoder {
 		this.statementItems = cfg.getNodes();
 		
 		for(int i=0; i<this.statementItems.size();i++){
-			index.put(this.statementItems.get(i), i);
+			this.index.put(this.statementItems.get(i), i);
+			this.lineCountConstraints.add(this.statementItems.get(i).getLineCount());
 		}
-		
 		this.encodeDDG();
 		this.encodeAST();
 		this.encodeCFG();
@@ -39,6 +47,10 @@ public class ConstraintEncoder {
 			for(ElementItem dest: source.getDDGUsageSuccessor()){
 				this.ddgConstraints.add(new EdgeItem(source,dest,EdgeItem.DDGPrority));
 			}
+		}
+		//Stub, not encoding
+		for(EdgeItem e: this.ddgConstraints){
+			this.ddgConstraintsSerializer.add(new DependencePair(this.index.get(e.start), this.index.get(e.end)));
 		}
 	}
 	
@@ -53,6 +65,10 @@ public class ConstraintEncoder {
 			if(parent!=null){
 				this.astConstraints.add(new EdgeItem(parent,dest,EdgeItem.ASTPrority));
 			}
+		}
+		//Stub, not encoding
+		for(EdgeItem e: this.astConstraints){
+			this.astConstraintsSerializer.add(new DependencePair(this.index.get(e.start), this.index.get(e.end)));
 		}
 	}
 	
@@ -75,5 +91,21 @@ public class ConstraintEncoder {
 		for(EdgeItem edge:this.astConstraints){
 			System.out.println(this.index.get(edge.start)+"====>"+this.index.get(edge.end));
 		}
+	}
+	
+	public List<DependencePair> getDDGConstraints(){
+		return this.ddgConstraintsSerializer;
+	}
+	
+	public List<DependencePair> getASTConstraints(){
+		return this.astConstraintsSerializer;
+	}
+	
+	public List<DependencePair> getCFGConstraints(){
+		return this.cfgConstraintsSerializer;
+	}
+	
+	public List<Integer> getLineCounts(){
+		return this.lineCountConstraints;
 	}
 }

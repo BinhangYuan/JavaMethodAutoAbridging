@@ -12,6 +12,8 @@ import org.eclipse.jdt.core.dom.IBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.SimpleName;
 
+import ilpSolver.BinaryIPSolver;
+
 public class ASTParserUtils {
 	
 	//use ASTParse to parse string
@@ -51,6 +53,11 @@ public class ASTParserUtils {
 			//cfg.printCFG();
 			ConstraintEncoder encoder = new ConstraintEncoder(cfg,ddg);
 			encoder.printConstraints();
+			BinaryIPSolver solver = new BinaryIPSolver();
+			solver.setDependenceConstraints(encoder.getASTConstraints(), encoder.getCFGConstraints(), encoder.getDDGConstraints());
+			solver.setLineCostConstraints(encoder.getLineCounts());
+			solver.setTargetLineCount(15);
+			solver.solve();
 		}
 	}
 	
