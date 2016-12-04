@@ -27,40 +27,40 @@ import org.eclipse.jdt.core.dom.TypeDeclarationStatement;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
 
-import statementGraph.graphNode.AssertStatementItem;
-import statementGraph.graphNode.BreakStatementItem;
-import statementGraph.graphNode.ConstructorInvocationStatementItem;
-import statementGraph.graphNode.ContinueStatementItem;
-import statementGraph.graphNode.DoStatementItem;
-import statementGraph.graphNode.ElementItem;
-import statementGraph.graphNode.ElementItemFactory;
-import statementGraph.graphNode.EmptyStatementItem;
-import statementGraph.graphNode.EnhancedForStatementItem;
-import statementGraph.graphNode.ExpressionStatementItem;
-import statementGraph.graphNode.ForStatementItem;
-import statementGraph.graphNode.IfStatementItem;
-import statementGraph.graphNode.LabeledStatementItem;
-import statementGraph.graphNode.ReturnStatementItem;
-import statementGraph.graphNode.SuperConstructorInvocationStatementItem;
-import statementGraph.graphNode.SwitchCaseStatementItem;
-import statementGraph.graphNode.SwitchStatementItem;
-import statementGraph.graphNode.SynchronizedStatementItem;
-import statementGraph.graphNode.ThrowStatementItem;
-import statementGraph.graphNode.TryStatementItem;
-import statementGraph.graphNode.TypeDeclarationStatementItem;
-import statementGraph.graphNode.VariableDeclarationStatementItem;
-import statementGraph.graphNode.WhileStatementItem;
+import statementGraph.graphNode.AssertStatementWrapper;
+import statementGraph.graphNode.BreakStatementWrapper;
+import statementGraph.graphNode.ConstructorInvocationStatementWrapper;
+import statementGraph.graphNode.ContinueStatementWrapper;
+import statementGraph.graphNode.DoStatementWrapper;
+import statementGraph.graphNode.StatementWrapper;
+import statementGraph.graphNode.StatementWrapperFactory;
+import statementGraph.graphNode.EmptyStatementWrapper;
+import statementGraph.graphNode.EnhancedForStatementWrapper;
+import statementGraph.graphNode.ExpressionStatementWrapper;
+import statementGraph.graphNode.ForStatementWrapper;
+import statementGraph.graphNode.IfStatementWrapper;
+import statementGraph.graphNode.LabeledStatementWrapper;
+import statementGraph.graphNode.ReturnStatementWrapper;
+import statementGraph.graphNode.SuperConstructorInvocationStatementWrapper;
+import statementGraph.graphNode.SwitchCaseStatementWrapper;
+import statementGraph.graphNode.SwitchStatementWrapper;
+import statementGraph.graphNode.SynchronizedStatementWrapper;
+import statementGraph.graphNode.ThrowStatementWrapper;
+import statementGraph.graphNode.TryStatementWrapper;
+import statementGraph.graphNode.TypeDeclarationStatementWrapper;
+import statementGraph.graphNode.VariableDeclarationStatementWrapper;
+import statementGraph.graphNode.WhileStatementWrapper;
 
 public class CFG {
 	private int entryIndex = -1;
 	
-	private ElementItemFactory factory = new ElementItemFactory();
+	private StatementWrapperFactory factory = new StatementWrapperFactory();
 	
 	private MethodDeclaration methodASTNode;
 	
 	private HashMap<ASTNode,Integer> astMap = new HashMap<ASTNode,Integer>();
 	
-	private List<ElementItem> nodes = new ArrayList<ElementItem>();
+	private List<StatementWrapper> nodes = new ArrayList<StatementWrapper>();
 	//private List<EdgeItem> edges = new ArrayList<EdgeItem>();
 	
 	
@@ -71,7 +71,7 @@ public class CFG {
 		buildGraphEdges(astNode);
 	}
 	
-	public ElementItem getItem(ASTNode node){
+	public StatementWrapper getItem(ASTNode node){
 		if(this.astMap.containsKey(node)){
 			return this.nodes.get(this.astMap.get(node));
 		}
@@ -83,7 +83,7 @@ public class CFG {
 	
 	private void buildGraphNodes(ASTNode node){
 		int nodeType = node.getNodeType();
-		if(nodeType == ElementItem.METHOD_DECLARATION){
+		if(nodeType == StatementWrapper.METHOD_DECLARATION){
 			if(((MethodDeclaration)node).getBody()==null){
 				return;
 			}
@@ -93,36 +93,36 @@ public class CFG {
 				}
 			}
 		}
-		else if(nodeType == ElementItem.BLOCK){
+		else if(nodeType == StatementWrapper.BLOCK){
 			for(Object statement:((Block)node).statements()){
 				buildGraphNodes((ASTNode)statement);
 			}
 		}
-		else if(nodeType == ElementItem.ASSERT_STATEMENT){
-			AssertStatementItem item = (AssertStatementItem) this.factory.createElementItem(node);
+		else if(nodeType == StatementWrapper.ASSERT_STATEMENT){
+			AssertStatementWrapper item = (AssertStatementWrapper) this.factory.createElementItem(node);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
 		}
-		else if(nodeType == ElementItem.BREAK_STATEMENT){
-			BreakStatementItem item = (BreakStatementItem) this.factory.createElementItem(node);
+		else if(nodeType == StatementWrapper.BREAK_STATEMENT){
+			BreakStatementWrapper item = (BreakStatementWrapper) this.factory.createElementItem(node);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
 		}
-		else if(nodeType == ElementItem.CONSTRUCTOR_INVOCATION){
-			ConstructorInvocationStatementItem item = (ConstructorInvocationStatementItem) this.factory.createElementItem(node);
+		else if(nodeType == StatementWrapper.CONSTRUCTOR_INVOCATION){
+			ConstructorInvocationStatementWrapper item = (ConstructorInvocationStatementWrapper) this.factory.createElementItem(node);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
 		}
-		else if(nodeType == ElementItem.CONTINUE_STATEMENT){
-			ContinueStatementItem item = (ContinueStatementItem) this.factory.createElementItem(node);
+		else if(nodeType == StatementWrapper.CONTINUE_STATEMENT){
+			ContinueStatementWrapper item = (ContinueStatementWrapper) this.factory.createElementItem(node);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
 		}
-		else if(nodeType == ElementItem.DO_STATEMENT){
-			DoStatementItem item = (DoStatementItem) this.factory.createElementItem(node);;
+		else if(nodeType == StatementWrapper.DO_STATEMENT){
+			DoStatementWrapper item = (DoStatementWrapper) this.factory.createElementItem(node);;
 			astMap.put(node, nodes.size());
 			nodes.add(item);
-			if(((DoStatement)node).getBody().getNodeType() != ElementItem.BLOCK){
+			if(((DoStatement)node).getBody().getNodeType() != StatementWrapper.BLOCK){
 				buildGraphNodes((ASTNode)(((DoStatement)node).getBody()));
 			}
 			else{
@@ -132,16 +132,16 @@ public class CFG {
 				}
 			}
 		}
-		else if(nodeType == ElementItem.EMPTY_STATEMENT){
-			EmptyStatementItem item = (EmptyStatementItem) this.factory.createElementItem(node);
+		else if(nodeType == StatementWrapper.EMPTY_STATEMENT){
+			EmptyStatementWrapper item = (EmptyStatementWrapper) this.factory.createElementItem(node);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
 		}
-		else if(nodeType == ElementItem.ENHANCED_FOR_STATEMENT){
-			EnhancedForStatementItem item = (EnhancedForStatementItem) this.factory.createElementItem(node);;
+		else if(nodeType == StatementWrapper.ENHANCED_FOR_STATEMENT){
+			EnhancedForStatementWrapper item = (EnhancedForStatementWrapper) this.factory.createElementItem(node);;
 			astMap.put(node, nodes.size());
 			nodes.add(item);
-			if(((EnhancedForStatement)node).getBody().getNodeType() != ElementItem.BLOCK){
+			if(((EnhancedForStatement)node).getBody().getNodeType() != StatementWrapper.BLOCK){
 				buildGraphNodes((ASTNode)(((DoStatement)node).getBody()));
 			}
 			else{
@@ -151,16 +151,16 @@ public class CFG {
 				}
 			}
 		}
-		else if(nodeType == ElementItem.EXPRESSION_STATEMENT){
-			ExpressionStatementItem item = (ExpressionStatementItem) this.factory.createElementItem(node);
+		else if(nodeType == StatementWrapper.EXPRESSION_STATEMENT){
+			ExpressionStatementWrapper item = (ExpressionStatementWrapper) this.factory.createElementItem(node);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
 		}
-		else if(nodeType == ElementItem.FOR_STATEMENT){
-			ForStatementItem item = (ForStatementItem) this.factory.createElementItem(node);;
+		else if(nodeType == StatementWrapper.FOR_STATEMENT){
+			ForStatementWrapper item = (ForStatementWrapper) this.factory.createElementItem(node);;
 			astMap.put(node, nodes.size());
 			nodes.add(item);
-			if(((ForStatement)node).getBody().getNodeType() != ElementItem.BLOCK){
+			if(((ForStatement)node).getBody().getNodeType() != StatementWrapper.BLOCK){
 				buildGraphNodes((ASTNode)(((ForStatement)node).getBody()));
 			}
 			else{
@@ -170,8 +170,8 @@ public class CFG {
 				}
 			}
 		}
-		else if(nodeType == ElementItem.IF_STATEMENT){
-			IfStatementItem item = (IfStatementItem) this.factory.createElementItem(node);
+		else if(nodeType == StatementWrapper.IF_STATEMENT){
+			IfStatementWrapper item = (IfStatementWrapper) this.factory.createElementItem(node);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
 			buildGraphNodes((ASTNode)(((IfStatement)(node)).getThenStatement()));
@@ -179,37 +179,37 @@ public class CFG {
 				buildGraphNodes((ASTNode)(((IfStatement)(node)).getElseStatement()));
 			}
 		}
-		else if(nodeType == ElementItem.LABELED_STATEMENT){
-			LabeledStatementItem item = (LabeledStatementItem) this.factory.createElementItem(node);
+		else if(nodeType == StatementWrapper.LABELED_STATEMENT){
+			LabeledStatementWrapper item = (LabeledStatementWrapper) this.factory.createElementItem(node);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
 			buildGraphNodes((ASTNode)(((LabeledStatement)(node)).getBody()));
 		}
-		else if(nodeType == ElementItem.RETURN_STATEMENT){
-			ReturnStatementItem item = (ReturnStatementItem) this.factory.createElementItem(node);
+		else if(nodeType == StatementWrapper.RETURN_STATEMENT){
+			ReturnStatementWrapper item = (ReturnStatementWrapper) this.factory.createElementItem(node);
 			astMap.put(node,nodes.size());
 			nodes.add(item);
 		}
-		else if(nodeType == ElementItem.SUPER_CONSTRUCTOR_INVOCATION){
-			SuperConstructorInvocationStatementItem item = (SuperConstructorInvocationStatementItem) this.factory.createElementItem(node);
+		else if(nodeType == StatementWrapper.SUPER_CONSTRUCTOR_INVOCATION){
+			SuperConstructorInvocationStatementWrapper item = (SuperConstructorInvocationStatementWrapper) this.factory.createElementItem(node);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
 		}
-		else if(nodeType == ElementItem.SWITCH_CASE){
-			SwitchCaseStatementItem item = (SwitchCaseStatementItem) this.factory.createElementItem(node);
+		else if(nodeType == StatementWrapper.SWITCH_CASE){
+			SwitchCaseStatementWrapper item = (SwitchCaseStatementWrapper) this.factory.createElementItem(node);
 			astMap.put(node,nodes.size());
 			nodes.add(item);
 		}
-		else if(nodeType == ElementItem.SWITCH_STATEMENT){
-			SwitchStatementItem item = (SwitchStatementItem) this.factory.createElementItem(node);
+		else if(nodeType == StatementWrapper.SWITCH_STATEMENT){
+			SwitchStatementWrapper item = (SwitchStatementWrapper) this.factory.createElementItem(node);
 			astMap.put(node,nodes.size());
 			nodes.add(item);
 			for(Object statement:((SwitchStatement)node).statements()){
 				buildGraphNodes((ASTNode)statement);
 			}
 		}
-		else if(nodeType == ElementItem.SYNCHRONIZED_STATEMENT){
-			SynchronizedStatementItem item = (SynchronizedStatementItem) this.factory.createElementItem(node);
+		else if(nodeType == StatementWrapper.SYNCHRONIZED_STATEMENT){
+			SynchronizedStatementWrapper item = (SynchronizedStatementWrapper) this.factory.createElementItem(node);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
 			Block body = (Block)((SynchronizedStatement)node).getBody();
@@ -217,13 +217,13 @@ public class CFG {
 				buildGraphNodes((ASTNode)statement);
 			}
 		}
-		else if(nodeType == ElementItem.THROW_STATEMENT){
-			ThrowStatementItem item = (ThrowStatementItem) this.factory.createElementItem(node);
+		else if(nodeType == StatementWrapper.THROW_STATEMENT){
+			ThrowStatementWrapper item = (ThrowStatementWrapper) this.factory.createElementItem(node);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
 		}
-		else if(nodeType == ElementItem.TRY_STATEMENT){
-			TryStatementItem item = (TryStatementItem) this.factory.createElementItem(node);
+		else if(nodeType == StatementWrapper.TRY_STATEMENT){
+			TryStatementWrapper item = (TryStatementWrapper) this.factory.createElementItem(node);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
 			Block body = (Block)((TryStatement)node).getBody();
@@ -235,21 +235,21 @@ public class CFG {
 				buildGraphNodes((ASTNode)statement);
 			}
 		}
-		else if(nodeType == ElementItem.TYPE_DECLARATION_STATEMENT){
-			TypeDeclarationStatementItem item = (TypeDeclarationStatementItem) this.factory.createElementItem(node);
+		else if(nodeType == StatementWrapper.TYPE_DECLARATION_STATEMENT){
+			TypeDeclarationStatementWrapper item = (TypeDeclarationStatementWrapper) this.factory.createElementItem(node);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
 		}
-		else if(nodeType == ElementItem.VARIABLE_DECLARATION_STATEMENT){
-			VariableDeclarationStatementItem item = (VariableDeclarationStatementItem) this.factory.createElementItem(node);
+		else if(nodeType == StatementWrapper.VARIABLE_DECLARATION_STATEMENT){
+			VariableDeclarationStatementWrapper item = (VariableDeclarationStatementWrapper) this.factory.createElementItem(node);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
 		}
-		else if(nodeType == ElementItem.WHILE_STATEMENT){
-			WhileStatementItem item = (WhileStatementItem) this.factory.createElementItem(node);;
+		else if(nodeType == StatementWrapper.WHILE_STATEMENT){
+			WhileStatementWrapper item = (WhileStatementWrapper) this.factory.createElementItem(node);;
 			astMap.put(node, nodes.size());
 			nodes.add(item);
-			if(((WhileStatement)node).getBody().getNodeType() != ElementItem.BLOCK){
+			if(((WhileStatement)node).getBody().getNodeType() != StatementWrapper.BLOCK){
 				buildGraphNodes((ASTNode)(((WhileStatement)node).getBody()));
 			}
 			else{
@@ -267,7 +267,7 @@ public class CFG {
 	
 	private void buildGraphEdges(ASTNode node){
 		int nodeType = node.getNodeType();
-		if(nodeType == ElementItem.METHOD_DECLARATION){
+		if(nodeType == StatementWrapper.METHOD_DECLARATION){
 			if(((MethodDeclaration)node).getBody()!=null){
 				Block methodBody = ((MethodDeclaration)node).getBody();
 				assert(astMap.get(methodBody.statements().get(0))==0);
@@ -275,35 +275,35 @@ public class CFG {
 				buildGraphEdges((ASTNode)(methodBody));
 			}
 		}
-		else if(nodeType == ElementItem.BLOCK){
+		else if(nodeType == StatementWrapper.BLOCK){
 			Block body = (Block)node;
 			buildGraphEdges((ASTNode)body.statements().get(0));
 			int i = 0;
 			for(; i< body.statements().size()-1;i++){
-				ElementItem start = nodes.get(astMap.get(body.statements().get(i)));
-				ElementItem end = nodes.get(astMap.get(body.statements().get(i+1)));
-				if(start.getType() != ElementItem.RETURN_STATEMENT){
+				StatementWrapper start = nodes.get(astMap.get(body.statements().get(i)));
+				StatementWrapper end = nodes.get(astMap.get(body.statements().get(i+1)));
+				if(start.getType() != StatementWrapper.RETURN_STATEMENT){
 					start.setCFGSeqSuccessor(end);
 				}
 				buildGraphEdges((ASTNode)body.statements().get(i));
 			}
 			buildGraphEdges((ASTNode)body.statements().get(i));
 		}
-		else if(nodeType == ElementItem.ASSERT_STATEMENT){
+		else if(nodeType == StatementWrapper.ASSERT_STATEMENT){
 			return;
 		}
-		else if(nodeType == ElementItem.BREAK_STATEMENT){
+		else if(nodeType == StatementWrapper.BREAK_STATEMENT){
 			//This is a linear solution, should improve if necessary in the future;
 			BreakStatement breakNode = (BreakStatement) node; 
 			if(breakNode.getLabel()!=null){
 				boolean flag = false;
 				for(Object o : nodes){
-					ElementItem statementItem = (ElementItem) o;
-					if(statementItem.getType() == ElementItem.LABELED_STATEMENT){
-						LabeledStatementItem labelItem = ((LabeledStatementItem)(statementItem));
+					StatementWrapper statementItem = (StatementWrapper) o;
+					if(statementItem.getType() == StatementWrapper.LABELED_STATEMENT){
+						LabeledStatementWrapper labelItem = ((LabeledStatementWrapper)(statementItem));
 						if(labelItem.getASTNode().getLabel().getIdentifier().equals(breakNode.getLabel().getIdentifier())){
 							flag = true;
-							ElementItem start = nodes.get(astMap.get(node));
+							StatementWrapper start = nodes.get(astMap.get(node));
 							start.setCFGSeqSuccessor(labelItem.getCFGSeqSuccessor());
 							break;
 						}
@@ -317,29 +317,29 @@ public class CFG {
 			else{
 				//Find the most immediate loop;
 				ASTNode ancestor = node.getParent();
-				while(!ElementItem.isLoopStatement(ancestor) && ancestor.getNodeType()!=ElementItem.SWITCH_STATEMENT){
+				while(!StatementWrapper.isLoopStatement(ancestor) && ancestor.getNodeType()!=StatementWrapper.SWITCH_STATEMENT){
 					ancestor = ancestor.getParent();
 				}
-				ElementItem start = nodes.get(astMap.get(node));
-				ElementItem end = nodes.get(astMap.get(ancestor)).getCFGSeqSuccessor();
+				StatementWrapper start = nodes.get(astMap.get(node));
+				StatementWrapper end = nodes.get(astMap.get(ancestor)).getCFGSeqSuccessor();
 				start.setCFGSeqSuccessor(end);
 			}
 		}
-		else if(nodeType == ElementItem.CONSTRUCTOR_INVOCATION){
+		else if(nodeType == StatementWrapper.CONSTRUCTOR_INVOCATION){
 			return;
 		}
-		else if(nodeType == ElementItem.CONTINUE_STATEMENT){
+		else if(nodeType == StatementWrapper.CONTINUE_STATEMENT){
 			//This is a linear solution, should improve if necessary in the future;
 			ContinueStatement continueNode = (ContinueStatement) node; 
 			if(continueNode.getLabel()!=null){
 				boolean flag = false;
 				for(Object o : nodes){
-					ElementItem statementItem = (ElementItem) o;
-					if(statementItem.getType() == ElementItem.LABELED_STATEMENT){
-						LabeledStatementItem labelItem = ((LabeledStatementItem)(statementItem));
+					StatementWrapper statementItem = (StatementWrapper) o;
+					if(statementItem.getType() == StatementWrapper.LABELED_STATEMENT){
+						LabeledStatementWrapper labelItem = ((LabeledStatementWrapper)(statementItem));
 						if(labelItem.getASTNode().getLabel().getIdentifier().equals(continueNode.getLabel().getIdentifier())){
 							flag = true;
-							ElementItem start = nodes.get(astMap.get(node));
+							StatementWrapper start = nodes.get(astMap.get(node));
 							start.setCFGSeqSuccessor(labelItem);
 							break;
 						}
@@ -353,121 +353,121 @@ public class CFG {
 			else{
 				//Find the most immediate loop;
 				ASTNode ancestor = node.getParent();
-				while(!ElementItem.isLoopStatement(ancestor)){
+				while(!StatementWrapper.isLoopStatement(ancestor)){
 					ancestor = ancestor.getParent();
 				}
-				ElementItem start = nodes.get(astMap.get(node));
-				ElementItem end = nodes.get(astMap.get(ancestor));//Different from break here.
+				StatementWrapper start = nodes.get(astMap.get(node));
+				StatementWrapper end = nodes.get(astMap.get(ancestor));//Different from break here.
 				start.setCFGSeqSuccessor(end);
 			}
 		}
-		else if(nodeType == ElementItem.DO_STATEMENT){
+		else if(nodeType == StatementWrapper.DO_STATEMENT){
 			//This may be problematic 
 			DoStatement doNode = (DoStatement) node;
-			if(doNode.getBody().getNodeType()==ElementItem.BLOCK){
+			if(doNode.getBody().getNodeType()==StatementWrapper.BLOCK){
 				Block loopBlock = (Block)(doNode.getBody());
 				if(loopBlock.statements().size()==0){
 					return;
 				}
 				
 				ASTNode firstStatement = (ASTNode) loopBlock.statements().get(0);
-				DoStatementItem doItem = (DoStatementItem)nodes.get(astMap.get(node));
-				ElementItem firstItem = nodes.get(astMap.get(firstStatement));
+				DoStatementWrapper doItem = (DoStatementWrapper)nodes.get(astMap.get(node));
+				StatementWrapper firstItem = nodes.get(astMap.get(firstStatement));
 				doItem.setBodyEntry(firstItem);
 				
 				ASTNode lastStatement = (ASTNode) loopBlock.statements().get(loopBlock.statements().size()-1);
-				ElementItem lastItem = nodes.get(astMap.get(lastStatement));
+				StatementWrapper lastItem = nodes.get(astMap.get(lastStatement));
 				lastItem.setCFGSeqSuccessor(doItem);
 				//Recursive
 				buildGraphEdges(loopBlock);
 			}
 			else{
 				ASTNode bodyStatement = doNode.getBody();
-				ElementItem bodyItem = nodes.get(astMap.get(bodyStatement));
-				DoStatementItem doItem = (DoStatementItem)nodes.get(astMap.get(node));
+				StatementWrapper bodyItem = nodes.get(astMap.get(bodyStatement));
+				DoStatementWrapper doItem = (DoStatementWrapper)nodes.get(astMap.get(node));
 				bodyItem.setCFGSeqSuccessor(doItem);
 				doItem.setBodyEntry(bodyItem);
 				buildGraphEdges(bodyStatement);
 			}
 		}
-		else if(nodeType == ElementItem.EMPTY_STATEMENT){
+		else if(nodeType == StatementWrapper.EMPTY_STATEMENT){
 			return;
 		}
-		else if(nodeType == ElementItem.ENHANCED_FOR_STATEMENT){
+		else if(nodeType == StatementWrapper.ENHANCED_FOR_STATEMENT){
 			//This may be problematic 
 			EnhancedForStatement enforNode = (EnhancedForStatement) node;
-			if(enforNode.getBody().getNodeType()==ElementItem.BLOCK){
+			if(enforNode.getBody().getNodeType()==StatementWrapper.BLOCK){
 				Block loopBlock = (Block)(enforNode.getBody());
 				if(loopBlock.statements().size()==0){
 					return;
 				}
 				
 				ASTNode firstStatement = (ASTNode) loopBlock.statements().get(0);
-				EnhancedForStatementItem enforItem = (EnhancedForStatementItem)nodes.get(astMap.get(node));
-				ElementItem firstItem = nodes.get(astMap.get(firstStatement));
+				EnhancedForStatementWrapper enforItem = (EnhancedForStatementWrapper)nodes.get(astMap.get(node));
+				StatementWrapper firstItem = nodes.get(astMap.get(firstStatement));
 				enforItem.setBodyEntry(firstItem);
 				
 				ASTNode lastStatement = (ASTNode) loopBlock.statements().get(loopBlock.statements().size()-1);
-				ElementItem lastItem = nodes.get(astMap.get(lastStatement));
+				StatementWrapper lastItem = nodes.get(astMap.get(lastStatement));
 				lastItem.setCFGSeqSuccessor(enforItem);
 				//Recursive
 				buildGraphEdges(loopBlock);
 			}
 			else{
 				ASTNode bodyStatement = enforNode.getBody();
-				ElementItem bodyItem = nodes.get(astMap.get(bodyStatement));
-				EnhancedForStatementItem enforItem = (EnhancedForStatementItem)nodes.get(astMap.get(node));
+				StatementWrapper bodyItem = nodes.get(astMap.get(bodyStatement));
+				EnhancedForStatementWrapper enforItem = (EnhancedForStatementWrapper)nodes.get(astMap.get(node));
 				bodyItem.setCFGSeqSuccessor(enforItem);
 				enforItem.setBodyEntry(bodyItem);
 				buildGraphEdges(bodyStatement);
 			}
 		}
-		else if(nodeType == ElementItem.EXPRESSION_STATEMENT){
+		else if(nodeType == StatementWrapper.EXPRESSION_STATEMENT){
 			return;
 		}
-		else if(nodeType == ElementItem.FOR_STATEMENT){
+		else if(nodeType == StatementWrapper.FOR_STATEMENT){
 			//This may be problematic 
 			ForStatement forNode = (ForStatement) node;
-			if(forNode.getBody().getNodeType()==ElementItem.BLOCK){
+			if(forNode.getBody().getNodeType()==StatementWrapper.BLOCK){
 				Block loopBlock = (Block)(forNode.getBody());
 				if(loopBlock.statements().size()==0){
 					return;
 				}
 				
 				ASTNode firstStatement = (ASTNode) loopBlock.statements().get(0);
-				ForStatementItem forItem = (ForStatementItem)nodes.get(astMap.get(node));
-				ElementItem firstItem = nodes.get(astMap.get(firstStatement));
+				ForStatementWrapper forItem = (ForStatementWrapper)nodes.get(astMap.get(node));
+				StatementWrapper firstItem = nodes.get(astMap.get(firstStatement));
 				forItem.setBodyEntry(firstItem);
 				
 				ASTNode lastStatement = (ASTNode) loopBlock.statements().get(loopBlock.statements().size()-1);
-				ElementItem lastItem = nodes.get(astMap.get(lastStatement));
+				StatementWrapper lastItem = nodes.get(astMap.get(lastStatement));
 				lastItem.setCFGSeqSuccessor(forItem);
 				//Recursive
 				buildGraphEdges(loopBlock);
 			}
 			else{
 				ASTNode bodyStatement = forNode.getBody();
-				ElementItem bodyItem = nodes.get(astMap.get(bodyStatement));
-				ForStatementItem forItem = (ForStatementItem)nodes.get(astMap.get(node));
+				StatementWrapper bodyItem = nodes.get(astMap.get(bodyStatement));
+				ForStatementWrapper forItem = (ForStatementWrapper)nodes.get(astMap.get(node));
 				bodyItem.setCFGSeqSuccessor(forItem);
 				forItem.setBodyEntry(bodyItem);
 				buildGraphEdges(bodyStatement);
 			}
 		}
-		else if(nodeType == ElementItem.IF_STATEMENT){
+		else if(nodeType == StatementWrapper.IF_STATEMENT){
 			IfStatement ifnode = (IfStatement)node;
-			IfStatementItem ifItem = (IfStatementItem)nodes.get(astMap.get(ifnode));
+			IfStatementWrapper ifItem = (IfStatementWrapper)nodes.get(astMap.get(ifnode));
 			ASTNode thenNode = ifnode.getThenStatement();
 			ASTNode elseNode = ifnode.getElseStatement();
-			if(thenNode.getNodeType() == ElementItem.BLOCK){
+			if(thenNode.getNodeType() == StatementWrapper.BLOCK){
 				Block thenBlock = (Block)thenNode;
 				if(thenBlock.statements().size()==0){
 					return;
 				}
 				ASTNode firstStatement = (ASTNode) thenBlock.statements().get(0);
 				ASTNode lastStatement = (ASTNode) thenBlock.statements().get(thenBlock.statements().size()-1);
-				ElementItem firstItem = nodes.get(astMap.get(firstStatement));
-				ElementItem lastItem = nodes.get(astMap.get(lastStatement));
+				StatementWrapper firstItem = nodes.get(astMap.get(firstStatement));
+				StatementWrapper lastItem = nodes.get(astMap.get(lastStatement));
 				lastItem.setCFGSeqSuccessor(ifItem.getCFGSeqSuccessor());
 				ifItem.setThenEntry(firstItem);
 				//Recursive
@@ -475,21 +475,21 @@ public class CFG {
 			}
 			else{
 				ASTNode bodyStatement = (ASTNode)thenNode;
-				ElementItem bodyItem = nodes.get(astMap.get(bodyStatement));
+				StatementWrapper bodyItem = nodes.get(astMap.get(bodyStatement));
 				bodyItem.setCFGSeqSuccessor(ifItem.getCFGSeqSuccessor());
 				ifItem.setThenEntry(bodyItem);
 				buildGraphEdges(bodyStatement);
 			}
 			if(elseNode != null){//Only cares then branch
-				if(elseNode.getNodeType() == ElementItem.BLOCK){
+				if(elseNode.getNodeType() == StatementWrapper.BLOCK){
 					Block elseBlock = (Block)elseNode;
 					if(elseBlock.statements().size()==0){
 						return;
 					}
 					ASTNode firstStatement = (ASTNode) elseBlock.statements().get(0);
 					ASTNode lastStatement = (ASTNode) elseBlock.statements().get(elseBlock.statements().size()-1);
-					ElementItem firstItem = nodes.get(astMap.get(firstStatement));
-					ElementItem lastItem = nodes.get(astMap.get(lastStatement));
+					StatementWrapper firstItem = nodes.get(astMap.get(firstStatement));
+					StatementWrapper lastItem = nodes.get(astMap.get(lastStatement));
 					lastItem.setCFGSeqSuccessor(ifItem.getCFGSeqSuccessor());
 					ifItem.setElseEntry(firstItem);
 					//Recursive
@@ -497,53 +497,53 @@ public class CFG {
 				}
 				else{
 					ASTNode bodyStatement = (ASTNode)elseNode;
-					ElementItem bodyItem = nodes.get(astMap.get(bodyStatement));
+					StatementWrapper bodyItem = nodes.get(astMap.get(bodyStatement));
 					bodyItem.setCFGSeqSuccessor(ifItem.getCFGSeqSuccessor());
 					ifItem.setElseEntry(bodyItem);
 					buildGraphEdges(bodyStatement);
 				}
 			}
 		}
-		else if(nodeType == ElementItem.LABELED_STATEMENT){
+		else if(nodeType == StatementWrapper.LABELED_STATEMENT){
 			return;
 		}
-		else if(nodeType == ElementItem.RETURN_STATEMENT){
-			ReturnStatementItem returnItem = (ReturnStatementItem) nodes.get(astMap.get(node));
+		else if(nodeType == StatementWrapper.RETURN_STATEMENT){
+			ReturnStatementWrapper returnItem = (ReturnStatementWrapper) nodes.get(astMap.get(node));
 			if(returnItem.getCFGSeqSuccessor()!=null){
 				returnItem.setCFGSeqSuccessor(null);
 			}
 		}
-		else if(nodeType == ElementItem.SUPER_CONSTRUCTOR_INVOCATION){
+		else if(nodeType == StatementWrapper.SUPER_CONSTRUCTOR_INVOCATION){
 			return;
 		}
-		else if(nodeType == ElementItem.SWITCH_CASE){
+		else if(nodeType == StatementWrapper.SWITCH_CASE){
 			return;//This may be problematic;
 		}
-		else if(nodeType == ElementItem.SWITCH_STATEMENT){
+		else if(nodeType == StatementWrapper.SWITCH_STATEMENT){
 			List<Statement> branchNodes = ((SwitchStatement)node).statements();
-			SwitchStatementItem  switchItem =  (SwitchStatementItem) nodes.get(astMap.get(node));
+			SwitchStatementWrapper  switchItem =  (SwitchStatementWrapper) nodes.get(astMap.get(node));
 			int i = 0;
 			for(; i<branchNodes.size()-1 ;i++){
 				Statement branchNode = branchNodes.get(i);
-				ElementItem branchNodeItem = nodes.get(astMap.get(branchNode));
-				if(branchNode.getNodeType()==ElementItem.SWITCH_CASE){
-					SwitchCaseStatementItem caseItem = (SwitchCaseStatementItem) branchNodeItem;
+				StatementWrapper branchNodeItem = nodes.get(astMap.get(branchNode));
+				if(branchNode.getNodeType()==StatementWrapper.SWITCH_CASE){
+					SwitchCaseStatementWrapper caseItem = (SwitchCaseStatementWrapper) branchNodeItem;
 					switchItem.addBranchEntries(caseItem);
 				}
-				ElementItem nextBranchNodeItem = nodes.get(astMap.get(branchNodes.get(i+1)));
+				StatementWrapper nextBranchNodeItem = nodes.get(astMap.get(branchNodes.get(i+1)));
 				branchNodeItem.setCFGSeqSuccessor(nextBranchNodeItem);
 				buildGraphEdges(branchNode);
 			}
 			Statement lastBranchNode = branchNodes.get(i);
-			ElementItem lastBranchNodeItem = nodes.get(astMap.get(lastBranchNode));
-			if(lastBranchNode.getNodeType()==ElementItem.SWITCH_CASE){
-				SwitchCaseStatementItem caseItem = (SwitchCaseStatementItem) lastBranchNodeItem;
+			StatementWrapper lastBranchNodeItem = nodes.get(astMap.get(lastBranchNode));
+			if(lastBranchNode.getNodeType()==StatementWrapper.SWITCH_CASE){
+				SwitchCaseStatementWrapper caseItem = (SwitchCaseStatementWrapper) lastBranchNodeItem;
 				switchItem.addBranchEntries(caseItem);
 			}
 			lastBranchNodeItem.setCFGSeqSuccessor(switchItem.getCFGSeqSuccessor());
 			buildGraphEdges(lastBranchNode);
 		}
-		else if(nodeType == ElementItem.SYNCHRONIZED_STATEMENT){
+		else if(nodeType == StatementWrapper.SYNCHRONIZED_STATEMENT){
 			//This may not be handled correctly!
 			Block syncBlock = ((SynchronizedStatement)(node)).getBody();
 			if(syncBlock.statements().size()==0){
@@ -551,54 +551,54 @@ public class CFG {
 			}
 			buildGraphEdges(syncBlock);
 		}
-		else if(nodeType == ElementItem.THROW_STATEMENT){
+		else if(nodeType == StatementWrapper.THROW_STATEMENT){
 			return;
 		}
-		else if(nodeType == ElementItem.TRY_STATEMENT){
+		else if(nodeType == StatementWrapper.TRY_STATEMENT){
 			Block tryBlock = ((TryStatement)(node)).getBody();
 			if(tryBlock.statements().size()==0){
 				return;
 			}
 			ASTNode firstStatement = (ASTNode) tryBlock.statements().get(0);
 			ASTNode lastStatement = (ASTNode) tryBlock.statements().get(tryBlock.statements().size()-1);
-			TryStatementItem tryItem = (TryStatementItem)nodes.get(astMap.get(node));
-			ElementItem firstItem = nodes.get(astMap.get(firstStatement));
-			ElementItem lastItem = nodes.get(astMap.get(lastStatement));
+			TryStatementWrapper tryItem = (TryStatementWrapper)nodes.get(astMap.get(node));
+			StatementWrapper firstItem = nodes.get(astMap.get(firstStatement));
+			StatementWrapper lastItem = nodes.get(astMap.get(lastStatement));
 			lastItem.setCFGSeqSuccessor(tryItem.getCFGSeqSuccessor());
 			tryItem.setCFGSeqSuccessor(firstItem);
 			//Recursive
 			buildGraphEdges(tryBlock);
 		}
-		else if(nodeType == ElementItem.TYPE_DECLARATION_STATEMENT){
+		else if(nodeType == StatementWrapper.TYPE_DECLARATION_STATEMENT){
 			return;
 		}
-		else if(nodeType == ElementItem.VARIABLE_DECLARATION_STATEMENT){
+		else if(nodeType == StatementWrapper.VARIABLE_DECLARATION_STATEMENT){
 			return;
 		}
-		else if(nodeType == ElementItem.WHILE_STATEMENT){
+		else if(nodeType == StatementWrapper.WHILE_STATEMENT){
 			//This may be problematic 
 			WhileStatement whileNode = (WhileStatement) node;
-			if(whileNode.getBody().getNodeType()==ElementItem.BLOCK){
+			if(whileNode.getBody().getNodeType()==StatementWrapper.BLOCK){
 				Block loopBlock = (Block)(whileNode.getBody());
 				if(loopBlock.statements().size()==0){
 					return;
 				}
 				
 				ASTNode firstStatement = (ASTNode) loopBlock.statements().get(0);
-				WhileStatementItem whileItem = (WhileStatementItem)nodes.get(astMap.get(node));
-				ElementItem firstItem = nodes.get(astMap.get(firstStatement));
+				WhileStatementWrapper whileItem = (WhileStatementWrapper)nodes.get(astMap.get(node));
+				StatementWrapper firstItem = nodes.get(astMap.get(firstStatement));
 				whileItem.setBodyEntry(firstItem);
 				
 				ASTNode lastStatement = (ASTNode) loopBlock.statements().get(loopBlock.statements().size()-1);
-				ElementItem lastItem = nodes.get(astMap.get(lastStatement));
+				StatementWrapper lastItem = nodes.get(astMap.get(lastStatement));
 				lastItem.setCFGSeqSuccessor(whileItem);
 				//Recursive
 				buildGraphEdges(loopBlock);
 			}
 			else{
 				ASTNode bodyStatement = whileNode.getBody();
-				ElementItem bodyItem = nodes.get(astMap.get(bodyStatement));
-				WhileStatementItem whileItem = (WhileStatementItem)nodes.get(astMap.get(node));
+				StatementWrapper bodyItem = nodes.get(astMap.get(bodyStatement));
+				WhileStatementWrapper whileItem = (WhileStatementWrapper)nodes.get(astMap.get(node));
 				bodyItem.setCFGSeqSuccessor(whileItem);
 				whileItem.setBodyEntry(bodyItem);
 				buildGraphEdges(bodyStatement);
@@ -613,14 +613,14 @@ public class CFG {
 		return this.methodASTNode;
 	}
 	
-	public List<ElementItem> getNodes(){
+	public List<StatementWrapper> getNodes(){
 		return this.nodes;
 	}
 	
 	public void printCFG(){
 		System.out.println("Nodes:");
 		for(int i=0 ; i < nodes.size(); i++){
-			ElementItem item = nodes.get(i);
+			StatementWrapper item = nodes.get(i);
 			System.out.println("Node "+i+": <========");
 			item.printDebug();
 			System.out.println("========>");

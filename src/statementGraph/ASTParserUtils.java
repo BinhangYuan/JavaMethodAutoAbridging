@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.IBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.SimpleName;
 
-import ilpSolver.BinaryIPSolver;
+import ilpSolver.NaiveBinaryIPSolver;
 
 public class ASTParserUtils {
 	
@@ -53,7 +53,7 @@ public class ASTParserUtils {
 			//cfg.printCFG();
 			ConstraintEncoder encoder = new ConstraintEncoder(cfg,ddg);
 			encoder.printConstraints();
-			BinaryIPSolver solver = new BinaryIPSolver();
+			NaiveBinaryIPSolver solver = new NaiveBinaryIPSolver();
 			solver.setDependenceConstraints(encoder.getASTConstraints(), encoder.getCFGConstraints(), encoder.getDDGConstraints());
 			solver.setLineCostConstraints(encoder.getLineCounts());
 			solver.setTargetLineCount(15);

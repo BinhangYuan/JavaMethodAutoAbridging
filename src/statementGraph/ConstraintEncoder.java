@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import statementGraph.graphNode.EdgeItem;
-import statementGraph.graphNode.ElementItem;
+import statementGraph.graphNode.StatementWrapper;
 
 
 
@@ -14,8 +14,8 @@ public class ConstraintEncoder {
 	private CFG cfg;
 	private DDG ddg;
 	
-	private List<ElementItem> statementItems;
-	private Map<ElementItem,Integer> index = new HashMap<ElementItem,Integer>();
+	private List<StatementWrapper> statementItems;
+	private Map<StatementWrapper,Integer> index = new HashMap<StatementWrapper,Integer>();
 	private List<Integer> lineCountConstraints = new LinkedList<Integer>();
 	
 	private List<EdgeItem> ddgConstraints = new LinkedList<EdgeItem>();
@@ -43,8 +43,8 @@ public class ConstraintEncoder {
 	}
 	
 	public void encodeDDG(){
-		for(ElementItem source: this.statementItems){
-			for(ElementItem dest: source.getDDGUsageSuccessor()){
+		for(StatementWrapper source: this.statementItems){
+			for(StatementWrapper dest: source.getDDGUsageSuccessor()){
 				this.ddgConstraints.add(new EdgeItem(source,dest,EdgeItem.DDGPrority));
 			}
 		}
@@ -60,8 +60,8 @@ public class ConstraintEncoder {
 	}
 	
 	public void encodeAST(){
-		for(ElementItem dest: this.statementItems){
-			ElementItem parent = ddg.astSkel.getParent(dest);
+		for(StatementWrapper dest: this.statementItems){
+			StatementWrapper parent = ddg.astSkel.getParent(dest);
 			if(parent!=null){
 				this.astConstraints.add(new EdgeItem(parent,dest,EdgeItem.ASTPrority));
 			}

@@ -5,8 +5,8 @@ public class EdgeItem {
 	public static int ASTPrority = 1;
 	public static int CFGPrority = 1;
 	
-	public ElementItem start;
-	public ElementItem end;
+	public StatementWrapper start;
+	public StatementWrapper end;
 	/*
 	 *	Priority = 1 means sequential order;
 	 *	Priority = 2 means the last statement in a block linked back to the start point;
@@ -14,7 +14,7 @@ public class EdgeItem {
 	 */
 	int priority;
 	
-	public EdgeItem(ElementItem s, ElementItem e, int p){
+	public EdgeItem(StatementWrapper s, StatementWrapper e, int p){
 		this.start = s;
 		this.end = e;
 		this.priority = p;

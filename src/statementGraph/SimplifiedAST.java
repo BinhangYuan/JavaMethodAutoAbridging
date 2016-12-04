@@ -8,7 +8,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Block;
 
-import statementGraph.graphNode.ElementItem;
+import statementGraph.graphNode.StatementWrapper;
 
 public class SimplifiedAST {
 	private CFG cfg;
@@ -17,18 +17,18 @@ public class SimplifiedAST {
 		this.cfg = graph;
 	}
 	
-	public List<ElementItem> getSiblings(ElementItem item){
-		Statement state = ElementItem.getASTNodeStatement(item);
+	public List<StatementWrapper> getSiblings(StatementWrapper item){
+		Statement state = StatementWrapper.getASTNodeStatement(item);
 		//System.out.println("GetSiblings: <state>"+state.toString());
 		ASTNode parent = state.getParent();
 		//System.out.println("GetSiblings: <parent>"+parent.toString());
 		
 		if(parent instanceof Block){
-			LinkedList<ElementItem> siblings = new LinkedList<ElementItem>();
+			LinkedList<StatementWrapper> siblings = new LinkedList<StatementWrapper>();
 			Block block = (Block) parent;
 			for(Object o: block.statements()){
 				Statement siblingsState = (Statement)o;
-				if(siblingsState != ElementItem.getASTNodeStatement(item)){
+				if(siblingsState != StatementWrapper.getASTNodeStatement(item)){
 					siblings.add(cfg.getItem(siblingsState));
 				}
 				else{
@@ -42,14 +42,14 @@ public class SimplifiedAST {
 		}
 	}
 	
-	public ElementItem getParent(ElementItem item){
-		Statement state = ElementItem.getASTNodeStatement(item);
+	public StatementWrapper getParent(StatementWrapper item){
+		Statement state = StatementWrapper.getASTNodeStatement(item);
 		ASTNode parent = state.getParent();
 		if(parent instanceof Block){
 			parent = parent.getParent(); 
 		}
-		Assert.isTrue(ElementItem.isAstStatement(parent) || parent.getNodeType() == ASTNode.METHOD_DECLARATION);
-		ElementItem parentItem = cfg.getItem(parent);
+		Assert.isTrue(StatementWrapper.isAstStatement(parent) || parent.getNodeType() == ASTNode.METHOD_DECLARATION);
+		StatementWrapper parentItem = cfg.getItem(parent);
 		return parentItem;
 	}
 }
