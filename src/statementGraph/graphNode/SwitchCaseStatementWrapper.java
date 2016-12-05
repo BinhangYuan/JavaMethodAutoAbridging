@@ -47,8 +47,7 @@ public class SwitchCaseStatementWrapper extends StatementWrapper{
 	}
 
 	@Override
-	public String computeOutput() {
-		return this.toString();
-	}
-	
+	public String computeOutput(int level) {
+		return super.computeIndent(level)+this.toString();
+	}	
 }

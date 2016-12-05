@@ -80,20 +80,20 @@ public class EnhancedForStatementWrapper extends StatementWrapper{
 	}
 
 	@Override
-	public String computeOutput() {
+	public String computeOutput(int level) {
 		String result = new String();
-		result = "for ("+this.astNode.getParameter().toString()+" : "+this.astNode.getExpression().toString()+")";
+		result = super.computeIndent(level)+"for ("+this.astNode.getParameter().toString()+" : "+this.astNode.getExpression().toString()+")";
 		if(this.bodyIsBlock){
 			result += '{';
 		}
 		result += '\n';
 		for(StatementWrapper statementWrapper: this.bodyWrappers){
 			if(statementWrapper.isDisplay()){
-				result += statementWrapper.computeOutput();
+				result += statementWrapper.computeOutput(level+1);
 			}
 		}
 		if(this.bodyIsBlock){
-			result +='}';
+			result +=(super.computeIndent(level)+'}');
 		}
 		result+='\n';
 		return result;

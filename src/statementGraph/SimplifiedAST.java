@@ -524,7 +524,7 @@ public class SimplifiedAST {
 		//Recursive handle each statement:
 		for(StatementWrapper statementWrapper: this.methodBlock){
 			if(statementWrapper.isDisplay()){
-				result += statementWrapper.computeOutput();
+				result += statementWrapper.computeOutput(1);
 			}
 		}
 		result += '}';

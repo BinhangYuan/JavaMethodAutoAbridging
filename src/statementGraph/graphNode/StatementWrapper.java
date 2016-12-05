@@ -1,5 +1,6 @@
 package statementGraph.graphNode;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -345,7 +346,13 @@ public abstract class StatementWrapper {
 	
 	public abstract String toString();
 	
-	public abstract String computeOutput();
+	public abstract String computeOutput(int level);
+	
+	protected String computeIndent(int level){
+		char[] chars = new char[level];
+		Arrays.fill(chars, '\t');
+		return new String(chars);
+	}
 	
 	protected void printDDGPredecessor(){
 		System.out.println("DDG Predecessors: -->");

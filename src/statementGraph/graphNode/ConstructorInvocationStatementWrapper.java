@@ -45,8 +45,8 @@ public class ConstructorInvocationStatementWrapper extends StatementWrapper{
 	}
 
 	@Override
-	public String computeOutput() {
-		return astNode.toString();
+	public String computeOutput(int level) {
+		return super.computeIndent(level)+astNode.toString();
 	}
 }
 

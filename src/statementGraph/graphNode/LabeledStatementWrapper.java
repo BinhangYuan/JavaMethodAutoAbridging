@@ -61,15 +61,15 @@ public class LabeledStatementWrapper extends StatementWrapper{
 	}
 
 	@Override
-	public String computeOutput() {
-		String result = this.toString()+" :";
+	public String computeOutput(int level) {
+		String result = super.computeIndent(level)+this.toString()+" :";
 		if(this.bodyIsBlock){
 			result += '{';
 		}
 		result += '\n';
 		for(StatementWrapper statementWrapper : this.bodyWrappers){
 			if(statementWrapper.isDisplay()){
-				result += statementWrapper.computeOutput();
+				result += statementWrapper.computeOutput(level+1);
 			}
 		}
 		if(this.bodyIsBlock){

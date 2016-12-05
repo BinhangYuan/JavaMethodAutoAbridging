@@ -79,20 +79,20 @@ public class DoStatementWrapper extends StatementWrapper{
 	}
 
 	@Override
-	public String computeOutput() {
+	public String computeOutput(int level) {
 		String result = new String();
-		result = "do";
+		result = super.computeIndent(level)+"do";
 		if(this.bodyIsBlock){
 			result +='{';
 		}
 		result+='\n';
 		for(StatementWrapper statementWrapper: this.bodyWrappers){
 			if(statementWrapper.isDisplay()){
-				result += statementWrapper.computeOutput();
+				result += statementWrapper.computeOutput(level+1);
 			}
 		}
 		if(this.bodyIsBlock){
-			result +='}';
+			result += (super.computeIndent(level)+'}');
 		}
 		result += "while("+this.astNode.getExpression().toString()+")";
 		result+='\n';

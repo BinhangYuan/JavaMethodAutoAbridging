@@ -71,15 +71,15 @@ public class SwitchStatementWrapper extends StatementWrapper{
 	}
 
 	@Override
-	public String computeOutput() {
+	public String computeOutput(int level) {
 		String result = new String();
-		result += this.toString();
+		result += super.computeIndent(level)+this.toString();
 		for(StatementWrapper statementWrapper: this.statementsWrappers){
 			if(statementWrapper.isDisplay()){
-				result += statementWrapper.computeOutput();
+				result += statementWrapper.computeOutput(level+1);
 			}
 		}
-		result += "}\n";
+		result += (super.computeIndent(level)+"}\n");
 		return result;
 	}
 }

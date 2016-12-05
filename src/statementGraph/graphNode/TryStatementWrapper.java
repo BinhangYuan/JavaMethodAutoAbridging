@@ -112,13 +112,14 @@ public class TryStatementWrapper extends StatementWrapper{
 	}
 
 	@Override
-	public String computeOutput() {
+	public String computeOutput(int level) {
 		String result = new String();
+		result = super.computeIndent(level);
 		if(this.astNode.resources().isEmpty()){
-			result = "try {\n";
+			result += "try {\n";
 		}
 		else{
-			result = "try (";
+			result += "try (";
 			for(Object o: this.astNode.resources()){
 				ASTNode node = (ASTNode) o;
 				result += node.toString(); 
@@ -128,32 +129,32 @@ public class TryStatementWrapper extends StatementWrapper{
 		//Handle body:
 		for(StatementWrapper statementWrapper: this.bodyWrappers){
 			if(statementWrapper.isDisplay()){
-				result += statementWrapper.computeOutput();
+				result += statementWrapper.computeOutput(level+1);
 			}
 		}
-		result += "\n}";
+		result += (super.computeIndent(level)+"\n}");
 		//Handle catches:
 		if(this.catchList.size()!=0){
 			for(CatchClause catchItem: this.catchList){
 				result += "catch (" + catchItem.getException().toString() + "){\n";
 				for(StatementWrapper statementWrapper: this.catchMap.get(catchItem)){
 					if(statementWrapper.isDisplay()){
-						result += statementWrapper.computeOutput();
+						result += statementWrapper.computeOutput(level+1);
 					}
 				}
-				result += "} ";
+				result += (super.computeIndent(level)+"} ");
 			}
 			
 		}
 		//Handle final:		
 		if(this.astNode.getFinally()!=null){
-			result += "finally {";
+			result += (super.computeIndent(level)+"finally {");
 			for(StatementWrapper statementWrapper: this.finalBodyWrappers){
 				if(statementWrapper.isDisplay()){
-					result += statementWrapper.computeOutput();
+					result += statementWrapper.computeOutput(level+1);
 				}
 			}
-			result += "}";
+			result += (super.computeIndent(level)+"} ");
 		}
 		result += '\n';
 		return result;

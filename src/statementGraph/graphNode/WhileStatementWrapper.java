@@ -77,17 +77,17 @@ public class WhileStatementWrapper extends StatementWrapper{
 	}
 
 	@Override
-	public String computeOutput() {
+	public String computeOutput(int level) {
 		String result = new String();
-		result += this.toString();
-		result+='\n';
+		result = super.computeIndent(level)+this.toString();
+		result += '\n';
 		for(StatementWrapper statementWrapper: this.bodyWrappers){
 			if(statementWrapper.isDisplay()){
-				result += statementWrapper.computeOutput();
+				result += statementWrapper.computeOutput(level+1);
 			}
 		}
 		if(this.bodyIsBlock){
-			result +='}';
+			result += (super.computeIndent(level)+'}');
 		}
 		result+='\n';
 		return result;

@@ -40,7 +40,6 @@ public class ForStatementWrapper extends StatementWrapper{
 		this.astNode = astNode;
 		super.setType(astNode.getNodeType());
 		this.bodyIsBlock = this.astNode.getBody().getNodeType() == ASTNode.BLOCK;
-		
 	}
 	
 	public ForStatement getASTNode(){
@@ -104,16 +103,16 @@ public class ForStatementWrapper extends StatementWrapper{
 	}
 	
 	@Override
-	public String computeOutput() {
-		String result = this.toString();
+	public String computeOutput(int level) {
+		String result = super.computeIndent(level)+this.toString();
 		result += '\n';
 		for(StatementWrapper statementWrapper: this.bodyWrappers){
 			if(statementWrapper.isDisplay()){
-				result += statementWrapper.computeOutput();
+				result += statementWrapper.computeOutput(level+1);
 			}
 		}
 		if(this.bodyIsBlock){
-			result +='}';
+			result +=(super.computeIndent(level)+'}');
 		}
 		result+='\n';
 		return result;
