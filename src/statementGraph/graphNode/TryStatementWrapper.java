@@ -1,20 +1,18 @@
 package statementGraph.graphNode;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.CatchClause;
 import org.eclipse.jdt.core.dom.TryStatement;
 
 
 public class TryStatementWrapper extends StatementWrapper{
 
 	private TryStatement astNode; 
-	
-	public TryStatementWrapper(TryStatement astNode){
-		this.astNode = astNode;
-		super.setType(astNode.getNodeType());
-	}
 	
 	public TryStatement getASTNode(){
 		return this.astNode;
@@ -38,6 +36,32 @@ public class TryStatementWrapper extends StatementWrapper{
 	
 	public void addFinalBodyWrapper(StatementWrapper item){
 		this.finalBodyWrappers.add(item);
+	}
+	
+	private List<CatchClause> catchList = new LinkedList<CatchClause>();
+	
+	public List<CatchClause> getCatchList(){
+		return this.catchList;
+	}
+	
+	public TryStatementWrapper(TryStatement astNode){
+		this.astNode = astNode;
+		super.setType(astNode.getNodeType());
+		this.catchList.addAll(astNode.catchClauses());
+		for(CatchClause catchClause: this.catchList){
+			this.catchMap.put(catchClause, new LinkedList<StatementWrapper>());
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void addCatchListAll(List items){
+		this.catchList.addAll(items);
+	}
+	
+	private Map<CatchClause,LinkedList<StatementWrapper>> catchMap = new HashMap<CatchClause,LinkedList<StatementWrapper>>();
+	
+	public void addCatchClauseWrapper(CatchClause catchItem, StatementWrapper item){
+		this.catchMap.get(catchItem).add(item);
 	}
 	
 	@Override
@@ -82,8 +106,56 @@ public class TryStatementWrapper extends StatementWrapper{
 				ASTNode node = (ASTNode) o;
 				result += node.toString(); 
 			}
-			result += "{\n";
+			result += "){\n";
 		}
+		return result;
+	}
+
+	@Override
+	public String computeOutput() {
+		String result = new String();
+		if(this.astNode.resources().isEmpty()){
+			result = "try {\n";
+		}
+		else{
+			result = "try (";
+			for(Object o: this.astNode.resources()){
+				ASTNode node = (ASTNode) o;
+				result += node.toString(); 
+			}
+			result += "){\n";
+		}
+		//Handle body:
+		for(StatementWrapper statementWrapper: this.bodyWrappers){
+			if(statementWrapper.isDisplay()){
+				result += statementWrapper.computeOutput();
+			}
+		}
+		result += "\n}";
+		//Handle catches:
+		if(this.catchList.size()!=0){
+			for(CatchClause catchItem: this.catchList){
+				result += "catch (" + catchItem.getException().toString() + "){\n";
+				for(StatementWrapper statementWrapper: this.catchMap.get(catchItem)){
+					if(statementWrapper.isDisplay()){
+						result += statementWrapper.computeOutput();
+					}
+				}
+				result += "} ";
+			}
+			
+		}
+		//Handle final:		
+		if(this.astNode.getFinally()!=null){
+			result += "finally {";
+			for(StatementWrapper statementWrapper: this.finalBodyWrappers){
+				if(statementWrapper.isDisplay()){
+					result += statementWrapper.computeOutput();
+				}
+			}
+			result += "}";
+		}
+		result += '\n';
 		return result;
 	}
 }

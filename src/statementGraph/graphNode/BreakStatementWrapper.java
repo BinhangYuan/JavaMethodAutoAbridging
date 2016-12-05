@@ -45,5 +45,10 @@ public class BreakStatementWrapper extends StatementWrapper{
 	public int getLineCount() {
 		return astNode.toString().split(System.getProperty("line.separator")).length;
 	}
+
+	@Override
+	public String computeOutput() {
+		return astNode.toString();
+	}
 }
 

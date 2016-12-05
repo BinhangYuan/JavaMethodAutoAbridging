@@ -77,5 +77,26 @@ public class DoStatementWrapper extends StatementWrapper{
 	public int getLineCount() {
 		return this.toString().split(System.getProperty("line.separator")).length;
 	}
+
+	@Override
+	public String computeOutput() {
+		String result = new String();
+		result = "do";
+		if(this.bodyIsBlock){
+			result +='{';
+		}
+		result+='\n';
+		for(StatementWrapper statementWrapper: this.bodyWrappers){
+			if(statementWrapper.isDisplay()){
+				result += statementWrapper.computeOutput();
+			}
+		}
+		if(this.bodyIsBlock){
+			result +='}';
+		}
+		result += "while("+this.astNode.getExpression().toString()+")";
+		result+='\n';
+		return result;
+	}
 }
 

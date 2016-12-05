@@ -102,5 +102,21 @@ public class ForStatementWrapper extends StatementWrapper{
 		"for ("+forInit+"; "+ this.astNode.getExpression().toString()+"; "+ forUpdate +"){":
 		"for ("+forInit+"; "+ this.astNode.getExpression().toString()+"; "+ forUpdate +")";
 	}
+	
+	@Override
+	public String computeOutput() {
+		String result = this.toString();
+		result += '\n';
+		for(StatementWrapper statementWrapper: this.bodyWrappers){
+			if(statementWrapper.isDisplay()){
+				result += statementWrapper.computeOutput();
+			}
+		}
+		if(this.bodyIsBlock){
+			result +='}';
+		}
+		result+='\n';
+		return result;
+	}
 }
 

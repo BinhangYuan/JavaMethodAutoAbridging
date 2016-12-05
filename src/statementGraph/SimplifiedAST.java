@@ -13,6 +13,7 @@ import org.eclipse.jdt.core.dom.WhileStatement;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Block;
+import org.eclipse.jdt.core.dom.CatchClause;
 import org.eclipse.jdt.core.dom.DoStatement;
 import org.eclipse.jdt.core.dom.EnhancedForStatement;
 import org.eclipse.jdt.core.dom.ForStatement;
@@ -231,9 +232,18 @@ public class SimplifiedAST {
 			for(Object statement: body.statements()){
 				buildTreeNodes((ASTNode)statement);
 			}
+			List<CatchClause> catchClauses = ((TryStatement)node).catchClauses();
+			for(CatchClause catchItem: catchClauses){
+				Block catchbody = catchItem.getBody();
+				for(Object statement: catchbody.statements()){
+					buildTreeNodes((ASTNode)statement);
+				}
+			}
 			Block finalbody = (Block)((TryStatement)node).getFinally();
-			for(Object statement: finalbody.statements()){
-				buildTreeNodes((ASTNode)statement);
+			if(finalbody!=null){
+				for(Object statement: finalbody.statements()){
+					buildTreeNodes((ASTNode)statement);
+				}
 			}
 		}
 		else if(nodeType == StatementWrapper.TYPE_DECLARATION_STATEMENT){
@@ -420,10 +430,20 @@ public class SimplifiedAST {
 				item.addBodyWrapper(nodes.get(astMap.get(statement)));
 				buildHierachy((ASTNode)statement);
 			}
+			List<CatchClause> catchClauses = ((TryStatement)node).catchClauses();
+			for(CatchClause catchItem: catchClauses){
+				Block catchbody = catchItem.getBody();
+				for(Object statement: catchbody.statements()){
+					item.addCatchClauseWrapper(catchItem, nodes.get(astMap.get(statement)));
+					buildHierachy((ASTNode)statement);
+				}
+			}
 			Block finalbody = (Block)((TryStatement)node).getFinally();
-			for(Object statement: finalbody.statements()){
-				item.addFinalBodyWrapper(nodes.get(astMap.get(statement)));
-				buildHierachy((ASTNode)statement);
+			if(finalbody!=null){
+				for(Object statement: finalbody.statements()){
+					item.addFinalBodyWrapper(nodes.get(astMap.get(statement)));
+					buildHierachy((ASTNode)statement);
+				}
 			}
 		}
 		else if(nodeType == StatementWrapper.TYPE_DECLARATION_STATEMENT){
@@ -451,7 +471,6 @@ public class SimplifiedAST {
 			System.out.println("Unexpected Type in CFG!");
 		}
 	}
-	
 	
 	public List<StatementWrapper> getSiblings(StatementWrapper item){
 		Statement state = StatementWrapper.getASTNodeStatement(item);
@@ -484,8 +503,31 @@ public class SimplifiedAST {
 		if(parent instanceof Block){
 			parent = parent.getParent(); 
 		}
+		if(parent instanceof CatchClause){
+			parent = parent.getParent();
+		}
 		Assert.isTrue(StatementWrapper.isAstStatement(parent) || parent.getNodeType() == ASTNode.METHOD_DECLARATION);
 		StatementWrapper parentItem = this.getItem(parent);
 		return parentItem;
+	}
+
+	public String computeOutput(boolean [] solution){
+		Assert.isTrue(solution.length == this.nodes.size());
+		//Set up result;
+		for(int i=0; i<solution.length; i++){
+			this.nodes.get(i).setIsDisplay(solution[i]);
+		}
+		String result = new String();
+		//This may not be correct, check later:
+		result = this.methodASTNode.toString().substring(0, this.methodASTNode.toString().indexOf('{')+1);
+		result += '\n';
+		//Recursive handle each statement:
+		for(StatementWrapper statementWrapper: this.methodBlock){
+			if(statementWrapper.isDisplay()){
+				result += statementWrapper.computeOutput();
+			}
+		}
+		result += '}';
+		return result;
 	}
 }

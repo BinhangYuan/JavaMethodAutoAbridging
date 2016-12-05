@@ -75,4 +75,21 @@ public class WhileStatementWrapper extends StatementWrapper{
 	public int getLineCount() {
 		return this.toString().split(System.getProperty("line.separator")).length + (this.bodyIsBlock?1:0);
 	}
+
+	@Override
+	public String computeOutput() {
+		String result = new String();
+		result += this.toString();
+		result+='\n';
+		for(StatementWrapper statementWrapper: this.bodyWrappers){
+			if(statementWrapper.isDisplay()){
+				result += statementWrapper.computeOutput();
+			}
+		}
+		if(this.bodyIsBlock){
+			result +='}';
+		}
+		result+='\n';
+		return result;
+	}
 }

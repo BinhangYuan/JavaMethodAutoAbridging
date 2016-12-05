@@ -123,5 +123,46 @@ public class IfStatementWrapper extends StatementWrapper{
 		}
 		return result;
 	}
+
+	@Override
+	public String computeOutput() {
+		String result = new String();
+		result = "if("+ this.astNode.getExpression().toString() +")";
+		if(this.thenIsBlock){
+			result += "{";
+		}
+		result += '\n';
+		for(StatementWrapper statementWrapper: this.thenBodyWrappers){
+			if(statementWrapper.isDisplay()){
+				result += statementWrapper.computeOutput();
+			}
+		}
+		if(this.thenIsBlock){
+			result += "}";
+		}
+		result += '\n';
+		if(this.astNode.getElseStatement()!=null){
+			result += "else ";
+			if(this.elseIsBlock){
+				result += "{\n";
+				for(StatementWrapper statementWrapper: this.elseBodyWrappers){
+					if(statementWrapper.isDisplay()){
+						result += statementWrapper.computeOutput();
+					}
+				}
+				result += '}';
+			}
+			else{
+				if(this.astNode.getElseStatement().getFlags()!=ASTNode.IF_STATEMENT){
+					result += '\n';
+				}
+				if(this.elseBodyWrappers.get(0).isDisplay()){
+					result += this.elseBodyWrappers.get(0).computeOutput();
+				}
+			}
+			result += '\n';
+		}
+		return result;
+	}
 }
 

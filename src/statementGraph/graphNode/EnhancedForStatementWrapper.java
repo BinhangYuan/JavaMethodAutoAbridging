@@ -78,5 +78,25 @@ public class EnhancedForStatementWrapper extends StatementWrapper{
 		 "for ("+this.astNode.getParameter().toString()+" : "+this.astNode.getExpression().toString()+"){":
 		 "for ("+this.astNode.getParameter().toString()+" : "+this.astNode.getExpression().toString()+")";
 	}
+
+	@Override
+	public String computeOutput() {
+		String result = new String();
+		result = "for ("+this.astNode.getParameter().toString()+" : "+this.astNode.getExpression().toString()+")";
+		if(this.bodyIsBlock){
+			result += '{';
+		}
+		result += '\n';
+		for(StatementWrapper statementWrapper: this.bodyWrappers){
+			if(statementWrapper.isDisplay()){
+				result += statementWrapper.computeOutput();
+			}
+		}
+		if(this.bodyIsBlock){
+			result +='}';
+		}
+		result+='\n';
+		return result;
+	}
 }
 

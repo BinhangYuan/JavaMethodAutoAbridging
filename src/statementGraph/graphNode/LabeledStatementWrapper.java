@@ -3,15 +3,19 @@ package statementGraph.graphNode;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.LabeledStatement;
 
 public class LabeledStatementWrapper extends StatementWrapper{
 
 	private LabeledStatement astNode; 
 	
+	private boolean bodyIsBlock;
+	
 	public LabeledStatementWrapper(LabeledStatement astNode){
 		this.astNode = astNode;
 		super.setType(astNode.getNodeType());
+		this.bodyIsBlock = this.astNode.getBody().getNodeType() == ASTNode.BLOCK;
 	}
 	
 	public LabeledStatement getASTNode(){
@@ -55,5 +59,23 @@ public class LabeledStatementWrapper extends StatementWrapper{
 	public String toString() {
 		return this.astNode.getLabel().toString()+":\n";
 	}
-}
 
+	@Override
+	public String computeOutput() {
+		String result = this.toString()+" :";
+		if(this.bodyIsBlock){
+			result += '{';
+		}
+		result += '\n';
+		for(StatementWrapper statementWrapper : this.bodyWrappers){
+			if(statementWrapper.isDisplay()){
+				result += statementWrapper.computeOutput();
+			}
+		}
+		if(this.bodyIsBlock){
+			result += '{';
+		}
+		result += '\n';
+		return result;
+	}
+}

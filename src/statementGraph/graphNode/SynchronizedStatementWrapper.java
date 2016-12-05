@@ -56,4 +56,17 @@ public class SynchronizedStatementWrapper extends StatementWrapper{
 	public String toString() {
 		return "synchronized (" + this.astNode.getExpression().toString() + "){\n";
 	}
+
+	@Override
+	public String computeOutput() {
+		String result = new String();
+		result += this.toString();
+		for(StatementWrapper statementWrapper: this.bodyWrappers){
+			if(statementWrapper.isDisplay()){
+				result += statementWrapper.computeOutput();
+			}
+		}
+		result += "}\n";
+		return result;
+	}
 }

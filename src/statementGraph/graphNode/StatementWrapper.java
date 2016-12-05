@@ -345,6 +345,8 @@ public abstract class StatementWrapper {
 	
 	public abstract String toString();
 	
+	public abstract String computeOutput();
+	
 	protected void printDDGPredecessor(){
 		System.out.println("DDG Predecessors: -->");
 		if(this.getDDGDefinedPredecessor().isEmpty()){

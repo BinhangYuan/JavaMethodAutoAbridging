@@ -69,4 +69,17 @@ public class SwitchStatementWrapper extends StatementWrapper{
 	public String toString() {
 		return "switch (" + this.astNode.getExpression() + "){\n";
 	}
+
+	@Override
+	public String computeOutput() {
+		String result = new String();
+		result += this.toString();
+		for(StatementWrapper statementWrapper: this.statementsWrappers){
+			if(statementWrapper.isDisplay()){
+				result += statementWrapper.computeOutput();
+			}
+		}
+		result += "}\n";
+		return result;
+	}
 }

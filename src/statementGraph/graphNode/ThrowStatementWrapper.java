@@ -43,4 +43,9 @@ public class ThrowStatementWrapper extends StatementWrapper{
 		return astNode.toString();
 	}
 
+	@Override
+	public String computeOutput() {
+		return astNode.toString();
+	}
+
 }

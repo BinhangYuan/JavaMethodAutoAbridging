@@ -44,4 +44,9 @@ public class TypeDeclarationStatementWrapper extends StatementWrapper{
 		return astNode.toString().split(System.getProperty("line.separator")).length;
 	}
 
+	@Override
+	public String computeOutput() {
+		return astNode.toString();
+	}
+
 }

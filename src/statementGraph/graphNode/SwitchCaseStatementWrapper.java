@@ -43,6 +43,12 @@ public class SwitchCaseStatementWrapper extends StatementWrapper{
 	public String toString() {
 		return this.astNode.getExpression()==null?
 		"default :\n":
-		"case " + this.astNode.getExpression() + ": "; 
+		"case " + this.astNode.getExpression() + ": \n"; 
 	}
+
+	@Override
+	public String computeOutput() {
+		return this.toString();
+	}
+	
 }

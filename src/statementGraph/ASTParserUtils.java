@@ -58,8 +58,10 @@ public class ASTParserUtils {
 			NaiveBinaryIPSolver solver = new NaiveBinaryIPSolver();
 			solver.setDependenceConstraints(encoder.getASTConstraints(), encoder.getCFGConstraints(), encoder.getDDGConstraints());
 			solver.setLineCostConstraints(encoder.getLineCounts());
-			solver.setTargetLineCount(15);
-			solver.solve();
+			int targetLine = 15;
+			solver.setTargetLineCount(targetLine);
+			boolean[] solution = solver.solve();
+			System.out.println(sAST.computeOutput(solution));
 		}
 	}
 	
@@ -67,7 +69,6 @@ public class ASTParserUtils {
 	//This is used for a simple verification 
 	public static void parseVaraibleName(String filePath, String fileName) throws IOException {
 		ASTParser parser = ASTParser.newParser(AST.JLS8);
-		//parser.setS
 		String str = readFileToString(filePath+fileName);
 		parser.setSource(str.toCharArray());
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
@@ -132,10 +133,9 @@ public class ASTParserUtils {
 		File root = new File(dirPath);
 		//System.out.println(rootDir.listFiles());
 		File[] files = root.listFiles ( );
-		String filePath = null;
 	 
 		for (File f : files ) {
-			filePath = f.getAbsolutePath();
+			String filePath = f.getAbsolutePath();
 			if(f.isFile()){
 				//parse(readFileToString(filePath));
 			}
