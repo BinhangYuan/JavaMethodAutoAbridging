@@ -1,5 +1,8 @@
 package statementGraph.graphNode;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.jdt.core.dom.LabeledStatement;
 
 public class LabeledStatementWrapper extends StatementWrapper{
@@ -15,6 +18,15 @@ public class LabeledStatementWrapper extends StatementWrapper{
 		return this.astNode;
 	}
 	
+	private List<StatementWrapper> bodyWrappers = new LinkedList<StatementWrapper>();
+	
+	public List<StatementWrapper> getBodyWrappers(){
+		return this.bodyWrappers;
+	}
+	
+	public void addBodyWrapper(StatementWrapper item){
+		this.bodyWrappers.add(item);
+	}
 
 	@Override
 	public void printName() {

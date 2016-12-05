@@ -11,6 +11,7 @@ import statementGraph.graphNode.StatementWrapper;
 
 
 public class ConstraintEncoder {
+	private SimplifiedAST sAST;
 	private CFG cfg;
 	private DDG ddg;
 	
@@ -28,7 +29,8 @@ public class ConstraintEncoder {
 	private List<DependencePair> cfgConstraintsSerializer = new LinkedList<DependencePair>();
 	
 	
-	public ConstraintEncoder(CFG cfg, DDG ddg){
+	public ConstraintEncoder(SimplifiedAST sAST, CFG cfg, DDG ddg){
+		this.sAST = sAST;
 		this.cfg = cfg;
 		this.ddg = ddg;
 		this.statementItems = cfg.getNodes();
@@ -61,7 +63,7 @@ public class ConstraintEncoder {
 	
 	public void encodeAST(){
 		for(StatementWrapper dest: this.statementItems){
-			StatementWrapper parent = ddg.astSkel.getParent(dest);
+			StatementWrapper parent = sAST.getParent(dest);
 			if(parent!=null){
 				this.astConstraints.add(new EdgeItem(parent,dest,EdgeItem.ASTPrority));
 			}

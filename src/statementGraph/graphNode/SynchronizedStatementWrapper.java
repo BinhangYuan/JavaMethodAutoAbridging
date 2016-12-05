@@ -1,11 +1,24 @@
 package statementGraph.graphNode;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.jdt.core.dom.SynchronizedStatement;
 
 //synchronized ( Expression ) Block
 public class SynchronizedStatementWrapper extends StatementWrapper{
 
 	private SynchronizedStatement astNode; 
+	
+	private List<StatementWrapper> bodyWrappers = new LinkedList<StatementWrapper>();
+	
+	public List<StatementWrapper> getBodyWrappers(){
+		return this.bodyWrappers;
+	}
+	
+	public void addBodyWrapper(StatementWrapper item){
+		this.bodyWrappers.add(item);
+	}
 	
 	public SynchronizedStatementWrapper(SynchronizedStatement astNode){
 		this.astNode = astNode;

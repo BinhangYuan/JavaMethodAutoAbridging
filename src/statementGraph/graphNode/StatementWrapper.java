@@ -219,6 +219,26 @@ public abstract class StatementWrapper {
 		return this.itemType;
 	}
 	
+	private boolean isDisplay = false;
+	
+	public void setIsDisplay(boolean flag){
+		this.isDisplay = flag;
+	}
+	
+	public boolean isDisplay(){
+		return this.isDisplay;
+	}
+	
+	private StatementWrapper parent = null;
+	
+	public StatementWrapper getParent(){
+		return this.parent;
+	}
+	
+	public void setParent(StatementWrapper parent){
+		this.parent = parent;
+	}
+	
 	private StatementWrapper cfgSeqSuccessor = null;
 	
 	public void setCFGSeqSuccessor(StatementWrapper item){

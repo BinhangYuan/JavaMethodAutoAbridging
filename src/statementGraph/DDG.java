@@ -13,21 +13,19 @@ import statementGraph.graphNode.StatementWrapper;
 
 
 public class DDG {
-	private CFG cfg;
-	public SimplifiedAST astSkel;
+	public SimplifiedAST sAST;
 	private List<SimpleName> methodParameters =  new LinkedList<SimpleName>();
 	private Map<String,List<StatementWrapper>> variablesDecl = new HashMap<String,List<StatementWrapper>>();
 	
-	public DDG(CFG cfg){
-		this.cfg = cfg;
-		this.astSkel = new SimplifiedAST(this.cfg);
+	public DDG(SimplifiedAST sAST){
+		this.sAST = sAST;
 		this.updateMethodParameters();
 		this.updateAllVariables();
 		this.buildEdges();
 	}
 	
 	private void updateMethodParameters(){
-		MethodDeclaration methodAst = this.cfg.getMethodDeclaration();
+		MethodDeclaration methodAst = this.sAST.getASTNode();
 		for(Object s: methodAst.parameters()){
 			if(s instanceof SingleVariableDeclaration){
 				SingleVariableDeclaration svdec = (SingleVariableDeclaration)s;
@@ -39,7 +37,7 @@ public class DDG {
 	}
 	
 	private void updateAllVariables(){
-		for(StatementWrapper item:this.cfg.getNodes()){
+		for(StatementWrapper item:this.sAST.getAllWrapperList()){
 			Statement statement = StatementWrapper.getASTNodeStatement(item);
 			item.addDefinedVariables(ExpressionExtractor.getVariableSimpleNames(statement, true));
 			if(!item.getDefinedVariables().isEmpty()){
@@ -55,7 +53,7 @@ public class DDG {
 	}
 	
 	private void buildEdges(){
-		for(StatementWrapper item: this.cfg.getNodes()){
+		for(StatementWrapper item: this.sAST.getAllWrapperList()){
 			if(!item.getUsageVariables().isEmpty()){
 				for(String var: item.getUsageVariableSet()){
 					if(this.variablesDecl.containsKey(var)){//If the variable is declared out of the scope of the function, we ignore it for now.
@@ -75,7 +73,7 @@ public class DDG {
 								List<StatementWrapper> siblings = null;
 								boolean done = false;
 								while(!done){
-									siblings = this.astSkel.getSiblings(current);
+									siblings = this.sAST.getSiblings(current);
 									for(StatementWrapper sibling: siblings){
 										if(sibling.getDefinedVariableSet().contains(var)){
 											StatementWrapper preItem = sibling;
@@ -88,7 +86,7 @@ public class DDG {
 										}
 									}
 									if(!done){
-										parent = this.astSkel.getParent(current);
+										parent = this.sAST.getParent(current);
 										//System.out.println(parent.toString());
 										if(parent.getDefinedVariableSet().contains(var)){
 											StatementWrapper preItem = parent;
@@ -115,7 +113,7 @@ public class DDG {
 	
 	public void printDDG(){
 		System.out.println("Print the elements declaration and usage");
-		for(StatementWrapper item:this.cfg.getNodes()){
+		for(StatementWrapper item:this.sAST.getAllWrapperList()){
 			item.printName();
 			System.out.println("Declares: "+item.getDefinedVariables());
 			System.out.println("Uses: "+item.getUsageVariables());

@@ -1,5 +1,8 @@
 package statementGraph.graphNode;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.DoStatement;
 
@@ -17,6 +20,16 @@ public class DoStatementWrapper extends StatementWrapper{
 	
 	public StatementWrapper getBodyEntry(){
 		return this.bodyEntry;
+	}
+	
+	private List<StatementWrapper> bodyWrappers = new LinkedList<StatementWrapper>();
+	
+	public List<StatementWrapper> getBodyWrappers(){
+		return this.bodyWrappers;
+	}
+	
+	public void addBodyWrapper(StatementWrapper item){
+		this.bodyWrappers.add(item);
 	}
 	
 	public DoStatementWrapper(DoStatement astNode){

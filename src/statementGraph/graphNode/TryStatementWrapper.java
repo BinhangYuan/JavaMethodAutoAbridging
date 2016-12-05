@@ -1,5 +1,8 @@
 package statementGraph.graphNode;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.TryStatement;
 
@@ -17,6 +20,26 @@ public class TryStatementWrapper extends StatementWrapper{
 		return this.astNode;
 	}
 
+	private List<StatementWrapper> bodyWrappers = new LinkedList<StatementWrapper>();
+	
+	public List<StatementWrapper> getBodyWrappers(){
+		return this.bodyWrappers;
+	}
+	
+	public void addBodyWrapper(StatementWrapper item){
+		this.bodyWrappers.add(item);
+	}
+	
+	private List<StatementWrapper> finalBodyWrappers = new LinkedList<StatementWrapper>();
+	
+	public List<StatementWrapper> getFinalBodyWrappers(){
+		return this.finalBodyWrappers;
+	}
+	
+	public void addFinalBodyWrapper(StatementWrapper item){
+		this.finalBodyWrappers.add(item);
+	}
+	
 	@Override
 	public void printName() {
 		System.out.print("Try Statement: "+astNode.toString());

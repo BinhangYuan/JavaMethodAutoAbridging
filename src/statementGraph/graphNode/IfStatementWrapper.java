@@ -1,5 +1,8 @@
 package statementGraph.graphNode;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.IfStatement;
 
@@ -27,6 +30,26 @@ public class IfStatementWrapper extends StatementWrapper{
 	
 	public StatementWrapper getElseEntry(){
 		return this.elseEntry;
+	}
+	
+	private List<StatementWrapper> thenBodyWrappers = new LinkedList<StatementWrapper>();
+	
+	public List<StatementWrapper> getThenBodyWrappers(){
+		return this.thenBodyWrappers;
+	}
+	
+	public void addThenBodyWrapper(StatementWrapper item){
+		this.thenBodyWrappers.add(item);
+	}
+	
+	private List<StatementWrapper> elseBodyWrappers = new LinkedList<StatementWrapper>();
+	
+	public List<StatementWrapper> getElseBodyWrappers(){
+		return this.elseBodyWrappers;
+	}
+	
+	public void addElseBodyWrapper(StatementWrapper item){
+		this.elseBodyWrappers.add(item);
 	}
 	
 	public IfStatementWrapper(IfStatement astNode){

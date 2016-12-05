@@ -25,7 +25,7 @@ import org.eclipse.jdt.core.dom.WhileStatement;
 
 public class StatementWrapperFactory {
 	
-	public StatementWrapper createElementItem(ASTNode node){
+	public StatementWrapper createWrapper(ASTNode node){
 		if(node.getNodeType() == StatementWrapper.ASSERT_STATEMENT){
 			return new AssertStatementWrapper((AssertStatement)node);
 		}

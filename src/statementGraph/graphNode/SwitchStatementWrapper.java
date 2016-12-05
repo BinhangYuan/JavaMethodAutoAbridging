@@ -28,6 +28,16 @@ public class SwitchStatementWrapper extends StatementWrapper{
 		return this.astNode;
 	}
 	
+	private List<StatementWrapper> statementsWrappers = new LinkedList<StatementWrapper>();
+	
+	public List<StatementWrapper> getStatementsWrappers(){
+		return this.statementsWrappers;
+	}
+	
+	public void addStatementsWrapper(StatementWrapper item){
+		this.statementsWrappers.add(item);
+	}
+	
 	@Override
 	public void printName() {
 		System.out.print("Switch Statement: "+astNode.toString());

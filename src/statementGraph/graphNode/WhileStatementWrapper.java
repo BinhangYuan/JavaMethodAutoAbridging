@@ -1,5 +1,8 @@
 package statementGraph.graphNode;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.jdt.core.dom.WhileStatement;
 
 public class WhileStatementWrapper extends StatementWrapper{
@@ -16,6 +19,16 @@ public class WhileStatementWrapper extends StatementWrapper{
 	
 	public StatementWrapper getBodyEntry(){
 		return this.bodyEntry;
+	}
+	
+	private List<StatementWrapper> bodyWrappers = new LinkedList<StatementWrapper>();
+	
+	public List<StatementWrapper> getBodyWrappers(){
+		return this.bodyWrappers;
+	}
+	
+	public void addBodyWrapper(StatementWrapper item){
+		this.bodyWrappers.add(item);
 	}
 	
 	public WhileStatementWrapper(WhileStatement astNode){
