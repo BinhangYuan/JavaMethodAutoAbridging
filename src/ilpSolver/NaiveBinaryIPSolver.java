@@ -16,7 +16,7 @@ public class NaiveBinaryIPSolver {
 	List<Integer> lineCostConstraints;
 	int targetLineCount = -1;
 	int variableNum = 0;
-	boolean debug = true;
+	boolean debug = false;
 	
 	public NaiveBinaryIPSolver(){
 		this.dependenceConstraints = new LinkedList<DependencePair>();

@@ -101,13 +101,10 @@ public class IfStatementWrapper extends StatementWrapper{
 	@Override
 	public int getLineCount() {
 		int count = this.toString().split(System.getProperty("line.separator")).length;
-		if(this.thenIsBlock && this.astNode.getElseStatement()==null){
+		if(this.thenIsBlock){
 			count += 1;
 		}
-		else if(!this.thenIsBlock && this.astNode.getElseStatement()==null){
-			//Nothing to be done;
-		}
-		else if(this.astNode.getElseStatement()!=null){
+		if(this.astNode.getElseStatement()!=null){
 			count += (this.elseIsBlock?2:1);
 		}
 		return count;
@@ -165,3 +162,4 @@ public class IfStatementWrapper extends StatementWrapper{
 		return result;
 	}
 }
+

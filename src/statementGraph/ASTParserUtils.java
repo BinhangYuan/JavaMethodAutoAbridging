@@ -44,21 +44,20 @@ public class ASTParserUtils {
 		for(MethodDeclaration node: methods){
 			System.out.println("Method Declaration of: '"+node.getName()+ "' at line" +cu.getLineNumber(node.getStartPosition()));
 			System.out.println(node.toString());
-			System.out.println("Generate CFG:");
+			//System.out.println("Generate CFG:");
 			
 			SimplifiedAST sAST = new SimplifiedAST(node);
 			CFG cfg = new CFG(sAST);
 			//cfg.printCFG();
-			System.out.println("Generate DDG:");
+			//System.out.println("Generate DDG:");
 			DDG ddg = new DDG(sAST);
 			//ddg.printDDG();
-			//cfg.printCFG();
 			ConstraintEncoder encoder = new ConstraintEncoder(sAST,cfg,ddg);
-			encoder.printConstraints();
+			//encoder.printConstraints();
 			NaiveBinaryIPSolver solver = new NaiveBinaryIPSolver();
 			solver.setDependenceConstraints(encoder.getASTConstraints(), encoder.getCFGConstraints(), encoder.getDDGConstraints());
 			solver.setLineCostConstraints(encoder.getLineCounts());
-			int targetLine = 15;
+			int targetLine = 5;
 			solver.setTargetLineCount(targetLine);
 			boolean[] solution = solver.solve();
 			System.out.println(sAST.computeOutput(solution));
