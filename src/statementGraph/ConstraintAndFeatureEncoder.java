@@ -10,7 +10,7 @@ import statementGraph.graphNode.StatementWrapper;
 
 
 
-public class ConstraintEncoder {
+public class ConstraintAndFeatureEncoder {
 	private SimplifiedAST sAST;
 	private CFG cfg;
 	private DDG ddg;
@@ -18,6 +18,7 @@ public class ConstraintEncoder {
 	private List<StatementWrapper> statementItems;
 	private Map<StatementWrapper,Integer> index = new HashMap<StatementWrapper,Integer>();
 	private List<Integer> lineCountConstraints = new LinkedList<Integer>();
+	private List<Integer> feature_statementTypes = new LinkedList<Integer>();
 	
 	private List<EdgeItem> ddgConstraints = new LinkedList<EdgeItem>();
 	private List<DependencePair> ddgConstraintsSerializer = new LinkedList<DependencePair>();
@@ -29,7 +30,7 @@ public class ConstraintEncoder {
 	private List<DependencePair> cfgConstraintsSerializer = new LinkedList<DependencePair>();
 	
 	
-	public ConstraintEncoder(SimplifiedAST sAST, CFG cfg, DDG ddg){
+	public ConstraintAndFeatureEncoder(SimplifiedAST sAST, CFG cfg, DDG ddg){
 		this.sAST = sAST;
 		this.cfg = cfg;
 		this.ddg = ddg;
@@ -74,6 +75,12 @@ public class ConstraintEncoder {
 		}
 	}
 	
+	public void encodeFeatureStatementType(){
+		for(StatementWrapper statementWrapper: this.statementItems){
+			this.feature_statementTypes.add(statementWrapper.getType());
+		}
+	}
+	
 	public void printConstraints(){
 		for(int i=0; i<this.statementItems.size(); i++){
 			System.out.println("Node <"+i+">");
@@ -109,5 +116,9 @@ public class ConstraintEncoder {
 	
 	public List<Integer> getLineCounts(){
 		return this.lineCountConstraints;
+	}
+	
+	public List<Integer> getStatementType(){
+		return this.feature_statementTypes;
 	}
 }

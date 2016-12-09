@@ -52,7 +52,7 @@ public class ASTParserUtils {
 			//System.out.println("Generate DDG:");
 			DDG ddg = new DDG(sAST);
 			//ddg.printDDG();
-			ConstraintEncoder encoder = new ConstraintEncoder(sAST,cfg,ddg);
+			ConstraintAndFeatureEncoder encoder = new ConstraintAndFeatureEncoder(sAST,cfg,ddg);
 			//encoder.printConstraints();
 			NaiveBinaryIPSolver solver = new NaiveBinaryIPSolver();
 			solver.setDependenceConstraints(encoder.getASTConstraints(), encoder.getCFGConstraints(), encoder.getDDGConstraints());
