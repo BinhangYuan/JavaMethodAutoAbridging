@@ -13,5 +13,6 @@
 	<classpathentry kind="lib" path="/home/yuan/Desktop/PL research/eclipseWorkSpace/javaSrcCompress/external lib/org.eclipse.equinox.common_3.5.1.R35x_v20090807-1100.jar"/>
 	<classpathentry kind="lib" path="/home/yuan/Desktop/PL research/eclipseWorkSpace/javaSrcCompress/external lib/org.eclipse.equinox.preferences_3.2.301.R35x_v20091117.jar"/>
 	<classpathentry kind="lib" path="/home/yuan/Desktop/PL research/eclipseWorkSpace/javaSrcCompress/external lib/org.eclipse.osgi_3.5.2.R35x_v20100126.jar"/>
+	<classpathentry kind="lib" path="/home/yuan/Desktop/PL research/eclipseWorkSpace/javaSrcCompress/external lib/json-20160810.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

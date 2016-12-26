@@ -518,7 +518,7 @@ public class SimplifiedAST {
 			this.nodes.get(i).setIsDisplay(solution[i]);
 		}
 		String result = new String();
-		//This may not be correct, check later:
+		//Do not consider javadoc yet, updated later!
 		result = this.methodASTNode.toString().substring(0, this.methodASTNode.toString().indexOf('{')+1);
 		result += '\n';
 		//Recursive handle each statement:

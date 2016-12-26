@@ -57,7 +57,6 @@ public class FiniteDifferenceGradientDescent {
 		for (File f : files ) {
 			String filePath = f.getAbsolutePath();
 			if(f.isFile()){
-				//parse(readFileToString(filePath));
 				ASTParser parser = ASTParser.newParser(AST.JLS8);
 				String str = ASTParserUtils.readFileToString(filePath);
 				parser.setSource(str.toCharArray());
@@ -88,7 +87,7 @@ public class FiniteDifferenceGradientDescent {
 					solver.setLineCostConstraints(encoder.getLineCounts());
 					solver.setTypeMap(this.typeMap);
 					solver.setStatementType(encoder.getStatementType());
-					ManualLabel label = new ManualLabel(f.getName()+"_"+node.getName().getIdentifier()+".");
+					ManualLabel label = new ManualLabel(f.getName()+"_"+node.getName().getIdentifier()+".txt");
 					solver.setTargetLineCount(label.getLineConstraintt());
 					this.trainingSet.put(solver,label);
 				}
@@ -137,7 +136,7 @@ public class FiniteDifferenceGradientDescent {
 	
 	public static void main(String[] args) throws IOException {
 		FiniteDifferenceGradientDescent model = new FiniteDifferenceGradientDescent();
-		model.initTraining(".");
+		model.initTraining("/home/yuan/Desktop/PL research/dataset/labeled");
 		model.training();
 	}
 }

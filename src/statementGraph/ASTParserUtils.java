@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -13,6 +16,7 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.SimpleName;
 
 import ilpSolver.NaiveBinaryIPSolver;
+import statementGraph.graphNode.StatementWrapper;
 
 public class ASTParserUtils {
 	
@@ -63,6 +67,53 @@ public class ASTParserUtils {
 			System.out.println(sAST.computeOutput(solution));
 		}
 	}
+	
+	
+	//use ASTParse to parse string
+	public static void parseMethod(String filePath, String fileName, String methodName, boolean [] manualLabel) throws IOException {
+		ASTParser parser = ASTParser.newParser(AST.JLS8);
+		String str = readFileToString(filePath+fileName);
+		parser.setSource(str.toCharArray());
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		parser.setEnvironment(new String[]{filePath}, null, null, true);
+		parser.setUnitName("Anything");
+		parser.setResolveBindings(true);
+			
+		final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
+		ArrayList<MethodDeclaration> methods = new ArrayList<MethodDeclaration>();
+			
+		cu.accept(new ASTVisitor() {
+			public boolean visit(MethodDeclaration node){
+				SimpleName name = node.getName();
+				if(name.getIdentifier().equals(methodName)){
+					methods.add(node);
+				}
+				return true;
+			}
+		});
+			
+		Assert.isTrue(methods.size()==1);
+		MethodDeclaration method = methods.get(0);
+		System.out.println("Method Declaration of: '"+method.getName()+ "' at line" +cu.getLineNumber(method.getStartPosition()));
+		System.out.println(method.toString());
+		SimplifiedAST sAST = new SimplifiedAST(method);
+		List<StatementWrapper> statements = sAST.getAllWrapperList();
+			
+		System.out.println("Statements:");
+		for(int i=0 ; i < statements.size(); i++){
+			StatementWrapper item = statements.get(i);
+			System.out.println("Node "+i+": <========");
+			System.out.println(item.toString());
+			System.out.println("========>");
+		}
+		
+		if(manualLabel.length == statements.size()){
+			System.out.println("Manual labeled result:");
+			System.out.println(sAST.computeOutput(manualLabel));
+		}
+	}
+	
+	
 	
 	
 	//This is used for a simple verification 
@@ -144,7 +195,7 @@ public class ASTParserUtils {
 	
 	public static void main(String[] args) throws IOException {
 		//ParseFilesInDir();
-		String filePath = "/home/yuan/Desktop/PL research/eclipseWorkSpace/javaSrcCompress/src/testCodes/";
+		String filePath = "src/testCodes/";
 		String fileName = "Solution350.java";
 		parse(filePath,fileName);
 		//parseVaraibleName(filePath,fileName);
