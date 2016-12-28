@@ -8,10 +8,10 @@ import statementGraph.ASTParserUtils;
 
 public class SourceCodeDataLoader {
 	
-	public static void displaySourceCode(String filePath, String fileName, String methodName, boolean [] manualLabel) throws IOException{
+	public static void displaySourceCode(String filePath, String fileName, String methodName, int pos, boolean [] manualLabel) throws IOException{
 		System.out.println("Display source code data:");
 		System.out.println(filePath+"-"+methodName);
-		ASTParserUtils.parseMethod(filePath, fileName,methodName, manualLabel);
+		ASTParserUtils.parseMethod(filePath, fileName,methodName,pos,manualLabel);
 	}
 	
 	
@@ -25,12 +25,13 @@ public class SourceCodeDataLoader {
 			String filePath = dataArray.getJSONObject(i).getString("file_path");
 			String fileName = dataArray.getJSONObject(i).getString("file_name");
 			String methodName = dataArray.getJSONObject(i).getString("method");
+			int pos = dataArray.getJSONObject(i).getInt("pos");
 			JSONArray labelJsonarray = dataArray.getJSONObject(i).getJSONArray("label");
 			boolean [] labels = new boolean[labelJsonarray.length()];
 			for(int j =0; j< labels.length; j++){
 				labels[j] = labelJsonarray.getBoolean(j);
 			}
-			displaySourceCode(filePath,fileName,methodName,labels);
+			displaySourceCode(filePath,fileName,methodName,pos,labels);
 		}
 	}
 }

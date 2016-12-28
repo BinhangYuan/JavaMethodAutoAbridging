@@ -70,7 +70,7 @@ public class ASTParserUtils {
 	
 	
 	//use ASTParse to parse string
-	public static void parseMethod(String filePath, String fileName, String methodName, boolean [] manualLabel) throws IOException {
+	public static void parseMethod(String filePath, String fileName, String methodName, int pos, boolean [] manualLabel) throws IOException {
 		ASTParser parser = ASTParser.newParser(AST.JLS8);
 		String str = readFileToString(filePath+fileName);
 		parser.setSource(str.toCharArray());
@@ -85,7 +85,7 @@ public class ASTParserUtils {
 		cu.accept(new ASTVisitor() {
 			public boolean visit(MethodDeclaration node){
 				SimpleName name = node.getName();
-				if(name.getIdentifier().equals(methodName)){
+				if(name.getIdentifier().equals(methodName) && pos == cu.getLineNumber(node.getStartPosition())){
 					methods.add(node);
 				}
 				return true;

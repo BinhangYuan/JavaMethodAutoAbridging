@@ -4,12 +4,55 @@
 			"file_path":"dataset/edu/stanford/nlp/stanford-corenlp/1.2.0/edu/stanford/nlp/classify/",
 			"file_name": "AdaptedGaussianPriorObjectiveFunction.java",
 			"method":"calculateCL",
+			"pos":39,
 			"label":[true,true,false,false,false,false,false,false,false,false,
 					 true,true,true,true,true,true,false,false,false,false,
 					 true,false,false,false,false,false,false,false,true,true,
 					 true,true,true,true],
 			"lineCount": 18
-		}
-
+		},
+		{
+			"file_path":"dataset/edu/stanford/nlp/stanford-corenlp/1.2.0/edu/stanford/nlp/classify/",
+			"file_name": "BiasedLogConditionalObjectiveFunction.java",
+			"method":"calculate",
+			"pos":58,
+			"label":[true,false,false,true,true,true,true,true,true,true,
+					 true,false,false,false,false,true,true,false,false,true,
+					 true,true,true,false,false,false,true,true,true,true,
+					 true],
+			"lineCount":25
+		},
+		{
+			"file_path":"dataset/edu/stanford/nlp/stanford-corenlp/1.2.0/edu/stanford/nlp/classify/",
+		 	"file_name": "Dataset.java",
+			"method":"split",
+			"pos":89,
+			"label":[true,true,true,true,true,true,false,false,false,false,
+					 true,true,true,true,false,false,true,true,true,true,
+					 true,true],
+			"lineCount": 17
+		},
+		{
+			"file_path":"dataset/edu/stanford/nlp/stanford-corenlp/1.2.0/edu/stanford/nlp/classify/",
+		 	"file_name": "Dataset.java",
+			"method":"split",
+			"pos":126,
+			"label":[true,true,true,true,true,true,false,false,false,false,
+					 false,false,true,true,true,true,false,false,false, true,
+					 true,true,true,true,true],
+			"lineCount": 17
+		},
+		{
+			"file_path":"dataset/edu/stanford/nlp/stanford-corenlp/1.2.0/edu/stanford/nlp/classify/",
+		 	"file_name": "Dataset.java",
+			"method":"getInformationGains",
+			"pos":603,
+			"label":[true,true,true,true,true,true,true,true,false,false,
+					 true,true,true,true,true,true,true,true,true,true,
+					 true,true,true,true,true,true,true,false,false,false,
+					 false,false,false,true,true,true,true,true,true,true,
+					 true,true,true,true,true,true,true],
+			"lineCount":46
+		},
 	]
 }
