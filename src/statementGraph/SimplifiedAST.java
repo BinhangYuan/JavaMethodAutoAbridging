@@ -472,7 +472,7 @@ public class SimplifiedAST {
 		}
 	}
 	
-	public List<StatementWrapper> getSiblings(StatementWrapper item){
+	public List<StatementWrapper> getSiblings(StatementWrapper item) throws Exception{
 		Statement state = StatementWrapper.getASTNodeStatement(item);
 		//System.out.println("GetSiblings: <state>"+state.toString());
 		ASTNode parent = state.getParent();
@@ -497,7 +497,7 @@ public class SimplifiedAST {
 		}
 	}
 	
-	public StatementWrapper getParent(StatementWrapper item){
+	public StatementWrapper getParent(StatementWrapper item) throws Exception{
 		Statement state = StatementWrapper.getASTNodeStatement(item);
 		ASTNode parent = state.getParent();
 		if(parent instanceof Block){

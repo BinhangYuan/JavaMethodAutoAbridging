@@ -51,7 +51,7 @@ public class FiniteDifferenceGradientDescent {
 		return cost/n;
 	}	
 	
-	public void initTraining(String labelPath) throws IOException{
+	public void initTraining(String labelPath) throws Exception{
 		String  labelString = ASTParserUtils.readFileToString(labelPath);
 		JSONObject obj = new JSONObject(labelString);
 		
@@ -83,7 +83,7 @@ public class FiniteDifferenceGradientDescent {
 			int lineCount = dataArray.getJSONObject(index).getInt("lineCount");
 			
 			
-			ConstraintAndFeatureEncoder encoder = ASTParserUtils.parseMethod(false,filePath, fileName,methodName,pos,label);
+			ConstraintAndFeatureEncoder encoder = ASTParserUtils.parseMethod(true,filePath, fileName,methodName,pos,label);
 			
 			LearningBinaryIPSolverV0 solver = new LearningBinaryIPSolverV0();
 			solver.setDependenceConstraints(encoder.getASTConstraints(), encoder.getCFGConstraints(), encoder.getDDGConstraints());
@@ -137,7 +137,7 @@ public class FiniteDifferenceGradientDescent {
 	}
 	
 	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 		FiniteDifferenceGradientDescent model = new FiniteDifferenceGradientDescent();
 		model.initTraining("src/learning/labeling/labels.json");
 		model.training();

@@ -21,7 +21,7 @@ import statementGraph.graphNode.StatementWrapper;
 public class ASTParserUtils {
 	
 	//use ASTParse to parse string
-	public static void parse(String filePath, String fileName) throws IOException {
+	public static void parse(String filePath, String fileName) throws Exception {
 		ASTParser parser = ASTParser.newParser(AST.JLS8);
 		//parser.setS
 		String str = readFileToString(filePath+fileName);
@@ -70,7 +70,7 @@ public class ASTParserUtils {
 	
 	
 	//use ASTParse to parse string
-	public static ConstraintAndFeatureEncoder parseMethod(boolean print, String filePath, String fileName, String methodName, int pos, boolean [] manualLabel) throws IOException {
+	public static ConstraintAndFeatureEncoder parseMethod(boolean print, String filePath, String fileName, String methodName, int pos, boolean [] manualLabel) throws Exception {
 		ASTParser parser = ASTParser.newParser(AST.JLS8);
 		String str = readFileToString(filePath+fileName);
 		parser.setSource(str.toCharArray());
@@ -119,6 +119,8 @@ public class ASTParserUtils {
 				System.out.println("Manual labeled result:");
 				System.out.println(sAST.computeOutput(manualLabel));
 			}
+			
+			encoder.printConstraints();
 		}
 		
 		return encoder;
@@ -204,7 +206,7 @@ public class ASTParserUtils {
 	}
 	 
 	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 		//ParseFilesInDir();
 		String filePath = "dataset/edu/stanford/nlp/stanford-corenlp/1.2.0/edu/stanford/nlp/classify/";
 		String fileName = "AdaptedGaussianPriorObjectiveFunction.java";

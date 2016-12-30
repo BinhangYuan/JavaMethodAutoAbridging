@@ -17,7 +17,7 @@ public class DDG {
 	private List<SimpleName> methodParameters =  new LinkedList<SimpleName>();
 	private Map<String,List<StatementWrapper>> variablesDecl = new HashMap<String,List<StatementWrapper>>();
 	
-	public DDG(SimplifiedAST sAST){
+	public DDG(SimplifiedAST sAST) throws Exception{
 		this.sAST = sAST;
 		this.updateMethodParameters();
 		this.updateAllVariables();
@@ -36,7 +36,7 @@ public class DDG {
 		}
 	}
 	
-	private void updateAllVariables(){
+	private void updateAllVariables() throws Exception{
 		for(StatementWrapper item:this.sAST.getAllWrapperList()){
 			Statement statement = StatementWrapper.getASTNodeStatement(item);
 			item.addDefinedVariables(ExpressionExtractor.getVariableSimpleNames(statement, true));
@@ -52,7 +52,7 @@ public class DDG {
 		}
 	}
 	
-	private void buildEdges(){
+	private void buildEdges() throws Exception{
 		for(StatementWrapper item: this.sAST.getAllWrapperList()){
 			if(!item.getUsageVariables().isEmpty()){
 				for(String var: item.getUsageVariableSet()){

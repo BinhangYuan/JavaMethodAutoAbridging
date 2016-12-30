@@ -148,7 +148,7 @@ public abstract class StatementWrapper {
 	}
 	
 	
-	public static Statement getASTNodeStatement(StatementWrapper item){
+	public static Statement getASTNodeStatement(StatementWrapper item) throws Exception{
 		int nodeType = item.getType();
 		Statement statement = null;
 		if(nodeType == StatementWrapper.ASSERT_STATEMENT){
@@ -159,6 +159,9 @@ public abstract class StatementWrapper {
 		}
 		else if(nodeType == StatementWrapper.CONSTRUCTOR_INVOCATION){
 			statement = ((ConstructorInvocationStatementWrapper)item).getASTNode();
+		}
+		else if(nodeType == StatementWrapper.CONTINUE_STATEMENT){
+			statement = ((ContinueStatementWrapper)item).getASTNode();
 		}
 		else if(nodeType == StatementWrapper.DO_STATEMENT){
 			statement = ((DoStatementWrapper)item).getASTNode();
@@ -212,7 +215,9 @@ public abstract class StatementWrapper {
 			statement = ((WhileStatementWrapper)item).getASTNode();
 		}
 		else{
-			System.out.println("Unexpected Type in CFG!");
+			//System.out.println("Unexpected Type in CFG!");
+			System.out.println(item.toString());
+			throw new Exception("Unexpected Type:"+nodeType);
 		}
 		return statement;
 	}

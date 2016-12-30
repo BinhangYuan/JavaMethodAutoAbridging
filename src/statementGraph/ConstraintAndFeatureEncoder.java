@@ -30,7 +30,7 @@ public class ConstraintAndFeatureEncoder {
 	private List<DependencePair> cfgConstraintsSerializer = new LinkedList<DependencePair>();
 	
 	
-	public ConstraintAndFeatureEncoder(SimplifiedAST sAST, CFG cfg, DDG ddg){
+	public ConstraintAndFeatureEncoder(SimplifiedAST sAST, CFG cfg, DDG ddg) throws Exception{
 		this.sAST = sAST;
 		this.cfg = cfg;
 		this.ddg = ddg;
@@ -43,6 +43,7 @@ public class ConstraintAndFeatureEncoder {
 		this.encodeDDG();
 		this.encodeAST();
 		this.encodeCFG();
+		this.encodeFeatureStatementType();
 	}
 	
 	public void encodeDDG(){
@@ -62,7 +63,7 @@ public class ConstraintAndFeatureEncoder {
 		
 	}
 	
-	public void encodeAST(){
+	public void encodeAST() throws Exception{
 		for(StatementWrapper dest: this.statementItems){
 			StatementWrapper parent = sAST.getParent(dest);
 			if(parent!=null){
@@ -100,6 +101,11 @@ public class ConstraintAndFeatureEncoder {
 		for(EdgeItem edge:this.astConstraints){
 			System.out.println(this.index.get(edge.start)+"====>"+this.index.get(edge.end));
 		}
+		System.out.println("Statement types:");
+		for(Integer type: this.feature_statementTypes){
+			System.out.print(type+" ");
+		}
+		System.out.println();
 	}
 	
 	public List<DependencePair> getDDGConstraints(){

@@ -8,14 +8,14 @@ import statementGraph.ASTParserUtils;
 
 public class SourceCodeDataLoader {
 	
-	public static void displaySourceCode(String filePath, String fileName, String methodName, int pos, boolean [] manualLabel) throws IOException{
+	public static void displaySourceCode(String filePath, String fileName, String methodName, int pos, boolean [] manualLabel) throws Exception{
 		System.out.println("Display source code data:");
 		System.out.println(filePath+"-"+methodName);
 		ASTParserUtils.parseMethod(true, filePath, fileName,methodName,pos,manualLabel);
 	}
 	
 	
-	public static void main(String[] args) throws IOException{
+	public static void main(String[] args) throws Exception{
 		String  labelString = ASTParserUtils.readFileToString("src/learning/labeling/labels.json");
 		JSONObject obj = new JSONObject(labelString);
 		
