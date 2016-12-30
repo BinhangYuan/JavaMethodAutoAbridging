@@ -70,7 +70,7 @@ public class ASTParserUtils {
 	
 	
 	//use ASTParse to parse string
-	public static void parseMethod(String filePath, String fileName, String methodName, int pos, boolean [] manualLabel) throws IOException {
+	public static ConstraintAndFeatureEncoder parseMethod(boolean print, String filePath, String fileName, String methodName, int pos, boolean [] manualLabel) throws IOException {
 		ASTParser parser = ASTParser.newParser(AST.JLS8);
 		String str = readFileToString(filePath+fileName);
 		parser.setSource(str.toCharArray());
@@ -95,22 +95,33 @@ public class ASTParserUtils {
 		Assert.isTrue(methods.size()==1);
 		MethodDeclaration method = methods.get(0);
 		System.out.println("Method Declaration of: '"+method.getName()+ "' at line" +cu.getLineNumber(method.getStartPosition()));
-		System.out.println(method.toString());
+		if(print){
+			//System.out.println("Method Declaration of: '"+method.getName()+ "' at line" +cu.getLineNumber(method.getStartPosition()));
+			System.out.println(method.toString());
+		}
 		SimplifiedAST sAST = new SimplifiedAST(method);
-		List<StatementWrapper> statements = sAST.getAllWrapperList();
+		CFG cfg = new CFG(sAST);
+		DDG ddg = new DDG(sAST);
+		ConstraintAndFeatureEncoder encoder = new ConstraintAndFeatureEncoder(sAST,cfg,ddg);
+		
 			
-		System.out.println("Statements:");
-		for(int i=0 ; i < statements.size(); i++){
-			StatementWrapper item = statements.get(i);
-			System.out.println("Node "+i+": <========");
-			System.out.println(item.toString());
-			System.out.println("========>");
+		if(print){
+			List<StatementWrapper> statements = sAST.getAllWrapperList();
+			System.out.println("Statements:");
+			for(int i=0 ; i < statements.size(); i++){
+				StatementWrapper item = statements.get(i);
+				System.out.println("Node "+i+": <========");
+				System.out.println(item.toString());
+				System.out.println("========>");
+			}
+		
+			if(manualLabel.length == statements.size()){
+				System.out.println("Manual labeled result:");
+				System.out.println(sAST.computeOutput(manualLabel));
+			}
 		}
 		
-		if(manualLabel.length == statements.size()){
-			System.out.println("Manual labeled result:");
-			System.out.println(sAST.computeOutput(manualLabel));
-		}
+		return encoder;
 	}
 	
 	
@@ -195,8 +206,8 @@ public class ASTParserUtils {
 	
 	public static void main(String[] args) throws IOException {
 		//ParseFilesInDir();
-		String filePath = "src/testCodes/";
-		String fileName = "Solution350.java";
+		String filePath = "dataset/edu/stanford/nlp/stanford-corenlp/1.2.0/edu/stanford/nlp/classify/";
+		String fileName = "AdaptedGaussianPriorObjectiveFunction.java";
 		parse(filePath,fileName);
 		//parseVaraibleName(filePath,fileName);
 	}	

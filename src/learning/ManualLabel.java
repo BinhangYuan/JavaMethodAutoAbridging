@@ -5,8 +5,9 @@ public class ManualLabel {
 	
 	private boolean [] booleanLabels;
 	
-	public ManualLabel(String path){
-		
+	public ManualLabel(int lines, boolean [] labels){
+		this.lineConstraint = lines;
+		this.booleanLabels = labels;
 	}
 	
 	public int getLineConstraintt(){

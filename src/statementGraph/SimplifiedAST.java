@@ -468,7 +468,7 @@ public class SimplifiedAST {
 			}
 		}
 		else{
-			System.out.println("Unexpected Type in CFG!");
+			System.out.println("Unexpected Type in AST!("+nodeType+")");
 		}
 	}
 	

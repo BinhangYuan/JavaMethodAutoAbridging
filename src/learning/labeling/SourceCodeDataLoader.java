@@ -11,7 +11,7 @@ public class SourceCodeDataLoader {
 	public static void displaySourceCode(String filePath, String fileName, String methodName, int pos, boolean [] manualLabel) throws IOException{
 		System.out.println("Display source code data:");
 		System.out.println(filePath+"-"+methodName);
-		ASTParserUtils.parseMethod(filePath, fileName,methodName,pos,manualLabel);
+		ASTParserUtils.parseMethod(true, filePath, fileName,methodName,pos,manualLabel);
 	}
 	
 	

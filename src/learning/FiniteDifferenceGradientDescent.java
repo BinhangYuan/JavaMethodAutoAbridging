@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jdt.core.dom.AST;
@@ -13,6 +15,8 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.SimpleName;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import ilpSolver.LearningBinaryIPSolverV0;
 import statementGraph.ASTParserUtils;
@@ -47,53 +51,52 @@ public class FiniteDifferenceGradientDescent {
 		return cost/n;
 	}	
 	
-	public void initTraining(String name) throws IOException{
-		File dirs = new File(name);
-		String dirPath = dirs.getCanonicalPath() + File.separator+"src"+File.separator;
-		File root = new File(dirPath);
-		//System.out.println(rootDir.listFiles());
-		File[] files = root.listFiles ( );
+	public void initTraining(String labelPath) throws IOException{
+		String  labelString = ASTParserUtils.readFileToString(labelPath);
+		JSONObject obj = new JSONObject(labelString);
+		
+		JSONArray dataArray = obj.getJSONArray("data");
+		//Split the data set into training set and test set. 
+		List<Integer> shuffleArray = new ArrayList<Integer>();
+		for(int i=0; i< dataArray.length(); i++){
+			shuffleArray.add(i);
+		}
+		Collections.shuffle(shuffleArray);
+		
+		System.out.println("Shuffle data set:");
+		for(Integer i: shuffleArray){
+			System.out.print(i+" ");
+		}
+		System.out.println();
 	 
-		for (File f : files ) {
-			String filePath = f.getAbsolutePath();
-			if(f.isFile()){
-				ASTParser parser = ASTParser.newParser(AST.JLS8);
-				String str = ASTParserUtils.readFileToString(filePath);
-				parser.setSource(str.toCharArray());
-				parser.setKind(ASTParser.K_COMPILATION_UNIT);
-				parser.setEnvironment(new String[]{filePath}, null, null, true);
-				parser.setUnitName("Anything");
-				parser.setResolveBindings(true);
-				
-				final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
-				ArrayList<MethodDeclaration> methods = new ArrayList<MethodDeclaration>();
-				
-				cu.accept(new ASTVisitor() {
-					public boolean visit(MethodDeclaration node){
-						SimpleName name = node.getName();
-						System.out.println("Vistor:: Method Declaration of: '"+name+ "' at line" +cu.getLineNumber(node.getStartPosition()));
-						methods.add(node);
-						return true;
-					}
-				});
-				
-				for(MethodDeclaration node: methods){
-					SimplifiedAST sAST = new SimplifiedAST(node);
-					CFG cfg = new CFG(sAST);
-					DDG ddg = new DDG(sAST);
-					ConstraintAndFeatureEncoder encoder = new ConstraintAndFeatureEncoder(sAST,cfg,ddg);
-					LearningBinaryIPSolverV0 solver = new LearningBinaryIPSolverV0();
-					solver.setDependenceConstraints(encoder.getASTConstraints(), encoder.getCFGConstraints(), encoder.getDDGConstraints());
-					solver.setLineCostConstraints(encoder.getLineCounts());
-					solver.setTypeMap(this.typeMap);
-					solver.setStatementType(encoder.getStatementType());
-					ManualLabel label = new ManualLabel(f.getName()+"_"+node.getName().getIdentifier()+".txt");
-					solver.setTargetLineCount(label.getLineConstraintt());
-					this.trainingSet.put(solver,label);
-				}
+		for(int i = 0; i < dataArray.length(); i++) {
+			int index = shuffleArray.get(i);
+			String filePath = dataArray.getJSONObject(index).getString("file_path");
+			String fileName = dataArray.getJSONObject(index).getString("file_name");
+			String methodName = dataArray.getJSONObject(index).getString("method");
+			int pos = dataArray.getJSONObject(index).getInt("pos");
+			JSONArray labelJsonarray = dataArray.getJSONObject(index).getJSONArray("label");
+			boolean [] label = new boolean[labelJsonarray.length()];
+			for(int j =0; j< label.length; j++){
+				label[j] = labelJsonarray.getBoolean(j);
 			}
+			int lineCount = dataArray.getJSONObject(index).getInt("lineCount");
+			
+			
+			ConstraintAndFeatureEncoder encoder = ASTParserUtils.parseMethod(false,filePath, fileName,methodName,pos,label);
+			
+			LearningBinaryIPSolverV0 solver = new LearningBinaryIPSolverV0();
+			solver.setDependenceConstraints(encoder.getASTConstraints(), encoder.getCFGConstraints(), encoder.getDDGConstraints());
+			solver.setLineCostConstraints(encoder.getLineCounts());
+			solver.setTypeMap(this.typeMap);
+			solver.setStatementType(encoder.getStatementType());
+			
+			solver.setTargetLineCount(lineCount);
+			ManualLabel mlabel = new ManualLabel(lineCount,label);
+			this.trainingSet.put(solver,mlabel);
 		}
 	}
+	
 	
 	public void training(){
 		for(int i = 0; i < this.maxIterations; i++){
@@ -136,7 +139,7 @@ public class FiniteDifferenceGradientDescent {
 	
 	public static void main(String[] args) throws IOException {
 		FiniteDifferenceGradientDescent model = new FiniteDifferenceGradientDescent();
-		model.initTraining("/home/yuan/Desktop/PL research/dataset/labeled");
+		model.initTraining("src/learning/labeling/labels.json");
 		model.training();
 	}
 }

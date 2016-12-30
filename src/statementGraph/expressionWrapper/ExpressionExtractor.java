@@ -656,8 +656,8 @@ public class ExpressionExtractor {
 		}
 		else if(expression instanceof SimpleName) {
 			SimpleName simpleName = (SimpleName)expression;
-			Assert.isNotNull(simpleName.resolveBinding());
-			if(simpleName.resolveBinding().getKind()==IBinding.VARIABLE && simpleName.isDeclaration()==isDeclaration){
+			//Assert.isNotNull(simpleName.resolveBinding());
+			if(simpleName.resolveBinding() != null && simpleName.resolveBinding().getKind()==IBinding.VARIABLE && simpleName.isDeclaration()==isDeclaration){
 				variableList.add(simpleName);
 			}
 		}
