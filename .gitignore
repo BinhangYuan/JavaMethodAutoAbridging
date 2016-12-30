@@ -1,1 +1,9 @@
 dataset
+
+*.class
+
+.classpath
+
+*.class
+
+*.class
