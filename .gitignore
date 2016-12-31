@@ -7,3 +7,5 @@ dataset
 *.class
 
 *.class
+
+*.log

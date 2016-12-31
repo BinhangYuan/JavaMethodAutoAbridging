@@ -12,6 +12,7 @@ public class JaccardDistance implements Distance{
 		for(int i = 0; i < a.length; i++){
 			if(a[i] && b[i]){
 				inter ++;
+				union ++;
 			}
 			else if( a[i] || b[i]){
 				union ++;
@@ -21,7 +22,9 @@ public class JaccardDistance implements Distance{
 			return 0;
 		}
 		else{
-			return (double)(union - inter)/(double)(union);
+			double dist = (double)(union - inter)/(double)(union);
+			Assert.isTrue(0 <= dist && dist <=1);
+			return dist;
 		}
 	}
 }

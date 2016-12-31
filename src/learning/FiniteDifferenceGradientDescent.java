@@ -8,6 +8,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
 
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
@@ -29,13 +31,15 @@ import statementGraph.graphNode.StatementWrapper;
 public class FiniteDifferenceGradientDescent {
 	private double [] parameters;
 	private Map<Integer,Integer> typeMap;
-	private double stepLength = 0.1;
+	private double stepLength = 0.01;
 	private double epsilon = 0.01;
 	private JaccardDistance computeDistance = new JaccardDistance();
+	private Logger trainlogger = Logger.getLogger("learning");
+
 	
 	private Map<LearningBinaryIPSolverV0,ManualLabel> trainingSet = new HashMap<LearningBinaryIPSolverV0,ManualLabel>();
 	private int maxIterations = 100;
-	private double threshold = 0.00001;
+	private double threshold = 0.0000001;
 	
 	void setStepLength(double step){
 		this.stepLength = step;
@@ -52,6 +56,11 @@ public class FiniteDifferenceGradientDescent {
 	}	
 	
 	public void initTraining(String labelPath) throws Exception{
+		//Set up logger:
+		FileHandler handler = new FileHandler("log/trainLog"+System.currentTimeMillis()+".log", false);
+		this.trainlogger.addHandler(handler);
+		
+		this.trainlogger.info("Initialize training");
 		String  labelString = ASTParserUtils.readFileToString(labelPath);
 		JSONObject obj = new JSONObject(labelString);
 		
@@ -63,6 +72,7 @@ public class FiniteDifferenceGradientDescent {
 		}
 		Collections.shuffle(shuffleArray);
 		
+		this.trainlogger.info("Shuffling data set is done");
 		System.out.println("Shuffle data set:");
 		for(Integer i: shuffleArray){
 			System.out.print(i+" ");
@@ -82,7 +92,6 @@ public class FiniteDifferenceGradientDescent {
 			}
 			int lineCount = dataArray.getJSONObject(index).getInt("lineCount");
 			
-			
 			ConstraintAndFeatureEncoder encoder = ASTParserUtils.parseMethod(true,filePath, fileName,methodName,pos,label);
 			
 			LearningBinaryIPSolverV0 solver = new LearningBinaryIPSolverV0();
@@ -95,13 +104,15 @@ public class FiniteDifferenceGradientDescent {
 			ManualLabel mlabel = new ManualLabel(lineCount,label);
 			this.trainingSet.put(solver,mlabel);
 		}
+		this.trainlogger.info("Loading data set and parsing data set are done");
 	}
 	
 	
 	public void training(){
+		this.trainlogger.info("Training start");
 		for(int i = 0; i < this.maxIterations; i++){
 			double precost = this.computeCost(this.parameters);
-			System.out.println("Training process: Iteration "+i +": "+ precost);
+			System.out.println("Training process: Iteration "+i +" with cost value: "+ precost);
 			double [] derivative = new double[this.parameters.length];
 			
 			for(int j = 0; j < this.parameters.length; j++ ){
@@ -120,6 +131,7 @@ public class FiniteDifferenceGradientDescent {
 			
 			double postcost = this.computeCost(this.parameters);
 			
+			this.trainlogger.info("Training process: Iteration "+i +" with pre cost value: "+ precost+ " post cost value: "+postcost);
 			if(Math.abs(precost-postcost) < this.threshold){
 				break;
 			}
