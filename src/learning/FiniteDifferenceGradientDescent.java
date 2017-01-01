@@ -31,8 +31,8 @@ import statementGraph.graphNode.StatementWrapper;
 public class FiniteDifferenceGradientDescent {
 	private double [] parameters;
 	private Map<Integer,Integer> typeMap;
-	private double stepLength = 0.01;
-	private double epsilon = 0.01;
+	private double stepLength = 0.1;
+	private double epsilon = 0.1;
 	private JaccardDistance computeDistance = new JaccardDistance();
 	private Logger trainlogger = Logger.getLogger("learning");
 

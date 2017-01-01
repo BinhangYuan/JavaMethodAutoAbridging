@@ -74,15 +74,17 @@ public class DDG {
 								boolean done = false;
 								while(!done){
 									siblings = this.sAST.getSiblings(current);
-									for(StatementWrapper sibling: siblings){
-										if(sibling.getDefinedVariableSet().contains(var)){
-											StatementWrapper preItem = sibling;
-											item.addDDGDefinedPredecessor(preItem);
-											if(preItem!=null){
-												preItem.addDDGUsageSuccessor(item);
+									if(siblings!=null){
+										for(StatementWrapper sibling: siblings){
+											if(sibling.getDefinedVariableSet().contains(var)){
+												StatementWrapper preItem = sibling;
+												item.addDDGDefinedPredecessor(preItem);
+												if(preItem!=null){
+													preItem.addDDGUsageSuccessor(item);
+												}
+												done = true;
+												break;
 											}
-											done = true;
-											break;
 										}
 									}
 									if(!done){

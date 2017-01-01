@@ -120,7 +120,7 @@ public class ASTParserUtils {
 				System.out.println(sAST.computeOutput(manualLabel));
 			}
 			
-			encoder.printConstraints();
+			//encoder.printConstraints();
 		}
 		
 		return encoder;

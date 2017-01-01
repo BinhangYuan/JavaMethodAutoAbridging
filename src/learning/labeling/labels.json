@@ -72,7 +72,60 @@
 					 true,false,false,false,false,false,false,false,false],
 			"lineCount":15
 		},
-		
-
+		{
+			"file_path":"dataset/edu/stanford/nlp/stanford-corenlp/1.2.0/edu/stanford/nlp/classify/",
+		 	"file_name": "GeneralizedExpectationObjectiveFunction.java",
+			"method":"computeEmpiricalStatistics",
+			"pos":142,
+			"label":[true,true,true,true,false,false,false,false,false,true,
+					 true,true,true,true,true,true,true,true,true,true,
+					 true,true,true,true,true,true,false],
+			"lineCount":27,
+		},
+		{
+			"file_path":"dataset/edu/stanford/nlp/stanford-corenlp/1.2.0/edu/stanford/nlp/classify/",
+		 	"file_name": "LinearClassifierFactory.java",
+			"method":"loadFromFilename",
+			"pos":755,
+			"label":[true,true,true,true,true,true,true,true,true,true,
+					 false,false,true,true,true,true,true,true,true,true,
+					 true,true,true,true,true,true,true,false,false,false],
+			"lineCount":28,
+		},
+		{
+			"file_path":"dataset/edu/stanford/nlp/stanford-corenlp/1.2.0/edu/stanford/nlp/classify/",
+		 	"file_name": "LogConditionalObjectiveFunction.java",
+			"method":"calculateStochasticAlgorithmicDifferentiation",
+			"pos":617,
+			"label":[false,true,true,true,false,false,true,true,false,false,
+					 true,true,false,false,true,true,false,false,false,false,
+					 false,true,true,true,false,false,true,true,true,true,
+					 true,true,true,true,true,true,true,true,true,true,
+					 true,true,true,true,true,true,true,true,true,true,
+					 true],
+			"lineCount":50,
+		},
+		{
+			"file_path":"dataset/edu/stanford/nlp/stanford-corenlp/1.2.0/edu/stanford/nlp/classify/",
+		 	"file_name": "LogPrior.java",
+			"method":"compute",
+			"pos":248,
+			"label":[true,true,true,true,true,false,false,false,true,true,
+					 false,false,false,false,false,false,false,false,false,true,
+					 true,false,false,false,true,true,false,false,true,true,
+					 false,false,false,false,false,false,false,false,false,true,
+					 true,false,false,false,true,true,true],
+			"lineCount":19,
+		},
+		{
+			"file_path":"dataset/edu/stanford/nlp/stanford-corenlp/1.2.0/edu/stanford/nlp/classify/",
+		 	"file_name": "RVFDataset.java",
+			"method":"applyFeatureMaxCountThreshold",
+			"pos":665,
+			"label":[true,true,true,true,true,true,true,true,true,true,
+					 true,true,true,true,true,true,true,true,false,false,
+					 false,false,false],
+			"lineCount":25,
+		}
 	]
 }

@@ -132,7 +132,7 @@ public class TryStatementWrapper extends StatementWrapper{
 				result += statementWrapper.computeOutput(level+1);
 			}
 		}
-		result += (super.computeIndent(level)+"\n}");
+		result += (super.computeIndent(level)+"}");
 		//Handle catches:
 		if(this.catchList.size()!=0){
 			for(CatchClause catchItem: this.catchList){

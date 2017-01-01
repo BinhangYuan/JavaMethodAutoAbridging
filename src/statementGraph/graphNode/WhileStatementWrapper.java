@@ -3,6 +3,7 @@ package statementGraph.graphNode;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.WhileStatement;
 
 public class WhileStatementWrapper extends StatementWrapper{
@@ -34,6 +35,7 @@ public class WhileStatementWrapper extends StatementWrapper{
 	public WhileStatementWrapper(WhileStatement astNode){
 		this.astNode = astNode;
 		super.setType(astNode.getNodeType());
+		this.bodyIsBlock = this.astNode.getBody().getNodeType() == ASTNode.BLOCK;
 	}
 	
 	public WhileStatement getASTNode(){
