@@ -1,13 +1,9 @@
 dataset
 
-*.class
+bin
 
 .classpath
 
 *.class
 
-*.class
-
 *.log
-
-*.class
