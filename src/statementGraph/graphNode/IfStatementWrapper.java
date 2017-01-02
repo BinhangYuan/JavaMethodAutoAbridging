@@ -123,8 +123,12 @@ public class IfStatementWrapper extends StatementWrapper{
 
 	@Override
 	public String computeOutput(int level) {
+		return this.computeIfOutput(level, false);
+	}
+	
+	private String computeIfOutput(int level, boolean nestedElseFlag){
 		String result = new String();
-		result = super.computeIndent(level)+"if("+ this.astNode.getExpression().toString() +")";
+		result = (nestedElseFlag?"":super.computeIndent(level))+"if("+ this.astNode.getExpression().toString() +")";
 		if(this.thenIsBlock){
 			result += "{";
 		}
@@ -135,9 +139,8 @@ public class IfStatementWrapper extends StatementWrapper{
 			}
 		}
 		if(this.thenIsBlock){
-			result += (super.computeIndent(level)+"}");
+			result += (super.computeIndent(level)+"}\n");
 		}
-		result += '\n';
 		if(this.astNode.getElseStatement()!=null){
 			result += (super.computeIndent(level)+"else ");
 			if(this.elseIsBlock){
@@ -147,17 +150,22 @@ public class IfStatementWrapper extends StatementWrapper{
 						result += statementWrapper.computeOutput(level+1);
 					}
 				}
-				result += (super.computeIndent(level)+'}');
+				result += (super.computeIndent(level)+"}\n");
 			}
 			else{
-				if(this.astNode.getElseStatement().getFlags()!=ASTNode.IF_STATEMENT){
-					result += '\n';
+				if(this.astNode.getElseStatement().getNodeType()==ASTNode.IF_STATEMENT){
+					IfStatementWrapper nestedElse = (IfStatementWrapper) this.elseBodyWrappers.get(0);
+					if(nestedElse.isDisplay()){
+						result += nestedElse.computeIfOutput(level, true);
+					}
 				}
-				if(this.elseBodyWrappers.get(0).isDisplay()){
-					result += this.elseBodyWrappers.get(0).computeOutput(level+1);
+				else{
+					result += '\n';
+					if(this.elseBodyWrappers.get(0).isDisplay()){
+						result += this.elseBodyWrappers.get(0).computeOutput(level+1);
+					}
 				}
 			}
-			result += '\n';
 		}
 		return result;
 	}
