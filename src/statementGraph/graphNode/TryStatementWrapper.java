@@ -132,7 +132,7 @@ public class TryStatementWrapper extends StatementWrapper{
 				result += statementWrapper.computeOutput(level+1);
 			}
 		}
-		result += (super.computeIndent(level)+"}");
+		result += (super.computeIndent(level)+"} ");
 		//Handle catches:
 		if(this.catchList.size()!=0){
 			for(CatchClause catchItem: this.catchList){
@@ -148,7 +148,7 @@ public class TryStatementWrapper extends StatementWrapper{
 		}
 		//Handle final:		
 		if(this.astNode.getFinally()!=null){
-			result += (super.computeIndent(level)+"finally {");
+			result += "finally {";
 			for(StatementWrapper statementWrapper: this.finalBodyWrappers){
 				if(statementWrapper.isDisplay()){
 					result += statementWrapper.computeOutput(level+1);

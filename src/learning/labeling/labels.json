@@ -126,6 +126,21 @@
 					 true,true,true,true,true,true,true,true,false,false,
 					 false,false,false],
 			"lineCount":25,
+		},
+		{
+			"file_path":"dataset/edu/mit/simile/butterfly/1.0/edu/mit/simile/butterfly/",
+		 	"file_name": "Butterfly.java",
+			"method":"init",
+			"pos":178,
+			"label":[true,true,true,true,true,true,true,true,true,true,
+					 true,true,true,true,true,true,true,false,false,false,
+					 false,true,true,true,true,true,true,true,true,true,
+					 false,false,true,true,true,true,true,true,true,true,
+					 true,true,true,true,true,true,true,true,false,false,
+					 false,false,false,false,false,false,true,true,true,true,
+					 true,true,true,true,true,true,true,false,false,true,
+					 false,true,true,false,true,false],
+			"lineCount":79,
 		}
 	]
 }

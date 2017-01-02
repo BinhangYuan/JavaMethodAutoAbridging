@@ -118,8 +118,8 @@ public class ASTParserUtils {
 			if(manualLabel.length == statements.size()){
 				System.out.println("Manual labeled result:");
 				System.out.println(sAST.computeOutput(manualLabel));
+				System.out.println("Reduced line count: "+sAST.computeBodyLines(manualLabel));
 			}
-			
 			//encoder.printConstraints();
 		}
 		
@@ -207,10 +207,5 @@ public class ASTParserUtils {
 	 
 	
 	public static void main(String[] args) throws Exception {
-		//ParseFilesInDir();
-		String filePath = "dataset/edu/stanford/nlp/stanford-corenlp/1.2.0/edu/stanford/nlp/classify/";
-		String fileName = "AdaptedGaussianPriorObjectiveFunction.java";
-		parse(filePath,fileName);
-		//parseVaraibleName(filePath,fileName);
 	}	
 }

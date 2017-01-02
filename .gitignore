@@ -9,3 +9,5 @@ dataset
 *.class
 
 *.log
+
+*.class

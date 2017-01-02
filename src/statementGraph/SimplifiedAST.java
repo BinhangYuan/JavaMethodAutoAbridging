@@ -513,21 +513,32 @@ public class SimplifiedAST {
 
 	public String computeOutput(boolean [] solution){
 		Assert.isTrue(solution.length == this.nodes.size());
+		String result = new String();
+		//Do not consider javadoc yet, updated later!
+		result = this.methodASTNode.toString().substring(0, this.methodASTNode.toString().indexOf('{')+1);
+		result += '\n';
+		result += this.computeBody(solution);
+		result += '}';
+		return result;
+	}
+	
+	private String computeBody(boolean [] solution){
+		Assert.isTrue(solution.length == this.nodes.size());
 		//Set up result;
 		for(int i=0; i<solution.length; i++){
 			this.nodes.get(i).setIsDisplay(solution[i]);
 		}
 		String result = new String();
-		//Do not consider javadoc yet, updated later!
-		result = this.methodASTNode.toString().substring(0, this.methodASTNode.toString().indexOf('{')+1);
-		result += '\n';
 		//Recursive handle each statement:
 		for(StatementWrapper statementWrapper: this.methodBlock){
 			if(statementWrapper.isDisplay()){
 				result += statementWrapper.computeOutput(1);
 			}
 		}
-		result += '}';
 		return result;
+	}
+	
+	public int computeBodyLines(boolean[] solution){
+		return this.computeBody(solution).split(System.getProperty("line.separator")).length;
 	}
 }
