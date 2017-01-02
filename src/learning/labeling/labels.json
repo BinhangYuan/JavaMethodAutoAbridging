@@ -217,6 +217,19 @@
 					 true,true,false,false,true,false,false,false,false,false,
 					 false,false,false,true,true,true,true,false,false,true],
 			"lineCount":41,
+		},
+		{
+			"file_path":"dataset/edu/uci/ics/crawler4j/3.4/edu/uci/ics/crawler4j/fetcher/",
+		 	"file_name":"PageFetcher.java",
+			"method":"fetchHeader",
+			"pos":142,
+			"label":[true,true,true,true,true,false,false,false,false,true,
+					 true,true,true,true,true,true,true,true,false,false,
+					 false,false,true,true,false,true,true,true,true,true,
+					 true,true,true,true,true,false,false,false,false,false,
+					 false,true,true,true,true,true,true,false,false,false,
+					 false,false,false,true,true,true,false,true,true],
+			"lineCount":54,
 		}
 	]
 }

@@ -148,7 +148,7 @@ public class TryStatementWrapper extends StatementWrapper{
 		}
 		//Handle final:		
 		if(this.astNode.getFinally()!=null){
-			result += "finally {";
+			result += "finally {\n";
 			for(StatementWrapper statementWrapper: this.finalBodyWrappers){
 				if(statementWrapper.isDisplay()){
 					result += statementWrapper.computeOutput(level+1);
