@@ -1,7 +1,5 @@
 package learning.labeling;
 
-import java.io.IOException;
-
 import org.json.*;
 
 import statementGraph.ASTParserUtils;

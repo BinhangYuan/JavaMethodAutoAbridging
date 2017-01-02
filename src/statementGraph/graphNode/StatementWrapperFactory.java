@@ -13,6 +13,7 @@ import org.eclipse.jdt.core.dom.ForStatement;
 import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.LabeledStatement;
 import org.eclipse.jdt.core.dom.ReturnStatement;
+import org.eclipse.jdt.core.dom.SuperConstructorInvocation;
 import org.eclipse.jdt.core.dom.SwitchCase;
 import org.eclipse.jdt.core.dom.SwitchStatement;
 import org.eclipse.jdt.core.dom.SynchronizedStatement;
@@ -25,7 +26,7 @@ import org.eclipse.jdt.core.dom.WhileStatement;
 
 public class StatementWrapperFactory {
 	
-	public StatementWrapper createWrapper(ASTNode node){
+	public StatementWrapper createWrapper(ASTNode node) throws Exception{
 		if(node.getNodeType() == StatementWrapper.ASSERT_STATEMENT){
 			return new AssertStatementWrapper((AssertStatement)node);
 		}
@@ -62,6 +63,9 @@ public class StatementWrapperFactory {
 		else if(node.getNodeType() == StatementWrapper.RETURN_STATEMENT){
 			return new ReturnStatementWrapper((ReturnStatement)(node));
 		}
+		else if(node.getNodeType() == StatementWrapper.SUPER_CONSTRUCTOR_INVOCATION){
+			return new SuperConstructorInvocationStatementWrapper((SuperConstructorInvocation)(node));
+		}
 		else if(node.getNodeType() == StatementWrapper.SWITCH_CASE){
 			return new SwitchCaseStatementWrapper((SwitchCase)(node));
 		}
@@ -87,8 +91,8 @@ public class StatementWrapperFactory {
 			return new WhileStatementWrapper((WhileStatement)(node));
 		}
 		else{
-			System.out.println("Unexpected type");
-			return null;
+			System.out.println(node.toString());
+			throw new Exception("Unexpected Type:"+node.getNodeType());
 		}
 		
 	}

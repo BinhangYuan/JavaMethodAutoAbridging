@@ -68,7 +68,7 @@ public class SimplifiedAST {
 	
 	private List<StatementWrapper> methodBlock = new LinkedList<StatementWrapper>();
 	
-	public SimplifiedAST(MethodDeclaration methodASTNode){
+	public SimplifiedAST(MethodDeclaration methodASTNode) throws Exception{
 		this.methodASTNode = methodASTNode;
 		this.buildTreeNodes(this.methodASTNode);
 		this.buildHierachy(this.methodASTNode);
@@ -83,7 +83,7 @@ public class SimplifiedAST {
 		}
 	}
 	
-	private void buildTreeNodes(ASTNode node){
+	private void buildTreeNodes(ASTNode node) throws Exception{
 		int nodeType = node.getNodeType();
 		if(nodeType == StatementWrapper.METHOD_DECLARATION){
 			if(((MethodDeclaration)node).getBody()==null){
