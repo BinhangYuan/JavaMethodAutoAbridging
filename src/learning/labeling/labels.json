@@ -287,6 +287,18 @@
 					 false,false,true,false,false,true,false,false,true,false,
 					 false,true,false,false,true,true,true],
 			"lineCount":25,
+		},
+		{
+			"file_path":"dataset/edu/uci/ics/crawler4j/3.4/edu/uci/ics/crawler4j/url/",
+		 	"file_name":"UrlResolver.java",
+			"method":"parseUrl",
+			"pos":63,
+			"label":[true,true,true,true,true,false,false,true,true,false,
+					 false,false,false,true,true,true,false,false,false,false,
+					 false,false,true,true,false,false,false,false,false,true,
+					 true,false,false,false,false,false,true,true,true,true,
+					 true,true,true],
+			"lineCount":31,
 		}
 	]
 }
