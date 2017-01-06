@@ -299,6 +299,16 @@
 					 true,false,false,false,false,false,true,true,true,true,
 					 true,true,true],
 			"lineCount":31,
+		},
+		{
+			"file_path":"dataset/edu/vt/middleware/vt-dictionary/3.0/edu/vt/middleware/dictionary/sort/",
+		 	"file_name":"QuickSort.java",
+			"method":"sort",
+			"pos":45,
+			"label":[true,true,true,true,true,true,true,true,true,true,
+					 false,false,false,false,false,true,true,true,true],
+			"lineCount":20,
 		}
+
 	]
 }
