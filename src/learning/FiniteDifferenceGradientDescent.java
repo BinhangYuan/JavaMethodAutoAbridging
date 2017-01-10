@@ -1,41 +1,31 @@
 package learning;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
-import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTParser;
-import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.SimpleName;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import ilpSolver.LearningBinaryIPSolverV0;
 import statementGraph.ASTParserUtils;
-import statementGraph.CFG;
 import statementGraph.ConstraintAndFeatureEncoder;
-import statementGraph.DDG;
-import statementGraph.SimplifiedAST;
 import statementGraph.graphNode.StatementWrapper;
 
 public class FiniteDifferenceGradientDescent {
 	private double [] parameters;
 	private Map<Integer,Integer> typeMap;
-	private double stepLength = 0.1;
+	private double stepLength = 1;
 	private double epsilon = 0.1;
 	private JaccardDistance computeDistance = new JaccardDistance();
 	private Logger trainlogger = Logger.getLogger("learning");
-
+	private LinkedList<Double> trainingCostRecord;
 	
 	private Map<LearningBinaryIPSolverV0,ManualLabel> trainingSet = new HashMap<LearningBinaryIPSolverV0,ManualLabel>();
 	private int maxIterations = 100;
@@ -56,6 +46,9 @@ public class FiniteDifferenceGradientDescent {
 	}	
 	
 	public void initTraining(String labelPath) throws Exception{
+		//Create record for training cost;
+		this.trainingCostRecord = new LinkedList<Double>();
+		
 		//Set up logger:
 		FileHandler handler = new FileHandler("log/trainLog"+System.currentTimeMillis()+".log", false);
 		this.trainlogger.addHandler(handler);
@@ -110,8 +103,11 @@ public class FiniteDifferenceGradientDescent {
 	
 	public void training(){
 		this.trainlogger.info("Training start");
+		int stopLength = 3;
+		boolean[] stops = new boolean[stopLength]; 
 		for(int i = 0; i < this.maxIterations; i++){
 			double precost = this.computeCost(this.parameters);
+			this.trainingCostRecord.add(precost);
 			System.out.println("Training process: Iteration "+i +" with cost value: "+ precost);
 			double [] derivative = new double[this.parameters.length];
 			
@@ -126,13 +122,35 @@ public class FiniteDifferenceGradientDescent {
 			
 			//update parameters
 			for(int j = 0; j < this.parameters.length; j++){
-				this.parameters[j] += (this.stepLength*derivative[j]);
+				this.parameters[j] -= (this.stepLength*derivative[j]);
 			}
 			
 			double postcost = this.computeCost(this.parameters);
 			
 			this.trainlogger.info("Training process: Iteration "+i +" with pre cost value: "+ precost+ " post cost value: "+postcost);
+			this.trainlogger.info("Para:"+LearningHelper.outputDoubleArray2String(this.parameters));
+			/*
 			if(Math.abs(precost-postcost) < this.threshold){
+				break;
+			}*/
+			//Stop if 3 continuous iterations do not change;
+			if(i<3){
+				stops[i] = (precost - postcost < this.threshold);
+			}
+			else{
+				for(int j=0; j<stopLength-1; j++){
+					stops[j] = stops[j+1];
+				}
+				stops[stopLength-1] =  (precost - postcost < this.threshold); 
+			}
+			boolean stopHere = true;
+			for(int j=0; j<stopLength; j++){
+				stopHere = stopHere && stops[j];
+				if(!stopHere){
+					break;
+				}
+			}
+			if(stopHere){
 				break;
 			}
 		}
@@ -141,6 +159,7 @@ public class FiniteDifferenceGradientDescent {
 	public FiniteDifferenceGradientDescent(){
 		this.parameters = new double[StatementWrapper.statementsLabelSet.size()];
 		Arrays.fill(this.parameters,1.0);
+		this.parameters[1] = 2;
 		this.typeMap = new HashMap<Integer,Integer>();
 		int i = 0;
 		for(Integer label: StatementWrapper.statementsLabelSet){
