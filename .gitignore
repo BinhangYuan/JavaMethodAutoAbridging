@@ -2,6 +2,8 @@ dataset
 
 bin
 
+log
+
 .classpath
 
 *.class
