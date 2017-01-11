@@ -14,6 +14,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
 import org.eclipse.core.runtime.Assert;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import ilpSolver.LearningBinaryIPSolverV0;
@@ -25,7 +26,7 @@ public class ParamILS extends AbstractOptimizer{
 	
 	private HashMap<String,Double> visitedCandidates = new HashMap<String,Double>();
 	private int iterations = 0;
-	private int maxIterations = 100;
+	private int maxIterations = 10000;
 	private int paraLength;
 	private int paraR = 10;
 	private int paraS = 3;
@@ -238,6 +239,26 @@ public class ParamILS extends AbstractOptimizer{
 	}
 	
 	
+	@Override
+	public void outputTrainingResult() throws IOException{
+		JSONArray result = new JSONArray();
+		for(LearningBinaryIPSolverV0 solver:this.trainingSet.keySet()){
+			JSONObject current = new JSONObject();
+			current.put("Origin", solver.originalProgram2String());
+			current.put("manual", solver.outputLabeledResult(this.trainingSet.get(solver).getBooleanLabels()));
+			current.put("Automatic", solver.outputSolveResult());
+			result.put(current);
+		}
+		JSONObject obj = new JSONObject();
+		FileWriter file = new FileWriter("src/learning/labeling/result/result"+System.currentTimeMillis()+".json");
+		obj.put("Iterations", this.maxIterations);
+		obj.put("ObjectiveFunctionValue", this.getLowestObjectiveFunctionValue());
+		obj.put("result", result);
+		obj.write(file);
+		file.close();
+	}
+	
+	
 	public void outputTrainingCost2JsonFile() throws IOException{
 		FileWriter file = new FileWriter("log/ParaILSTrainingCurve.json");
 		JSONObject obj = new JSONObject();
@@ -249,12 +270,12 @@ public class ParamILS extends AbstractOptimizer{
 	
 	
 	
-	
 	public static void main(String[] args) throws Exception {
 		ParamILS model = new ParamILS();
 		model.initTraining("src/learning/labeling/labels.json");
 		model.training();
 		System.out.println("Lowest loss function value:"+model.getLowestObjectiveFunctionValue());
 		System.out.println(model.getBestStateHash());
+		model.outputTrainingResult();
 	}
 }

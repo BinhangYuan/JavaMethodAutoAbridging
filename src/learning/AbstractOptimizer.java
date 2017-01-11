@@ -78,7 +78,7 @@ public abstract class AbstractOptimizer {
 			
 			ConstraintAndFeatureEncoder encoder = ASTParserUtils.parseMethod(true,filePath, fileName,methodName,pos,label);
 			
-			LearningBinaryIPSolverV0 solver = new LearningBinaryIPSolverV0();
+			LearningBinaryIPSolverV0 solver = new LearningBinaryIPSolverV0(encoder);
 			solver.setDependenceConstraints(encoder.getASTConstraints(), encoder.getCFGConstraints(), encoder.getDDGConstraints());
 			solver.setLineCostConstraints(encoder.getLineCounts());
 			solver.setTypeMap(this.typeMap);
@@ -93,7 +93,5 @@ public abstract class AbstractOptimizer {
 	
 	abstract public void training() throws IOException;
 	
-	public void outputTrainingResult(){
-		
-	}
+	abstract public void outputTrainingResult() throws IOException;
 }

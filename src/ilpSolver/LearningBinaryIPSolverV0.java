@@ -10,9 +10,11 @@ import scpsolver.constraints.LinearSmallerThanEqualsConstraint;
 import scpsolver.lpsolver.LinearProgramSolver;
 import scpsolver.lpsolver.SolverFactory;
 import scpsolver.problems.LinearProgram;
+import statementGraph.ConstraintAndFeatureEncoder;
 import statementGraph.DependencePair;
 
 public class LearningBinaryIPSolverV0 {
+	ConstraintAndFeatureEncoder encoder;
 	LinearProgram lp;
 	List<DependencePair> dependenceConstraints;
 	List<Integer> lineCostConstraints;
@@ -23,7 +25,8 @@ public class LearningBinaryIPSolverV0 {
 	int variableNum = 0;
 	boolean debug = false;
 	
-	public LearningBinaryIPSolverV0(){
+	public LearningBinaryIPSolverV0(ConstraintAndFeatureEncoder encoder){
+		this.encoder = encoder;
 		this.dependenceConstraints = new LinkedList<DependencePair>();
 	}
 	
@@ -113,5 +116,20 @@ public class LearningBinaryIPSolverV0 {
 			}
 		}
 		return binarySolution;
+	}
+	
+	
+	public String outputSolveResult(){
+		return this.encoder.compressedProgram2String(this.solve());
+	}
+	
+	
+	public String outputLabeledResult(boolean [] labels){
+		return this.encoder.compressedProgram2String(labels);
+	}
+	
+	
+	public String originalProgram2String(){
+		return this.encoder.originProgram2String();
 	}
 }

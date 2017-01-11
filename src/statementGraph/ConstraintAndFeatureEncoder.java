@@ -12,7 +12,9 @@ import statementGraph.graphNode.StatementWrapper;
 
 public class ConstraintAndFeatureEncoder {
 	private SimplifiedAST sAST;
+	@SuppressWarnings("unused")
 	private CFG cfg;
+	@SuppressWarnings("unused")
 	private DDG ddg;
 	
 	private List<StatementWrapper> statementItems;
@@ -126,5 +128,13 @@ public class ConstraintAndFeatureEncoder {
 	
 	public List<Integer> getStatementType(){
 		return this.feature_statementTypes;
+	}
+	
+	public String compressedProgram2String(boolean [] flags){
+		return this.sAST.computeOutput(flags);
+	}
+	
+	public String originProgram2String(){
+		return this.sAST.getASTNode().toString();
 	}
 }
