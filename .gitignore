@@ -4,6 +4,8 @@ bin
 
 log
 
+src/learning/labeling/result
+
 .classpath
 
 *.class
