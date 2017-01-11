@@ -9,12 +9,12 @@ import ilpSolver.LearningBinaryIPSolverV0;
 import statementGraph.graphNode.StatementWrapper;
 
 public class FiniteDifferenceGradientDescent extends AbstractOptimizer{
-	private double stepLength = 1;
-	private double epsilon = 0.1;
+	private double stepLength = 0.1;
+	private double epsilon = 0.01;
 	private int maxIterations = 100;
 	private double threshold = 0.0000001;
 	
-	private Logger trainlogger = Logger.getLogger("learning");
+	private Logger trainlogger = Logger.getLogger("learning.FiniteDifferenceGradientDescent");
 	private LinkedList<Double> trainingCostRecord;
 	
 	
@@ -22,7 +22,6 @@ public class FiniteDifferenceGradientDescent extends AbstractOptimizer{
 		super();
 		this.parameters = new double[StatementWrapper.statementsLabelSet.size()];
 		Arrays.fill(this.parameters,1.0);
-		this.parameters[1] = 2;
 	}
 	
 	
@@ -102,6 +101,7 @@ public class FiniteDifferenceGradientDescent extends AbstractOptimizer{
 				break;
 			}
 		}
+		this.trainlogger.info("Lowest loss parameters:\n" + LearningHelper.typeWeightMap2String(this.typeMap, this.parameters));
 	}
 	
 	

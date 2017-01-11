@@ -12,5 +12,4 @@ public class CombineOptimizer {
 		fdgdmodel.setParameters(paramILSmodel.getParameters());
 		fdgdmodel.training();
 	}
-	
 }

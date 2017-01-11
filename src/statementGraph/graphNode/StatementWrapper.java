@@ -7,11 +7,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.AssertStatement;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.Statement;
-
-import statementGraph.expressionWrapper.ExpressionExtractor;
 
 
 public abstract class StatementWrapper {
@@ -90,6 +87,7 @@ public abstract class StatementWrapper {
 	public static final int ANNOTATION_TYPE_DECLARATION = ASTNode.ANNOTATION_TYPE_DECLARATION;
 	public static final int ANNOTATION_TYPE_MEMBER_DECLARATION = ASTNode.ANNOTATION_TYPE_DECLARATION;
 
+	
 	public static Set<Integer> statementsLabelSet = new HashSet<Integer>(Arrays.asList(new Integer[]{
 		ASSERT_STATEMENT,BREAK_STATEMENT,CONSTRUCTOR_INVOCATION,CONTINUE_STATEMENT,DO_STATEMENT,EMPTY_STATEMENT,
 		ENHANCED_FOR_STATEMENT,EXPRESSION_STATEMENT,FOR_STATEMENT,IF_STATEMENT,LABELED_STATEMENT,RETURN_STATEMENT,
@@ -103,7 +101,7 @@ public abstract class StatementWrapper {
 		return nodeType == ASSERT_STATEMENT||
 			   nodeType == BLOCK||
 			   nodeType == BREAK_STATEMENT||
-			   nodeType ==CONSTRUCTOR_INVOCATION||
+			   nodeType == CONSTRUCTOR_INVOCATION||
 			   nodeType == CONTINUE_STATEMENT||
 			   nodeType == DO_STATEMENT||
 			   nodeType == EMPTY_STATEMENT||
@@ -124,6 +122,37 @@ public abstract class StatementWrapper {
 			   nodeType == WHILE_STATEMENT;
 	}
 	
+	
+	public static String statementTypeInt2String(int nodeType){
+		switch (nodeType){
+			case ASSERT_STATEMENT: return "Assert Statement";
+			case BLOCK: return "Block";
+			case BREAK_STATEMENT: return "Break Statement";
+			case CONSTRUCTOR_INVOCATION: return "Constructor Invocation Statement";
+			case CONTINUE_STATEMENT: return "Continue Statement";
+			case DO_STATEMENT: return "Do Statement";
+			case EMPTY_STATEMENT: return "Empty Statement";
+			case ENHANCED_FOR_STATEMENT: return "Enhanced For Statement";
+			case EXPRESSION_STATEMENT: return "Expression Statement";
+			case FOR_STATEMENT: return "For Statement";
+			case IF_STATEMENT: return "IF Statement";
+			case LABELED_STATEMENT: return "Label Statement";
+			case RETURN_STATEMENT: return "Return Statement";
+			case SUPER_CONSTRUCTOR_INVOCATION: return "Super Constructor Invocation Statement";
+			case SWITCH_CASE: return "Switch Case";
+			case SWITCH_STATEMENT: return "Switch Statement";
+			case SYNCHRONIZED_STATEMENT: return "Synchronized Statement";
+			case THROW_STATEMENT: return "Throw Statement";
+			case TRY_STATEMENT: return "Try Statement";
+			case TYPE_DECLARATION_STATEMENT: return "Type Declaration Statement";
+			case VARIABLE_DECLARATION_STATEMENT: return "Variable Declaration Statement";
+			case WHILE_STATEMENT: return "While Statement";
+			default: return "Unexpected Statement Type by Code "+nodeType;
+			
+		}
+	}
+	
+	
 	public static boolean isSimpleStatement(ASTNode node){
 		int nodeType = node.getNodeType();
 		return nodeType == StatementWrapper.ASSERT_STATEMENT ||
@@ -138,6 +167,7 @@ public abstract class StatementWrapper {
 			   nodeType == StatementWrapper.TYPE_DECLARATION_STATEMENT ||
 			   nodeType == StatementWrapper.VARIABLE_DECLARATION_STATEMENT;
 	}
+	
 	
 	public static boolean isLoopStatement(ASTNode node){
 		int nodeType = node.getNodeType();
@@ -232,6 +262,7 @@ public abstract class StatementWrapper {
 		return this.itemType;
 	}
 	
+	
 	private boolean isDisplay = false;
 	
 	public void setIsDisplay(boolean flag){
@@ -241,6 +272,7 @@ public abstract class StatementWrapper {
 	public boolean isDisplay(){
 		return this.isDisplay;
 	}
+	
 	
 	private StatementWrapper parent = null;
 	
@@ -252,6 +284,7 @@ public abstract class StatementWrapper {
 		this.parent = parent;
 	}
 	
+	
 	private StatementWrapper cfgSeqSuccessor = null;
 	
 	public void setCFGSeqSuccessor(StatementWrapper item){
@@ -261,6 +294,7 @@ public abstract class StatementWrapper {
 	public StatementWrapper getCFGSeqSuccessor(){
 		return this.cfgSeqSuccessor;
 	}
+	
 	
 	private List<StatementWrapper> cfgSuccessors = new LinkedList<StatementWrapper>();
 	
@@ -272,6 +306,7 @@ public abstract class StatementWrapper {
 		this.cfgSuccessors.add(item);
 	}
 	
+	
 	private List<StatementWrapper> cfgPredecessor = new LinkedList<StatementWrapper>();
 	
 	public List<StatementWrapper> getCFGPredecessor(){
@@ -281,6 +316,7 @@ public abstract class StatementWrapper {
 	protected void addCFGPredecessor(StatementWrapper item){
 		this.cfgPredecessor.add(item);
 	}
+	
 	
 	//For the current implementation, this list should include only one element.
 	private List<StatementWrapper> ddgDefinedPredecessor = new LinkedList<StatementWrapper>();
@@ -293,6 +329,7 @@ public abstract class StatementWrapper {
 		this.ddgDefinedPredecessor.add(item);
 	}
 	
+	
 	private List<StatementWrapper> ddgUsageSuccessor = new LinkedList<StatementWrapper>();
 	
 	public List<StatementWrapper> getDDGUsageSuccessor(){
@@ -302,6 +339,7 @@ public abstract class StatementWrapper {
 	public void addDDGUsageSuccessor(StatementWrapper item){
 		this.ddgUsageSuccessor.add(item);
 	}
+	
 	
 	private List<SimpleName> usageVariables = new LinkedList<SimpleName>();
 	private Set<String> usageVariableSet = new HashSet<String>();
@@ -325,6 +363,7 @@ public abstract class StatementWrapper {
 	public Set<String> getUsageVariableSet(){
 		return this.usageVariableSet;
 	}
+	
 	
 	//For the current implementation, this list should include only one element.
 	private List<SimpleName> definedVariables = new LinkedList<SimpleName>();
@@ -365,6 +404,7 @@ public abstract class StatementWrapper {
 		Arrays.fill(chars, '\t');
 		return new String(chars);
 	}
+	
 	
 	protected void printDDGPredecessor(){
 		System.out.println("DDG Predecessors: -->");

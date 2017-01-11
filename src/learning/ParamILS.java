@@ -17,19 +17,19 @@ import ilpSolver.LearningBinaryIPSolverV0;
 import statementGraph.graphNode.StatementWrapper;
 
 public class ParamILS extends AbstractOptimizer{
-	static double[] candidate = {1.0,2.0,3.0,4.0,5.0,6.0};
+	static double[] candidate = {1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0};
 	private Random randGenerate = new Random();
 	
 	private HashMap<String,Double> visitedCandidates = new HashMap<String,Double>();
 	private int iterations = 0;
-	private int maxIterations = 1000;
+	private int maxIterations = 10000;
 	private int paraLength;
 	private int paraR = 10;
 	private int paraS = 3;
 	private double restartProb = 0.01;
 	private String bestStateHash = null;
 	
-	private Logger trainlogger = Logger.getLogger("learning");
+	private Logger trainlogger = Logger.getLogger("learning.ParamILS");
 	private LinkedList<Double> trainingCostRecordIterations;
 	private LinkedList<Double> trainingCostRecordMin;
 	
@@ -64,7 +64,7 @@ public class ParamILS extends AbstractOptimizer{
 	
 	
 	private boolean visit(double[] state){
-		String stateHash = LearningHelper.HashKeyDoubleArray2String(state);
+		String stateHash = LearningHelper.hashKeyDoubleArray2String(state);
 		if(this.visitedCandidates.containsKey(stateHash)){
 			return false;
 		}
@@ -79,7 +79,9 @@ public class ParamILS extends AbstractOptimizer{
 			this.iterations++;
 			if(this.bestStateHash==null || cost < this.visitedCandidates.get(this.bestStateHash)){
 				this.bestStateHash = stateHash;
+				this.parameters = state;
 			}
+			
 			this.trainingCostRecordMin.add(this.visitedCandidates.get(this.bestStateHash));
 			return true;
 		}
@@ -87,10 +89,10 @@ public class ParamILS extends AbstractOptimizer{
 	
 	
 	private boolean isBetter(double[] state1, double[] state2){
-		Assert.isTrue(this.visitedCandidates.containsKey(LearningHelper.HashKeyDoubleArray2String(state1)));
-		double cost1 = this.visitedCandidates.get(LearningHelper.HashKeyDoubleArray2String(state1));
-		Assert.isTrue(this.visitedCandidates.containsKey(LearningHelper.HashKeyDoubleArray2String(state2)));
-		double cost2 = this.visitedCandidates.get(LearningHelper.HashKeyDoubleArray2String(state2));
+		Assert.isTrue(this.visitedCandidates.containsKey(LearningHelper.hashKeyDoubleArray2String(state1)));
+		double cost1 = this.visitedCandidates.get(LearningHelper.hashKeyDoubleArray2String(state1));
+		Assert.isTrue(this.visitedCandidates.containsKey(LearningHelper.hashKeyDoubleArray2String(state2)));
+		double cost2 = this.visitedCandidates.get(LearningHelper.hashKeyDoubleArray2String(state2));
 		return cost1 < cost2;
 	}
 	
@@ -130,7 +132,7 @@ public class ParamILS extends AbstractOptimizer{
 					double[] tempNeighbour = new double[currentState.length];
 					System.arraycopy(currentState, 0, tempNeighbour, 0, currentState.length);
 					tempNeighbour[i] = candidate[j];
-					if(!this.visitedCandidates.containsKey(LearningHelper.HashKeyDoubleArray2String(tempNeighbour))){
+					if(!this.visitedCandidates.containsKey(LearningHelper.hashKeyDoubleArray2String(tempNeighbour))){
 						LinkedList<Double> tempNeighbourList = new LinkedList<Double>();
 						for(double value:tempNeighbour){
 							tempNeighbourList.add(value);
@@ -212,6 +214,8 @@ public class ParamILS extends AbstractOptimizer{
 	public void training() {
 		double [] initState = this.randomState();
 		this.iteratedLocalSearch(initState);
+		this.trainlogger.info("Lowest loss function value:" + this.getLowestObjectiveFunctionValue());
+		this.trainlogger.info("Lowest loss parameters:\n" + LearningHelper.typeWeightMap2String(this.typeMap, this.parameters));	
 	}
 	
 	
