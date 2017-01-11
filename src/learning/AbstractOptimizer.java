@@ -1,5 +1,6 @@
 package learning;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -90,5 +91,9 @@ public abstract class AbstractOptimizer {
 	}
 	
 	
-	abstract public void training();
+	abstract public void training() throws IOException;
+	
+	public void outputTrainingResult(){
+		
+	}
 }

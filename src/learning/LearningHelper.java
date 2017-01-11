@@ -1,7 +1,9 @@
 package learning;
 
 import java.text.DecimalFormat;
+import java.util.LinkedList;
 import java.util.Map;
+import org.json.JSONArray;
 
 import statementGraph.graphNode.StatementWrapper;
 
@@ -36,5 +38,14 @@ public class LearningHelper {
 			result += (StatementWrapper.statementTypeInt2String(type)+": "+para[map.get(type)]+"\n");
 		}
 		return result;
-	}	
+	}
+	
+	
+	static JSONArray outputTrainingCost2JSONArray(LinkedList<Double> costs){
+		JSONArray line = new JSONArray();
+		for(Double value:costs){
+			line.put(value);
+		}
+		return line;
+	}
 }

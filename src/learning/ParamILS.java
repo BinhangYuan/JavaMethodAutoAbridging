@@ -4,6 +4,8 @@
  */
 package learning;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -12,17 +14,18 @@ import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
 import org.eclipse.core.runtime.Assert;
+import org.json.JSONObject;
 
 import ilpSolver.LearningBinaryIPSolverV0;
 import statementGraph.graphNode.StatementWrapper;
 
 public class ParamILS extends AbstractOptimizer{
-	static double[] candidate = {1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0};
+	static double[] candidate = {1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0};
 	private Random randGenerate = new Random();
 	
 	private HashMap<String,Double> visitedCandidates = new HashMap<String,Double>();
 	private int iterations = 0;
-	private int maxIterations = 10000;
+	private int maxIterations = 100;
 	private int paraLength;
 	private int paraR = 10;
 	private int paraS = 3;
@@ -211,11 +214,12 @@ public class ParamILS extends AbstractOptimizer{
 
 	
 	@Override
-	public void training() {
+	public void training() throws IOException {
 		double [] initState = this.randomState();
 		this.iteratedLocalSearch(initState);
 		this.trainlogger.info("Lowest loss function value:" + this.getLowestObjectiveFunctionValue());
 		this.trainlogger.info("Lowest loss parameters:\n" + LearningHelper.typeWeightMap2String(this.typeMap, this.parameters));	
+		this.outputTrainingCost2JsonFile();
 	}
 	
 	
@@ -232,6 +236,17 @@ public class ParamILS extends AbstractOptimizer{
 		super.initTraining(labelPath);
 		this.trainlogger.info("Loading data set and parsing data set are done");
 	}
+	
+	
+	public void outputTrainingCost2JsonFile() throws IOException{
+		FileWriter file = new FileWriter("log/ParaILSTrainingCurve.json");
+		JSONObject obj = new JSONObject();
+		obj.put("iterations", LearningHelper.outputTrainingCost2JSONArray(this.trainingCostRecordIterations));
+		obj.put("min", LearningHelper.outputTrainingCost2JSONArray(this.trainingCostRecordMin));
+		obj.write(file);
+		file.close();
+	}
+	
 	
 	
 	
