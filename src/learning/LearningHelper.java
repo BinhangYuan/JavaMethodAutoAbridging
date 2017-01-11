@@ -14,6 +14,7 @@ public class LearningHelper {
 		return result;
 	}
 	
+	
 	static String HashKeyDoubleArray2String(double[] array){
 		String result = new String();
 		for(int i=0; i<array.length;i++){
@@ -24,4 +25,7 @@ public class LearningHelper {
 		}
 		return result;
 	}
+	
+	
+	
 }

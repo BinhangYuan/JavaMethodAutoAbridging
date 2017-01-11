@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.eclipse.core.runtime.Assert;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -21,6 +23,18 @@ public abstract class AbstractOptimizer {
 
 	abstract protected double objectiveFunction(double [] paras);
 	
+	
+	public void setParameters(double[] para){
+		Assert.isTrue(para.length==this.parameters.length);
+		this.parameters = para;
+	}
+	
+	
+	public double[] getParameters(){
+		return this.parameters;
+	}
+	
+	
 	protected AbstractOptimizer(){
 		this.typeMap = new HashMap<Integer,Integer>();
 		int i = 0;
@@ -28,6 +42,7 @@ public abstract class AbstractOptimizer {
 			typeMap.put(label, i++);
 		}
 	}
+	
 	
 	public void initTraining(String labelPath) throws Exception{
 		String  labelString = ASTParserUtils.readFileToString(labelPath);
@@ -74,6 +89,6 @@ public abstract class AbstractOptimizer {
 		}
 	}
 	
-	abstract public void training();
 	
+	abstract public void training();
 }

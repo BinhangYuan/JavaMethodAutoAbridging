@@ -198,10 +198,12 @@ public class ASTParserUtils {
 		File[] files = root.listFiles ( );
 	 
 		for (File f : files ) {
+			/*
 			String filePath = f.getAbsolutePath();
 			if(f.isFile()){
-				//parse(readFileToString(filePath));
+				parse(readFileToString(filePath));
 			}
+			*/
 		}
 	}
 	 

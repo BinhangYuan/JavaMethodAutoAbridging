@@ -30,7 +30,8 @@ public class ParamILS extends AbstractOptimizer{
 	private String bestStateHash = null;
 	
 	private Logger trainlogger = Logger.getLogger("learning");
-	private LinkedList<Double> trainingCostRecord;
+	private LinkedList<Double> trainingCostRecordIterations;
+	private LinkedList<Double> trainingCostRecordMin;
 	
 	
 	public String getBestStateHash(){
@@ -71,7 +72,7 @@ public class ParamILS extends AbstractOptimizer{
 			double cost = this.objectiveFunction(state);
 			this.visitedCandidates.put(stateHash, cost);
 			
-			this.trainingCostRecord.add(cost);
+			this.trainingCostRecordIterations.add(cost);
 			this.trainlogger.info("Training process: Iteration "+this.iterations +" with cost value: "+ cost);
 			this.trainlogger.info("Para:"+LearningHelper.outputDoubleArray2String(state));
 			
@@ -79,6 +80,7 @@ public class ParamILS extends AbstractOptimizer{
 			if(this.bestStateHash==null || cost < this.visitedCandidates.get(this.bestStateHash)){
 				this.bestStateHash = stateHash;
 			}
+			this.trainingCostRecordMin.add(this.visitedCandidates.get(this.bestStateHash));
 			return true;
 		}
 	}
@@ -216,7 +218,8 @@ public class ParamILS extends AbstractOptimizer{
 	@Override
 	public void initTraining(String labelPath) throws Exception{
 		//Create record for training cost;
-		this.trainingCostRecord = new LinkedList<Double>();
+		this.trainingCostRecordIterations = new LinkedList<Double>();
+		this.trainingCostRecordMin = new LinkedList<Double>();
 		//Set up logger:
 		FileHandler handler = new FileHandler("log/ParamILS_TrainLog"+System.currentTimeMillis()+".log", false);
 		this.trainlogger.addHandler(handler);
