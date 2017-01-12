@@ -16,31 +16,38 @@
 <body>
     <div class="container">
         <div class="text-center page-header">
-           <h1>Web Demo</h1>
-       </div>
-
-       <div class="row">
-        <div class="col-md-2">
-            <h4>Load an example</h4>
-            <select class="form-control" id="select-example">
-                <option value=-1>--</option>
-            </select>
+            <h1>Web Demo</h1>
         </div>
 
-        <div class="col-md-10">
-            <div>   
-                <h4 class="text-center">Original Code</h4>
-                <div id="origin"></div>
+        <div class="row">
+            <div class="col-md-2">
+                <h4>Load an example</h4>
+                <select class="form-control" id="select-example">
+                    <option value=-1>--</option>
+                </select>
             </div>
-            <div>
-                <h4 class="text-center">Manual Labeled Result</h4>
-                <div id="manual"></div>
+
+            <div class="col-md-10">
+                <div>   
+                    <h4 class="text-center">Original Code</h4>
+                    <div id="origin"></div>
+                </div>
+                <div>
+                    <h4 class="text-center">Manual Labeled Result</h4>
+                    <div id="manual"></div>
+                </div>
+                <div>
+                    <h4 class="text-center">Learned Result</h4>
+                    <div id="auto"></div> 
+                </div>  
             </div>
-            <div>
-                <h4 class="text-center">Learned Result</h4>
-                <div id="auto"></div> 
-            </div>  
-        </div> 
+        </div>
+    
+        <div class="footer">
+            <br>
+            <p class="text-center">&copy; Binhang Yuan, 2017</p>
+            <br>
+        </div>
     </div>
 </div>
 </body>
