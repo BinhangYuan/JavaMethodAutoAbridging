@@ -6,6 +6,10 @@ log
 
 src/learning/labeling/result
 
+webDemo/result
+
+webDemo/ace-builds
+
 .classpath
 
 *.class
