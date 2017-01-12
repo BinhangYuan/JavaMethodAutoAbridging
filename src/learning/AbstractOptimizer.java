@@ -11,16 +11,16 @@ import org.eclipse.core.runtime.Assert;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import ilpSolver.LearningBinaryIPSolverV0;
+import ilpSolver.LearningBinaryIPSolverV1;
 import statementGraph.ASTParserUtils;
-import statementGraph.ConstraintAndFeatureEncoder;
+import statementGraph.ConstraintAndFeatureEncoderV1;
 import statementGraph.graphNode.StatementWrapper;
 
 public abstract class AbstractOptimizer {
 	protected double [] parameters;
 	protected Map<Integer,Integer> typeMap;
 	protected JaccardDistance computeDistance = new JaccardDistance();
-	protected Map<LearningBinaryIPSolverV0,ManualLabel> trainingSet = new HashMap<LearningBinaryIPSolverV0,ManualLabel>();
+	protected Map<LearningBinaryIPSolverV1,ManualLabel> trainingSet = new HashMap<LearningBinaryIPSolverV1,ManualLabel>();
 
 	abstract protected double objectiveFunction(double [] paras);
 	
@@ -76,9 +76,9 @@ public abstract class AbstractOptimizer {
 			}
 			int lineCount = dataArray.getJSONObject(index).getInt("lineCount");
 			
-			ConstraintAndFeatureEncoder encoder = ASTParserUtils.parseMethod(true,filePath, fileName,methodName,pos,label);
+			ConstraintAndFeatureEncoderV1 encoder = ASTParserUtils.parseMethod(true,filePath, fileName,methodName,pos,label);
 			
-			LearningBinaryIPSolverV0 solver = new LearningBinaryIPSolverV0(encoder);
+			LearningBinaryIPSolverV1 solver = new LearningBinaryIPSolverV1(encoder);
 			solver.setDependenceConstraints(encoder.getASTConstraints(), encoder.getCFGConstraints(), encoder.getDDGConstraints());
 			solver.setLineCostConstraints(encoder.getLineCounts());
 			solver.setTypeMap(this.typeMap);

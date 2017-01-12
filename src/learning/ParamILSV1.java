@@ -17,10 +17,10 @@ import org.eclipse.core.runtime.Assert;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import ilpSolver.LearningBinaryIPSolverV0;
+import ilpSolver.LearningBinaryIPSolverV1;
 import statementGraph.graphNode.StatementWrapper;
 
-public class ParamILS extends AbstractOptimizer{
+public class ParamILSV1 extends AbstractOptimizer{
 	static double[] candidate = {1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0};
 	private Random randGenerate = new Random();
 	
@@ -52,7 +52,7 @@ public class ParamILS extends AbstractOptimizer{
 	protected double objectiveFunction(double [] paras){
 		double cost = 0;
 		double n = (double)this.trainingSet.keySet().size();
-		for(LearningBinaryIPSolverV0 solver: this.trainingSet.keySet()){
+		for(LearningBinaryIPSolverV1 solver: this.trainingSet.keySet()){
 			Assert.isNotNull(paras);
 			solver.setParameters(paras);
 			cost += this.computeDistance.distanceBetweenSets(solver.solve(),this.trainingSet.get(solver).getBooleanLabels());
@@ -61,7 +61,7 @@ public class ParamILS extends AbstractOptimizer{
 	}
 	
 	
-	public ParamILS(){
+	public ParamILSV1(){
 		super();
 		this.paraLength = StatementWrapper.statementsLabelSet.size();
 	}
@@ -242,7 +242,7 @@ public class ParamILS extends AbstractOptimizer{
 	@Override
 	public void outputTrainingResult() throws IOException{
 		JSONArray result = new JSONArray();
-		for(LearningBinaryIPSolverV0 solver:this.trainingSet.keySet()){
+		for(LearningBinaryIPSolverV1 solver:this.trainingSet.keySet()){
 			JSONObject current = new JSONObject();
 			current.put("Origin", solver.originalProgram2String());
 			current.put("manual", solver.outputLabeledResult(this.trainingSet.get(solver).getBooleanLabels()));
@@ -271,7 +271,7 @@ public class ParamILS extends AbstractOptimizer{
 	
 	
 	public static void main(String[] args) throws Exception {
-		ParamILS model = new ParamILS();
+		ParamILSV1 model = new ParamILSV1();
 		model.initTraining("src/learning/labeling/labels.json");
 		model.training();
 		System.out.println("Lowest loss function value:"+model.getLowestObjectiveFunctionValue());

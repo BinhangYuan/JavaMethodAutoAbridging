@@ -10,10 +10,10 @@ import java.util.logging.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import ilpSolver.LearningBinaryIPSolverV0;
+import ilpSolver.LearningBinaryIPSolverV1;
 import statementGraph.graphNode.StatementWrapper;
 
-public class FiniteDifferenceGradientDescent extends AbstractOptimizer{
+public class FiniteDifferenceGradientDescentV1 extends AbstractOptimizer{
 	private double stepLength = 0.1;
 	private double epsilon = 0.01;
 	private int maxIterations = 100;
@@ -23,7 +23,7 @@ public class FiniteDifferenceGradientDescent extends AbstractOptimizer{
 	private LinkedList<Double> trainingCostRecord;
 	
 	
-	public FiniteDifferenceGradientDescent(){
+	public FiniteDifferenceGradientDescentV1(){
 		super();
 		this.parameters = new double[StatementWrapper.statementsLabelSet.size()];
 		Arrays.fill(this.parameters,1.0);
@@ -34,7 +34,7 @@ public class FiniteDifferenceGradientDescent extends AbstractOptimizer{
 	protected double objectiveFunction(double [] paras){
 		double cost = 0;
 		double n = (double)this.trainingSet.keySet().size();
-		for(LearningBinaryIPSolverV0 solver: this.trainingSet.keySet()){
+		for(LearningBinaryIPSolverV1 solver: this.trainingSet.keySet()){
 			solver.setParameters(paras);
 			cost += this.computeDistance.distanceBetweenSets(solver.solve(),this.trainingSet.get(solver).getBooleanLabels());
 		}
@@ -113,7 +113,7 @@ public class FiniteDifferenceGradientDescent extends AbstractOptimizer{
 	@Override
 	public void outputTrainingResult() throws IOException{
 		JSONArray result = new JSONArray();
-		for(LearningBinaryIPSolverV0 solver:this.trainingSet.keySet()){
+		for(LearningBinaryIPSolverV1 solver:this.trainingSet.keySet()){
 			JSONObject current = new JSONObject();
 			current.put("Origin", solver.originalProgram2String());
 			current.put("manual", solver.outputLabeledResult(this.trainingSet.get(solver).getBooleanLabels()));
@@ -131,7 +131,7 @@ public class FiniteDifferenceGradientDescent extends AbstractOptimizer{
 	
 	
 	public static void main(String[] args) throws Exception {
-		FiniteDifferenceGradientDescent model = new FiniteDifferenceGradientDescent();
+		FiniteDifferenceGradientDescentV1 model = new FiniteDifferenceGradientDescentV1();
 		model.initTraining("src/learning/labeling/labels.json");
 		model.training();
 	}

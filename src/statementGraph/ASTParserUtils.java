@@ -56,7 +56,7 @@ public class ASTParserUtils {
 			//System.out.println("Generate DDG:");
 			DDG ddg = new DDG(sAST);
 			//ddg.printDDG();
-			ConstraintAndFeatureEncoder encoder = new ConstraintAndFeatureEncoder(sAST,cfg,ddg);
+			ConstraintAndFeatureEncoderV1 encoder = new ConstraintAndFeatureEncoderV1(sAST,cfg,ddg);
 			//encoder.printConstraints();
 			NaiveBinaryIPSolver solver = new NaiveBinaryIPSolver();
 			solver.setDependenceConstraints(encoder.getASTConstraints(), encoder.getCFGConstraints(), encoder.getDDGConstraints());
@@ -70,7 +70,7 @@ public class ASTParserUtils {
 	
 	
 	//use ASTParse to parse string
-	public static ConstraintAndFeatureEncoder parseMethod(boolean print, String filePath, String fileName, String methodName, int pos, boolean [] manualLabel) throws Exception {
+	public static ConstraintAndFeatureEncoderV1 parseMethod(boolean print, String filePath, String fileName, String methodName, int pos, boolean [] manualLabel) throws Exception {
 		ASTParser parser = ASTParser.newParser(AST.JLS8);
 		String str = readFileToString(filePath+fileName);
 		parser.setSource(str.toCharArray());
@@ -102,7 +102,7 @@ public class ASTParserUtils {
 		SimplifiedAST sAST = new SimplifiedAST(method);
 		CFG cfg = new CFG(sAST);
 		DDG ddg = new DDG(sAST);
-		ConstraintAndFeatureEncoder encoder = new ConstraintAndFeatureEncoder(sAST,cfg,ddg);
+		ConstraintAndFeatureEncoderV1 encoder = new ConstraintAndFeatureEncoderV1(sAST,cfg,ddg);
 		
 			
 		if(print){

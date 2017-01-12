@@ -10,7 +10,7 @@ import statementGraph.graphNode.StatementWrapper;
 
 
 
-public class ConstraintAndFeatureEncoder {
+public class ConstraintAndFeatureEncoderV1 {
 	private SimplifiedAST sAST;
 	@SuppressWarnings("unused")
 	private CFG cfg;
@@ -32,7 +32,7 @@ public class ConstraintAndFeatureEncoder {
 	private List<DependencePair> cfgConstraintsSerializer = new LinkedList<DependencePair>();
 	
 	
-	public ConstraintAndFeatureEncoder(SimplifiedAST sAST, CFG cfg, DDG ddg) throws Exception{
+	public ConstraintAndFeatureEncoderV1(SimplifiedAST sAST, CFG cfg, DDG ddg) throws Exception{
 		this.sAST = sAST;
 		this.cfg = cfg;
 		this.ddg = ddg;
