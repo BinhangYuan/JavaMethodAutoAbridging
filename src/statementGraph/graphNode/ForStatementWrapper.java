@@ -98,8 +98,8 @@ public class ForStatementWrapper extends StatementWrapper{
 			}
 		}
 		return this.bodyIsBlock?
-		"for ("+forInit+"; "+ this.astNode.getExpression().toString()+"; "+ forUpdate +"){":
-		"for ("+forInit+"; "+ this.astNode.getExpression().toString()+"; "+ forUpdate +")";
+		"for ("+forInit+"; "+ this.astNode.getExpression()==null?"":this.astNode.getExpression().toString()+"; "+ forUpdate +"){":
+		"for ("+forInit+"; "+ this.astNode.getExpression()==null?"":this.astNode.getExpression().toString()+"; "+ forUpdate +")";
 	}
 	
 	@Override
