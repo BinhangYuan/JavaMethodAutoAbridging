@@ -1,4 +1,4 @@
-package learning;
+package learning.v1;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,11 +12,13 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import ilpSolver.LearningBinaryIPSolverV1;
+import learning.JaccardDistance;
+import learning.ManualLabel;
 import statementGraph.ASTParserUtils;
 import statementGraph.ConstraintAndFeatureEncoderV1;
 import statementGraph.graphNode.StatementWrapper;
 
-public abstract class AbstractOptimizer {
+public abstract class AbstractOptimizerV1 {
 	protected double [] parameters;
 	protected Map<Integer,Integer> typeMap;
 	protected JaccardDistance computeDistance = new JaccardDistance();
@@ -36,7 +38,7 @@ public abstract class AbstractOptimizer {
 	}
 	
 	
-	protected AbstractOptimizer(){
+	protected AbstractOptimizerV1(){
 		this.typeMap = new HashMap<Integer,Integer>();
 		int i = 0;
 		for(Integer label: StatementWrapper.statementsLabelSet){
@@ -76,7 +78,7 @@ public abstract class AbstractOptimizer {
 			}
 			int lineCount = dataArray.getJSONObject(index).getInt("lineCount");
 			
-			ConstraintAndFeatureEncoderV1 encoder = ASTParserUtils.parseMethod(true,filePath, fileName,methodName,pos,label);
+			ConstraintAndFeatureEncoderV1 encoder = ASTParserUtils.parseMethodV1(true,filePath, fileName,methodName,pos,label);
 			
 			LearningBinaryIPSolverV1 solver = new LearningBinaryIPSolverV1(encoder);
 			solver.setDependenceConstraints(encoder.getASTConstraints(), encoder.getCFGConstraints(), encoder.getDDGConstraints());

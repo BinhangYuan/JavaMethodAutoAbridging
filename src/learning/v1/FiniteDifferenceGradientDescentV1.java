@@ -1,4 +1,4 @@
-package learning;
+package learning.v1;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,9 +11,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import ilpSolver.LearningBinaryIPSolverV1;
+import learning.LearningHelper;
 import statementGraph.graphNode.StatementWrapper;
 
-public class FiniteDifferenceGradientDescentV1 extends AbstractOptimizer{
+public class FiniteDifferenceGradientDescentV1 extends AbstractOptimizerV1{
 	private double stepLength = 0.1;
 	private double epsilon = 0.01;
 	private int maxIterations = 100;

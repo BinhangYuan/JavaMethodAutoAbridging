@@ -1,5 +1,8 @@
 package learning;
 
+import learning.v1.FiniteDifferenceGradientDescentV1;
+import learning.v1.ParamILSV1;
+
 public class CombineOptimizer {
 	
 	/*

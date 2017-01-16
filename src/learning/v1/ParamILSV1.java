@@ -2,7 +2,7 @@
  * This file refers to the method introduced in http://www.cs.ubc.ca/labs/beta/Projects/ParamILS/algorithms.html
  * Some implementation refers to their ruby source code.
  */
-package learning;
+package learning.v1;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -18,9 +18,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import ilpSolver.LearningBinaryIPSolverV1;
+import learning.LearningHelper;
 import statementGraph.graphNode.StatementWrapper;
 
-public class ParamILSV1 extends AbstractOptimizer{
+public class ParamILSV1 extends AbstractOptimizerV1{
 	static double[] candidate = {1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0};
 	private Random randGenerate = new Random();
 	

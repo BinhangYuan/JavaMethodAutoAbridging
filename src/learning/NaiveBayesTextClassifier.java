@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import org.eclipse.core.runtime.Assert;
 
@@ -15,6 +16,7 @@ import textExtractor.TextUtils;
 
 public class NaiveBayesTextClassifier {
 	private Map<LearningBinaryIPSolverV2,ManualLabel> trainingSet;
+	private Logger trainlogger;
 	
 	private Set<String> vocabulary;
 	private Map<String,Integer> positiveWordCounts;
@@ -24,8 +26,10 @@ public class NaiveBayesTextClassifier {
 	private int positiveWordTotal;
 	private int negativeWordTotal;
 	
-	public NaiveBayesTextClassifier(Map<LearningBinaryIPSolverV2,ManualLabel> trainingSet) throws Exception{
+	
+	public NaiveBayesTextClassifier(Map<LearningBinaryIPSolverV2,ManualLabel> trainingSet, Logger logger) throws Exception{
 		this.trainingSet = trainingSet;
+		this.trainlogger = logger;
 		this.vocabulary = new HashSet<String>();
 		this.positiveWordCounts = new HashMap<String,Integer>();
 		this.negativeWordCounts = new HashMap<String,Integer>();
@@ -33,11 +37,13 @@ public class NaiveBayesTextClassifier {
 		this.negativeItemTotal = 0;
 		this.positiveWordTotal = 0;
 		this.negativeWordTotal = 0;
-		this.LearnNaiveBayesText();
+		//this.LearnNaiveBayesText();
+		//this.predictNaiveBayesText();
 	}
 	
 	
-	private void LearnNaiveBayesText() throws Exception{
+	public void LearnNaiveBayesText() throws Exception{
+		this.trainlogger.info("Start training text naive bayes");
 		for(LearningBinaryIPSolverV2 solver: this.trainingSet.keySet()){
 			List<StatementWrapper> statements = solver.getStatementWrapperList();
 			boolean[] labels = trainingSet.get(solver).getBooleanLabels();
@@ -73,6 +79,7 @@ public class NaiveBayesTextClassifier {
 				}
 			}
 		}
+		this.trainlogger.info("Training text naive bayes done");
 	}
 	
 	
@@ -113,7 +120,41 @@ public class NaiveBayesTextClassifier {
 		return result;
 	}
 	
-	public boolean predictNaiveBayesFlag(StatementWrapper item) throws Exception{
+	private boolean predictNaiveBayesStatementFlag(StatementWrapper item) throws Exception{
 		return this.predictNaiveBayesPositive_Log(item)>this.predictNaiveBayesNegative_Log(item);
+	}
+	
+	
+	public void predictNaiveBayesText() throws Exception{
+		this.trainlogger.info("Start predicting");
+		int truePositive = 0;
+		int trueNegative = 0;
+		int falsePositive = 0;
+		int falseNegative = 0;
+		for(LearningBinaryIPSolverV2 solver: this.trainingSet.keySet()){
+			List<StatementWrapper> statements = solver.getStatementWrapperList();
+			boolean[] labels = trainingSet.get(solver).getBooleanLabels();
+			Assert.isTrue(statements.size() == labels.length);
+			List<Boolean> predicts = new LinkedList<Boolean>();
+			for(int i = 0; i<statements.size();i++){
+				StatementWrapper item = statements.get(i);
+				boolean predict = this.predictNaiveBayesStatementFlag(item);
+				predicts.add(predict);
+				if(labels[i] && predict){
+					truePositive++;
+				}
+				else if(labels[i] && !predict){
+					falseNegative++;
+				}
+				else if(!labels[i] && predict){
+					falsePositive++;
+				}
+				else{
+					trueNegative++;
+				}
+			}
+			solver.setTextClassifierResults(predicts);
+		}
+		this.trainlogger.info("TP:"+truePositive+" TN:"+trueNegative+" FP:"+falsePositive+" FN:"+falseNegative);
 	}
 }

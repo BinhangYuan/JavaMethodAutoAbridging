@@ -8,7 +8,7 @@ import org.json.JSONArray;
 import statementGraph.graphNode.StatementWrapper;
 
 public class LearningHelper {
-	static String outputDoubleArray2String(double[] array){
+	public static String outputDoubleArray2String(double[] array){
 		String result = new String();
 		for(int i=0; i<array.length;i++){
 			result += array[i];
@@ -20,7 +20,7 @@ public class LearningHelper {
 	}
 	
 	
-	static String hashKeyDoubleArray2String(double[] array){
+	public static String hashKeyDoubleArray2String(double[] array){
 		String result = new String();
 		for(int i=0; i<array.length;i++){
 			result += (new DecimalFormat("#0.0").format(array[i]));
@@ -32,7 +32,7 @@ public class LearningHelper {
 	}
 	
 	
-	static String typeWeightMap2String(Map<Integer,Integer> map, double [] para){
+	public static String typeWeightMap2String(Map<Integer,Integer> map, double [] para){
 		String result = new String();
 		for(Integer type : map.keySet()){
 			result += (StatementWrapper.statementTypeInt2String(type)+": "+para[map.get(type)]+"\n");
@@ -41,7 +41,7 @@ public class LearningHelper {
 	}
 	
 	
-	static JSONArray outputTrainingCost2JSONArray(LinkedList<Double> costs){
+	public static JSONArray outputTrainingCost2JSONArray(LinkedList<Double> costs){
 		JSONArray line = new JSONArray();
 		for(Double value:costs){
 			line.put(value);

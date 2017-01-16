@@ -221,7 +221,9 @@ public class TextUtils {
 		}
 		else if(nodeType == StatementWrapper.RETURN_STATEMENT){
 			 ReturnStatement statement = ((ReturnStatementWrapper)item).getASTNode();
-			 result.addAll(parseCodeFragment(statement.getExpression().toString()));
+			 if(statement.getExpression()!=null){
+				 result.addAll(parseCodeFragment(statement.getExpression().toString()));
+			 }
 		}
 		else if(nodeType == StatementWrapper.SUPER_CONSTRUCTOR_INVOCATION){
 			SuperConstructorInvocation statement = ((SuperConstructorInvocationStatementWrapper)item).getASTNode();
