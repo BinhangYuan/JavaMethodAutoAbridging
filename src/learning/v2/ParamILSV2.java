@@ -222,7 +222,8 @@ public class ParamILSV2 extends AbstractOptimizerV2{
 		double [] initState = this.randomState();
 		this.iteratedLocalSearch(initState);
 		this.trainlogger.info("Lowest loss function value:" + this.getLowestObjectiveFunctionValue());
-		this.trainlogger.info("Lowest loss parameters:\n" + LearningHelper.typeWeightMap2String(this.typeMap, this.parameters));	
+		this.trainlogger.info("Lowest loss parameters:\n" + LearningHelper.typeWeightMap2String(this.typeMap, this.parameters) 
+				+"text classifier weight:"+this.parameters[this.typeMap.size()]);	
 		this.outputTrainingCost2JsonFile();
 	}
 	

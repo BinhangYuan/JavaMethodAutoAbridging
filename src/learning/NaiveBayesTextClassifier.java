@@ -1,5 +1,7 @@
 package learning;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -9,6 +11,8 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import org.eclipse.core.runtime.Assert;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import ilpSolver.LearningBinaryIPSolverV2;
 import statementGraph.graphNode.StatementWrapper;
@@ -80,6 +84,7 @@ public class NaiveBayesTextClassifier {
 			}
 		}
 		this.trainlogger.info("Training text naive bayes done");
+		this.outputWordDistribution2JsonFile();
 	}
 	
 	
@@ -155,6 +160,33 @@ public class NaiveBayesTextClassifier {
 			}
 			solver.setTextClassifierResults(predicts);
 		}
-		this.trainlogger.info("TP:"+truePositive+" TN:"+trueNegative+" FP:"+falsePositive+" FN:"+falseNegative);
+		String statics = "TP:"+truePositive+" TN:"+trueNegative+" FP:"+falsePositive+" FN:"+falseNegative; 
+		this.trainlogger.info(statics);
+	}
+	
+	
+	public void outputWordDistribution2JsonFile() throws IOException{
+		FileWriter file = new FileWriter("log/NaiveBayesTextWordDistribution.json");
+		JSONObject obj = new JSONObject();
+		JSONArray positive = new JSONArray();
+		for(String word:this.positiveWordCounts.keySet()){
+			JSONObject temp = new JSONObject();
+			temp.put("word",word);
+			temp.put("count", this.positiveWordCounts.get(word));
+			positive.put(temp);
+		}
+		obj.put("positive", positive);
+		
+		JSONArray negative = new JSONArray();
+		for(String word:this.negativeWordCounts.keySet()){
+			JSONObject temp = new JSONObject();
+			temp.put("word",word);
+			temp.put("count", this.negativeWordCounts.get(word));
+			negative.put(temp);
+		}
+		obj.put("negative", negative);
+		
+		obj.write(file);
+		file.close();
 	}
 }

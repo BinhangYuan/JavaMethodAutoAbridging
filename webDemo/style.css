@@ -12,3 +12,19 @@
     position: relative;
     height: 500px;
 }
+
+.minline{
+	fill: none;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+}
+
+.iterline{
+	fill: none;
+    stroke: green;
+    stroke-width: 1.5px;
+}
+
+circle{
+	fill:steelblue;
+}

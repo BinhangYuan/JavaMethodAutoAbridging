@@ -143,6 +143,12 @@ public class TextUtils {
 		codeFragment = codeFragment.replace('7', ' ');
 		codeFragment = codeFragment.replace('8', ' ');
 		codeFragment = codeFragment.replace('9', ' ');
+		//Remove punctuation
+		codeFragment = codeFragment.replace('\\', ' ');
+		codeFragment = codeFragment.replace('\"', ' ');
+		codeFragment = codeFragment.replace('\'', ' ');
+		codeFragment = codeFragment.replace('\t', ' ');
+		
 		
 		for(String word : codeFragment.split(" +")){
 			if(isAllLowercase(word)){
@@ -277,7 +283,8 @@ public class TextUtils {
 		if(removeKeyword){
 			int i = 0;
 			while(i<result.size()){
-				if(javaKeyword.contains(result.get(i))){
+				//java keyword or single character does not count;
+				if(javaKeyword.contains(result.get(i)) || result.get(i).length()<2){
 					result.remove(i);
 				}
 				else{
