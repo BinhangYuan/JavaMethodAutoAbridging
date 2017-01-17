@@ -41,6 +41,15 @@ public class LearningHelper {
 	}
 	
 	
+	public static String parentTypeWeightMap2String(Map<Integer,Integer> map, double [] para){
+		String result = new String();
+		for(Integer parentNodeType : map.keySet()){
+			result += (StatementWrapper.parentStatementTypeInt2String(parentNodeType)+": "+para[StatementWrapper.statementsLabelSet.size()+map.get(parentNodeType)]+"\n");
+		}
+		return result;
+	}
+	
+	
 	public static JSONArray outputTrainingCost2JSONArray(LinkedList<Double> costs){
 		JSONArray line = new JSONArray();
 		for(Double value:costs){

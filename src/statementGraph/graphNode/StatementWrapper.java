@@ -93,7 +93,31 @@ public abstract class StatementWrapper {
 		ENHANCED_FOR_STATEMENT,EXPRESSION_STATEMENT,FOR_STATEMENT,IF_STATEMENT,LABELED_STATEMENT,RETURN_STATEMENT,
 		SUPER_CONSTRUCTOR_INVOCATION,SWITCH_CASE,SWITCH_STATEMENT,SYNCHRONIZED_STATEMENT,THROW_STATEMENT,TRY_STATEMENT,
 		TYPE_DECLARATION_STATEMENT,VARIABLE_DECLARATION_STATEMENT,WHILE_STATEMENT	
-	})); 
+	}));
+	
+	
+	//Encode parent node information, defined by myself;
+	public static final int PARENT_ILLEGAL = -1000;
+	public static final int PARENT_METHODDECLARATION = 1000;
+	public static final int PARENT_DOSTATEMENT = 1010;
+	public static final int PARENT_ENHANCEDFORSTATEMENT = 1020;
+	public static final int PARENT_FORSTATEMENT = 1030;
+	public static final int PARENT_IFSTATEMENT_THEN = 1041;
+	public static final int PARENT_IFSTATEMENT_ELSE = 1042;
+	public static final int PARENT_LABELEDSTATEMENT = 1050;
+	public static final int PARENT_SWITCHSTATEMENT = 1060;
+	public static final int PARENT_SYNCHRONIZEDSTATEMENT = 1070;
+	public static final int PARENT_TRYSTATEMENT_BODY = 1081;
+	public static final int PARENT_TRYSTATEMENT_CATCH = 1082;
+	public static final int PARENT_TRYSTATEMENT_FINAL = 1083;
+	public static final int PARENT_WHILESTATEMENT = 1090;
+	
+	
+	public static Set<Integer> parentStatementsLabelSet = new HashSet<Integer>(Arrays.asList(new Integer[]{
+			PARENT_METHODDECLARATION, PARENT_DOSTATEMENT, PARENT_ENHANCEDFORSTATEMENT,PARENT_FORSTATEMENT, PARENT_IFSTATEMENT_THEN,
+			PARENT_IFSTATEMENT_ELSE, PARENT_LABELEDSTATEMENT,PARENT_SWITCHSTATEMENT,PARENT_SYNCHRONIZEDSTATEMENT, PARENT_TRYSTATEMENT_BODY, 
+			PARENT_TRYSTATEMENT_CATCH,PARENT_TRYSTATEMENT_FINAL,PARENT_WHILESTATEMENT
+	}));
 	
 	
 	public static boolean isAstStatement(ASTNode node){
@@ -149,6 +173,28 @@ public abstract class StatementWrapper {
 			case WHILE_STATEMENT: return "While Statement";
 			default: return "Unexpected Statement Type by Code "+nodeType;
 			
+		}
+	}
+	
+	
+	public static String parentStatementTypeInt2String(int parentNodeType){
+		switch (parentNodeType){
+			case PARENT_ILLEGAL: return "Illegal parenet type";
+			case PARENT_METHODDECLARATION: return "Parent MethodDeclaration";
+			case PARENT_DOSTATEMENT: return "Parent DoStatement";
+			case PARENT_ENHANCEDFORSTATEMENT: return "Parent EnhancedForStatement";
+			case PARENT_FORSTATEMENT: return "Parent ForStatement";
+			case PARENT_IFSTATEMENT_THEN: return "Parent IfStatement Then";
+			case PARENT_IFSTATEMENT_ELSE: return "Parent IfStatement Else";
+			case PARENT_LABELEDSTATEMENT: return "Parent LabeledStatement";
+			case PARENT_SWITCHSTATEMENT: return "Parent SwitchStatement";
+			case PARENT_SYNCHRONIZEDSTATEMENT: return "Parent SynchronizedStatement";
+			case PARENT_TRYSTATEMENT_BODY: return "Parent TryStatement Body";
+			case PARENT_TRYSTATEMENT_CATCH: return "Parent TryStatement Catch";
+			case PARENT_TRYSTATEMENT_FINAL: return "Parent TryStatement Final";
+			case PARENT_WHILESTATEMENT: return "Parent WhileStatement";
+			default: return "Unexpected Parent Statement Type by Code "+parentNodeType;
+		
 		}
 	}
 	
@@ -260,6 +306,16 @@ public abstract class StatementWrapper {
 	
 	public int getType(){
 		return this.itemType;
+	}
+	
+	private int parentType = PARENT_ILLEGAL;
+	
+	public void setParentType(int type){
+		this.parentType = type;
+	}
+	
+	public int getParentType(){
+		return this.parentType;
 	}
 	
 	

@@ -5,10 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.AssertStatement;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.BreakStatement;
-import org.eclipse.jdt.core.dom.ConstructorInvocation;
 import org.eclipse.jdt.core.dom.ContinueStatement;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Statement;
@@ -16,39 +14,21 @@ import org.eclipse.jdt.core.dom.DoStatement;
 import org.eclipse.jdt.core.dom.EnhancedForStatement;
 import org.eclipse.jdt.core.dom.ForStatement;
 import org.eclipse.jdt.core.dom.IfStatement;
-import org.eclipse.jdt.core.dom.LabeledStatement;
-import org.eclipse.jdt.core.dom.SuperConstructorInvocation;
-import org.eclipse.jdt.core.dom.SwitchCase;
 import org.eclipse.jdt.core.dom.SwitchStatement;
 import org.eclipse.jdt.core.dom.SynchronizedStatement;
-import org.eclipse.jdt.core.dom.ThrowStatement;
 import org.eclipse.jdt.core.dom.TryStatement;
-import org.eclipse.jdt.core.dom.TypeDeclarationStatement;
-import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
 
-import statementGraph.graphNode.AssertStatementWrapper;
-import statementGraph.graphNode.BreakStatementWrapper;
-import statementGraph.graphNode.ConstructorInvocationStatementWrapper;
-import statementGraph.graphNode.ContinueStatementWrapper;
 import statementGraph.graphNode.DoStatementWrapper;
 import statementGraph.graphNode.StatementWrapper;
-import statementGraph.graphNode.StatementWrapperFactory;
-import statementGraph.graphNode.EmptyStatementWrapper;
 import statementGraph.graphNode.EnhancedForStatementWrapper;
-import statementGraph.graphNode.ExpressionStatementWrapper;
 import statementGraph.graphNode.ForStatementWrapper;
 import statementGraph.graphNode.IfStatementWrapper;
 import statementGraph.graphNode.LabeledStatementWrapper;
 import statementGraph.graphNode.ReturnStatementWrapper;
-import statementGraph.graphNode.SuperConstructorInvocationStatementWrapper;
 import statementGraph.graphNode.SwitchCaseStatementWrapper;
 import statementGraph.graphNode.SwitchStatementWrapper;
-import statementGraph.graphNode.SynchronizedStatementWrapper;
-import statementGraph.graphNode.ThrowStatementWrapper;
 import statementGraph.graphNode.TryStatementWrapper;
-import statementGraph.graphNode.TypeDeclarationStatementWrapper;
-import statementGraph.graphNode.VariableDeclarationStatementWrapper;
 import statementGraph.graphNode.WhileStatementWrapper;
 
 public class CFG {
@@ -323,6 +303,7 @@ public class CFG {
 			return;//This may be problematic;
 		}
 		else if(nodeType == StatementWrapper.SWITCH_STATEMENT){
+			@SuppressWarnings("unchecked")
 			List<Statement> branchNodes = ((SwitchStatement)node).statements();
 			SwitchStatementWrapper  switchItem =  (SwitchStatementWrapper) nodes.get(astMap.get(node));
 			int i = 0;

@@ -232,6 +232,7 @@ public class SimplifiedAST {
 			for(Object statement: body.statements()){
 				buildTreeNodes((ASTNode)statement);
 			}
+			@SuppressWarnings("unchecked")
 			List<CatchClause> catchClauses = ((TryStatement)node).catchClauses();
 			for(CatchClause catchItem: catchClauses){
 				Block catchbody = catchItem.getBody();
@@ -283,7 +284,9 @@ public class SimplifiedAST {
 			}
 			else{
 				for(Object statement:((MethodDeclaration)node).getBody().statements()){
-					this.methodBlock.add(nodes.get(astMap.get(statement)));
+					StatementWrapper currentWrapper = nodes.get(astMap.get(statement));
+					currentWrapper.setParentType(StatementWrapper.PARENT_METHODDECLARATION);
+					this.methodBlock.add(currentWrapper);
 					buildHierachy((ASTNode)statement);
 				}
 			}
@@ -304,13 +307,17 @@ public class SimplifiedAST {
 			DoStatementWrapper item = (DoStatementWrapper) nodes.get(astMap.get(node));
 			ASTNode body = ((DoStatement)node).getBody();
 			if(body.getNodeType() != StatementWrapper.BLOCK){
-				item.addBodyWrapper(nodes.get(astMap.get(body)));
+				StatementWrapper currentWrapper = nodes.get(astMap.get(body));
+				currentWrapper.setParentType(StatementWrapper.PARENT_DOSTATEMENT);
+				item.addBodyWrapper(currentWrapper);
 				buildHierachy(body);
 			}
 			else{
 				Block bodyBlock = (Block) body;
 				for(Object statement: bodyBlock.statements()){
-					item.addBodyWrapper(nodes.get(astMap.get(statement)));
+					StatementWrapper currentWrapper = nodes.get(astMap.get(statement));
+					currentWrapper.setParentType(StatementWrapper.PARENT_DOSTATEMENT);
+					item.addBodyWrapper(currentWrapper);
 					buildHierachy((ASTNode)statement);
 				}
 			}
@@ -322,13 +329,17 @@ public class SimplifiedAST {
 			EnhancedForStatementWrapper item = (EnhancedForStatementWrapper) nodes.get(astMap.get(node));
 			ASTNode body = ((EnhancedForStatement)node).getBody();
 			if(body.getNodeType() != StatementWrapper.BLOCK){
-				item.addBodyWrapper(nodes.get(astMap.get(body)));
+				StatementWrapper currentWrapper = nodes.get(astMap.get(body));
+				currentWrapper.setParentType(StatementWrapper.PARENT_ENHANCEDFORSTATEMENT);
+				item.addBodyWrapper(currentWrapper);
 				buildHierachy(body);
 			}
 			else{
 				Block bodyBlock = (Block) body;
 				for(Object statement: bodyBlock.statements()){
-					item.addBodyWrapper(nodes.get(astMap.get(statement)));
+					StatementWrapper currentWrapper = nodes.get(astMap.get(statement));
+					currentWrapper.setParentType(StatementWrapper.PARENT_ENHANCEDFORSTATEMENT);
+					item.addBodyWrapper(currentWrapper);
 					buildHierachy((ASTNode)statement);
 				}
 			}
@@ -340,13 +351,17 @@ public class SimplifiedAST {
 			ForStatementWrapper item = (ForStatementWrapper) nodes.get(astMap.get(node));
 			ASTNode body = ((ForStatement)node).getBody();
 			if(body.getNodeType() != StatementWrapper.BLOCK){
-				item.addBodyWrapper(nodes.get(astMap.get(body)));
+				StatementWrapper currentWrapper = nodes.get(astMap.get(body));
+				currentWrapper.setParentType(StatementWrapper.PARENT_FORSTATEMENT);
+				item.addBodyWrapper(currentWrapper);
 				buildHierachy(body);
 			}
 			else{
 				Block bodyBlock = (Block) body;
 				for(Object statement: bodyBlock.statements()){
-					item.addBodyWrapper(nodes.get(astMap.get(statement)));
+					StatementWrapper currentWrapper = nodes.get(astMap.get(statement));
+					currentWrapper.setParentType(StatementWrapper.PARENT_FORSTATEMENT);
+					item.addBodyWrapper(currentWrapper);
 					buildHierachy((ASTNode)statement);
 				}
 			}
@@ -355,26 +370,34 @@ public class SimplifiedAST {
 			IfStatementWrapper item = (IfStatementWrapper) nodes.get(astMap.get(node));
 			ASTNode thenBody = ((IfStatement)node).getThenStatement();
 			if(thenBody.getNodeType() != StatementWrapper.BLOCK){
-				item.addThenBodyWrapper(nodes.get(astMap.get(thenBody)));
+				StatementWrapper currentWrapper = nodes.get(astMap.get(thenBody));
+				currentWrapper.setParentType(StatementWrapper.PARENT_IFSTATEMENT_THEN);
+				item.addThenBodyWrapper(currentWrapper);
 				buildHierachy(thenBody);
 			}
 			else{
 				Block thenBodyBlock = (Block) thenBody;
 				for(Object statement: thenBodyBlock.statements()){
-					item.addThenBodyWrapper(nodes.get(astMap.get(statement)));
+					StatementWrapper currentWrapper = nodes.get(astMap.get(statement));
+					currentWrapper.setParentType(StatementWrapper.PARENT_IFSTATEMENT_THEN);
+					item.addThenBodyWrapper(currentWrapper);
 					buildHierachy((ASTNode)statement);
 				}
 			}
 			ASTNode elseBody = ((IfStatement)node).getElseStatement();
 			if(elseBody != null){
 				if(elseBody.getNodeType() != StatementWrapper.BLOCK){
-					item.addElseBodyWrapper(nodes.get(astMap.get(elseBody)));
+					StatementWrapper currentWrapper = nodes.get(astMap.get(elseBody));
+					currentWrapper.setParentType(StatementWrapper.PARENT_IFSTATEMENT_ELSE);
+					item.addElseBodyWrapper(currentWrapper);
 					buildHierachy(elseBody);
 				}
 				else{
 					Block elseBodyBlock = (Block) elseBody;
 					for(Object statement: elseBodyBlock.statements()){
-						item.addElseBodyWrapper(nodes.get(astMap.get(statement)));
+						StatementWrapper currentWrapper = nodes.get(astMap.get(statement));
+						currentWrapper.setParentType(StatementWrapper.PARENT_IFSTATEMENT_ELSE);
+						item.addElseBodyWrapper(currentWrapper);
 						buildHierachy((ASTNode)statement);
 					}
 				}
@@ -384,13 +407,17 @@ public class SimplifiedAST {
 			LabeledStatementWrapper item = (LabeledStatementWrapper) nodes.get(astMap.get(node));
 			ASTNode body = ((LabeledStatement)node).getBody();
 			if(body.getNodeType() != StatementWrapper.BLOCK){
-				item.addBodyWrapper(nodes.get(astMap.get(body)));
+				StatementWrapper currentWrapper = nodes.get(astMap.get(body));
+				currentWrapper.setParentType(StatementWrapper.PARENT_LABELEDSTATEMENT);
+				item.addBodyWrapper(currentWrapper);
 				buildHierachy(body);
 			}
 			else{
 				Block bodyBlock = (Block) body;
 				for(Object statement: bodyBlock.statements()){
-					item.addBodyWrapper(nodes.get(astMap.get(statement)));
+					StatementWrapper currentWrapper = nodes.get(astMap.get(statement));
+					currentWrapper.setParentType(StatementWrapper.PARENT_LABELEDSTATEMENT);
+					item.addBodyWrapper(currentWrapper);
 					buildHierachy((ASTNode)statement);
 				}
 			}
@@ -406,9 +433,12 @@ public class SimplifiedAST {
 		}
 		else if(nodeType == StatementWrapper.SWITCH_STATEMENT){
 			SwitchStatementWrapper item = (SwitchStatementWrapper) nodes.get(astMap.get(node));
+			@SuppressWarnings("rawtypes")
 			List statements = ((SwitchStatement)node).statements();
 			for(Object statement: statements){
-				item.addStatementsWrapper(nodes.get(astMap.get(statement)));
+				StatementWrapper currentWrapper = nodes.get(astMap.get(statement));
+				currentWrapper.setParentType(StatementWrapper.PARENT_SWITCHSTATEMENT);
+				item.addStatementsWrapper(currentWrapper);
 				buildHierachy((ASTNode)statement);
 			}
 		}
@@ -416,7 +446,9 @@ public class SimplifiedAST {
 			SynchronizedStatementWrapper item = (SynchronizedStatementWrapper) nodes.get(astMap.get(node));
 			Block body = (Block)((SynchronizedStatement)node).getBody();
 			for(Object statement: body.statements()){
-				item.addBodyWrapper(nodes.get(astMap.get(statement)));
+				StatementWrapper currentWrapper = nodes.get(astMap.get(statement));
+				currentWrapper.setParentType(StatementWrapper.PARENT_SYNCHRONIZEDSTATEMENT);
+				item.addBodyWrapper(currentWrapper);
 				buildHierachy((ASTNode)statement);
 			}
 		}
@@ -427,21 +459,28 @@ public class SimplifiedAST {
 			TryStatementWrapper item = (TryStatementWrapper) nodes.get(astMap.get(node));
 			Block body = (Block)((TryStatement)node).getBody();
 			for(Object statement: body.statements()){
-				item.addBodyWrapper(nodes.get(astMap.get(statement)));
+				StatementWrapper currentWrapper = nodes.get(astMap.get(statement));
+				currentWrapper.setParentType(StatementWrapper.PARENT_TRYSTATEMENT_BODY);
+				item.addBodyWrapper(currentWrapper);
 				buildHierachy((ASTNode)statement);
 			}
-			List<CatchClause> catchClauses = ((TryStatement)node).catchClauses();
+			@SuppressWarnings("unchecked")
+			List<CatchClause> catchClauses = ((TryStatement)(node)).catchClauses();
 			for(CatchClause catchItem: catchClauses){
 				Block catchbody = catchItem.getBody();
 				for(Object statement: catchbody.statements()){
-					item.addCatchClauseWrapper(catchItem, nodes.get(astMap.get(statement)));
+					StatementWrapper currentWrapper = nodes.get(astMap.get(statement));
+					currentWrapper.setParentType(StatementWrapper.PARENT_TRYSTATEMENT_CATCH);
+					item.addCatchClauseWrapper(catchItem, currentWrapper);
 					buildHierachy((ASTNode)statement);
 				}
 			}
 			Block finalbody = (Block)((TryStatement)node).getFinally();
 			if(finalbody!=null){
 				for(Object statement: finalbody.statements()){
-					item.addFinalBodyWrapper(nodes.get(astMap.get(statement)));
+					StatementWrapper currentWrapper = nodes.get(astMap.get(statement));
+					currentWrapper.setParentType(StatementWrapper.PARENT_TRYSTATEMENT_FINAL);
+					item.addFinalBodyWrapper(currentWrapper);
 					buildHierachy((ASTNode)statement);
 				}
 			}
@@ -456,13 +495,17 @@ public class SimplifiedAST {
 			WhileStatementWrapper item = (WhileStatementWrapper) nodes.get(astMap.get(node));
 			ASTNode body = ((WhileStatement)node).getBody();
 			if(body.getNodeType() != StatementWrapper.BLOCK){
-				item.addBodyWrapper(nodes.get(astMap.get(body)));
+				StatementWrapper currentWrapper = nodes.get(astMap.get(body));
+				currentWrapper.setParentType(Statement.WHILE_STATEMENT);
+				item.addBodyWrapper(currentWrapper);
 				buildHierachy(body);
 			}
 			else{
 				Block bodyBlock = (Block) body;
 				for(Object statement: bodyBlock.statements()){
-					item.addBodyWrapper(nodes.get(astMap.get(statement)));
+					StatementWrapper currentWrapper = nodes.get(astMap.get(statement)); 
+					currentWrapper.setParentType(StatementWrapper.PARENT_WHILESTATEMENT);
+					item.addBodyWrapper(currentWrapper);
 					buildHierachy((ASTNode)statement);
 				}
 			}
@@ -471,6 +514,7 @@ public class SimplifiedAST {
 			System.out.println("Unexpected Type in AST!("+nodeType+")");
 		}
 	}
+	
 	
 	public List<StatementWrapper> getSiblings(StatementWrapper item) throws Exception{
 		Statement state = StatementWrapper.getASTNodeStatement(item);

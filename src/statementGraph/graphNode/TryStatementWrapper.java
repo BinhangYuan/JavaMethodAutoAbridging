@@ -44,6 +44,7 @@ public class TryStatementWrapper extends StatementWrapper{
 		return this.catchList;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public TryStatementWrapper(TryStatement astNode){
 		this.astNode = astNode;
 		super.setType(astNode.getNodeType());
@@ -54,7 +55,7 @@ public class TryStatementWrapper extends StatementWrapper{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void addCatchListAll(List items){
+	public void addCatchListAll(@SuppressWarnings("rawtypes") List items){
 		this.catchList.addAll(items);
 	}
 	

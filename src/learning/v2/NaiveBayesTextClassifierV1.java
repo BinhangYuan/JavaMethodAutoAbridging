@@ -1,4 +1,4 @@
-package learning;
+package learning.v2;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -15,10 +15,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import ilpSolver.LearningBinaryIPSolverV2;
+import learning.ManualLabel;
 import statementGraph.graphNode.StatementWrapper;
 import textExtractor.TextUtils;
 
-public class NaiveBayesTextClassifier {
+public class NaiveBayesTextClassifierV1 {
 	private Map<LearningBinaryIPSolverV2,ManualLabel> trainingSet;
 	private Logger trainlogger;
 	
@@ -31,7 +32,7 @@ public class NaiveBayesTextClassifier {
 	private int negativeWordTotal;
 	
 	
-	public NaiveBayesTextClassifier(Map<LearningBinaryIPSolverV2,ManualLabel> trainingSet, Logger logger) throws Exception{
+	public NaiveBayesTextClassifierV1(Map<LearningBinaryIPSolverV2,ManualLabel> trainingSet, Logger logger) throws Exception{
 		this.trainingSet = trainingSet;
 		this.trainlogger = logger;
 		this.vocabulary = new HashSet<String>();

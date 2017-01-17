@@ -2,7 +2,7 @@
  * This file refers to the method introduced in http://www.cs.ubc.ca/labs/beta/Projects/ParamILS/algorithms.html
  * Some implementation refers to their ruby source code.
  */
-package learning.v2;
+package learning.v3;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,11 +17,11 @@ import org.eclipse.core.runtime.Assert;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import ilpSolver.LearningBinaryIPSolverV2;
+import ilpSolver.LearningBinaryIPSolverV3;
 import learning.LearningHelper;
 import statementGraph.graphNode.StatementWrapper;
 
-public class ParamILSV2 extends AbstractOptimizerV2{
+public class ParamILSV3 extends AbstractOptimizerV3{
 	static double[] candidate = {1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0};
 	private Random randGenerate = new Random();
 	
@@ -37,7 +37,7 @@ public class ParamILSV2 extends AbstractOptimizerV2{
 	private Logger trainlogger = Logger.getLogger("learning.ParamILS");
 	private LinkedList<Double> trainingCostRecordIterations;
 	private LinkedList<Double> trainingCostRecordMin;
-	private NaiveBayesTextClassifierV1 textClassifier;
+	private NaiveBayesTextClassifierV3 textClassifier;
 	
 	
 	public String getBestStateHash(){
@@ -54,7 +54,7 @@ public class ParamILSV2 extends AbstractOptimizerV2{
 	protected double objectiveFunction(double [] paras){
 		double cost = 0;
 		double n = (double)this.trainingSet.keySet().size();
-		for(LearningBinaryIPSolverV2 solver: this.trainingSet.keySet()){
+		for(LearningBinaryIPSolverV3 solver: this.trainingSet.keySet()){
 			Assert.isNotNull(paras);
 			solver.setParameters(paras);
 			cost += this.computeDistance.distanceBetweenSets(solver.solve(),this.trainingSet.get(solver).getBooleanLabels());
@@ -63,9 +63,9 @@ public class ParamILSV2 extends AbstractOptimizerV2{
 	}
 	
 	
-	public ParamILSV2(){
+	public ParamILSV3(){
 		super();
-		this.paraLength = StatementWrapper.statementsLabelSet.size()+1;
+		this.paraLength = StatementWrapper.statementsLabelSet.size()+ StatementWrapper.parentStatementsLabelSet.size() +1;
 	}
 	
 	
@@ -221,8 +221,11 @@ public class ParamILSV2 extends AbstractOptimizerV2{
 		double [] initState = this.randomState();
 		this.iteratedLocalSearch(initState);
 		this.trainlogger.info("Lowest loss function value:" + this.getLowestObjectiveFunctionValue());
-		this.trainlogger.info("Lowest loss parameters:\n" + LearningHelper.typeWeightMap2String(this.typeMap, this.parameters) 
-				+"text classifier weight:"+this.parameters[this.typeMap.size()]);	
+		String LowestParaLog = "";
+		LowestParaLog += LearningHelper.typeWeightMap2String(this.typeMap, this.parameters);
+		LowestParaLog += LearningHelper.parentTypeWeightMap2String(this.parentTypeMap, this.parameters);
+		LowestParaLog += "text classifier weight:"+this.parameters[this.typeMap.size()];
+		this.trainlogger.info("Lowest loss parameters:\n" + LowestParaLog);	
 		this.outputTrainingCost2JsonFile();
 	}
 	
@@ -241,7 +244,7 @@ public class ParamILSV2 extends AbstractOptimizerV2{
 		this.trainlogger.info("Loading data set and parsing data set are done");
 		//Training naive Bayes text classifier
 		this.trainlogger.info("Train naive Bayes text classifier");
-		this.textClassifier = new NaiveBayesTextClassifierV1(this.trainingSet,this.trainlogger);
+		this.textClassifier = new NaiveBayesTextClassifierV3(this.trainingSet,this.trainlogger);
 		this.textClassifier.LearnNaiveBayesText();
 		this.textClassifier.predictNaiveBayesText();
 		this.trainlogger.info("Train naive Bayes text classifier done.");
@@ -251,7 +254,7 @@ public class ParamILSV2 extends AbstractOptimizerV2{
 	@Override
 	public void outputTrainingResult() throws IOException{
 		JSONArray result = new JSONArray();
-		for(LearningBinaryIPSolverV2 solver:this.trainingSet.keySet()){
+		for(LearningBinaryIPSolverV3 solver:this.trainingSet.keySet()){
 			JSONObject current = new JSONObject();
 			current.put("Origin", solver.originalProgram2String());
 			current.put("manual", solver.outputLabeledResult(this.trainingSet.get(solver).getBooleanLabels()));
@@ -280,7 +283,7 @@ public class ParamILSV2 extends AbstractOptimizerV2{
 	
 	
 	public static void main(String[] args) throws Exception {
-		ParamILSV2 model = new ParamILSV2();
+		ParamILSV3 model = new ParamILSV3();
 		model.initTraining("src/learning/labeling/labels.json");
 		model.training();
 		System.out.println("Lowest loss function value:"+model.getLowestObjectiveFunctionValue());

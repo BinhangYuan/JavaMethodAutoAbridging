@@ -13,7 +13,7 @@ const drawLine = ()=>{
 
     let g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    d3.json('ParaILSTrainingCurve.json',function(error,jsonData){
+    d3.json('result/ParaILSTrainingCurve.json',function(error,jsonData){
         if (error){
             throw error;
         }
@@ -89,7 +89,7 @@ const drawWordClound = (tag,attribute)=>{
 
     let g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-     d3.json('NaiveBayesTextWordDistribution.json',function(error,jsonData){
+     d3.json('result/NaiveBayesTextWordDistribution.json',function(error,jsonData){
         if (error){
             throw error;
         }
