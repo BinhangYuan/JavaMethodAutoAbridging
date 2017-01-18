@@ -330,5 +330,15 @@
 					 true,true,true,false,false,false,false,true],
 			"lineCount":20,
 		},
+		{
+			"file_path":"dataset/edu/ucla/sspace/sspace/1.6/edu/ucla/sspace/clustering/",
+		 	"file_name":"ClutoWrapper.java",
+			"method":"cluster",
+			"pos":144,
+			"label":[false,false,false,false,false,false,false,false,false,false,
+					 false,false,true,true,true,false,false,true,true,true,
+					 false,false,false,false,false,false,false,true],
+			"lineCount":10,
+		},
 	]
 }
