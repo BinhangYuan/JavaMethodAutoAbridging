@@ -22,12 +22,12 @@ import learning.LearningHelper;
 import statementGraph.graphNode.StatementWrapper;
 
 public class ParamILSV3 extends AbstractOptimizerV3{
-	static double[] candidate = {1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0};
+	static double[] candidate = {1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,11.0,12.0};
 	private Random randGenerate = new Random();
 	
 	private HashMap<String,Double> visitedCandidates = new HashMap<String,Double>();
 	private int iterations = 0;
-	private int maxIterations = 10000;
+	private int maxIterations = 100000;
 	private int paraLength;
 	private int paraR = 10;
 	private int paraS = 3;

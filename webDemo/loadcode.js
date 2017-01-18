@@ -34,7 +34,7 @@ window.onload = function(){
     autoEditor.getSession().setMode("ace/mode/java");
 
     //Load my data!
-    d3.json("result/result1484693850579.json",function(error,json){
+    d3.json("result/result1484701313784.json",function(error,json){
     	if (error) throw error;
     	data = json.result;
     	//console.log(data);
