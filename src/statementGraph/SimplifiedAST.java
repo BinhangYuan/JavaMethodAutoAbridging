@@ -144,7 +144,7 @@ public class SimplifiedAST {
 			astMap.put(node, nodes.size());
 			nodes.add(item);
 			if(((EnhancedForStatement)node).getBody().getNodeType() != StatementWrapper.BLOCK){
-				buildTreeNodes((ASTNode)(((DoStatement)node).getBody()));
+				buildTreeNodes((ASTNode)(((EnhancedForStatement)node).getBody()));
 			}
 			else{
 				Block body = (Block)((EnhancedForStatement)node).getBody();
