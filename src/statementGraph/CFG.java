@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.BreakStatement;
@@ -60,6 +61,9 @@ public class CFG {
 		}
 		else if(nodeType == StatementWrapper.BLOCK){
 			Block body = (Block)node;
+			if(body.statements().size()==0){
+				return;
+			}
 			buildGraphEdges((ASTNode)body.statements().get(0));
 			int i = 0;
 			for(; i< body.statements().size()-1;i++){
