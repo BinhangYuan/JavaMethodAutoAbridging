@@ -340,5 +340,26 @@
 					 false,false,false,false,false,false,false,true],
 			"lineCount":10,
 		},
+		{
+			"file_path":"dataset/edu/ucla/sspace/sspace/1.6/edu/ucla/sspace/clustering/",
+		 	"file_name":"HierarchicalAgglomerativeClustering.java",
+			"method":"cluster",
+			"pos":241,
+			"label":[true,true,true,true,true,true,true,false,true,false,
+					 true,true,true,true,false,true],
+			"lineCount":18,
+		},
+		{
+			"file_path":"dataset/edu/ucla/sspace/sspace/1.6/edu/ucla/sspace/clustering/",
+		 	"file_name":"HierarchicalAgglomerativeClustering.java",
+			"method":"cluster",
+			"pos":354,
+			"label":[true,false,true,true,false,true,false,false,false,true,
+					 true,true,true,false,true,true,true,true,true,true,
+				     true,true,false,false,true,true,true,false,true,false,
+				     false,false,false,false,false,false,false,false,true,true,
+			         true,false,false,false,false,false,false,false,true],
+			"lineCount":28,
+		},
 	]
 }
