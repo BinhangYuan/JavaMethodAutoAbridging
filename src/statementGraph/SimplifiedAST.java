@@ -435,12 +435,68 @@ public class SimplifiedAST {
 			SwitchStatementWrapper item = (SwitchStatementWrapper) nodes.get(astMap.get(node));
 			@SuppressWarnings("rawtypes")
 			List statements = ((SwitchStatement)node).statements();
-			for(Object statement: statements){
-				StatementWrapper currentWrapper = nodes.get(astMap.get(statement));
-				currentWrapper.setParentType(StatementWrapper.PARENT_SWITCHSTATEMENT);
-				item.addStatementsWrapper(currentWrapper);
-				buildHierachy((ASTNode)statement);
+			List<StatementWrapper> tempList = new LinkedList<StatementWrapper>();
+			boolean firstBranch = true;
+			boolean isDefault = false;
+			boolean lastIsBlock = false;
+			for(int i=0; i < statements.size();i++){
+				Object statement = statements.get(i);
+				if(i==0){
+					StatementWrapper currentWrapper = nodes.get(astMap.get(statement));
+					Assert.isTrue(currentWrapper.getType()==StatementWrapper.SWITCH_CASE);
+					if(((SwitchCaseStatementWrapper)currentWrapper).getASTNode().isDefault()){
+						currentWrapper.setParentType(StatementWrapper.PARENT_SWITCHSTATEMENT_DEFAULTCASE);
+						isDefault = true;
+					}
+					else{
+						currentWrapper.setParentType(StatementWrapper.PARENT_SWITCHSTATEMENT_FIRSTCASE);
+					}
+					item.addBranchEntries(currentWrapper);
+				}
+				else if(((ASTNode)statement).getNodeType()==StatementWrapper.SWITCH_CASE){
+					StatementWrapper currentWrapper = nodes.get(astMap.get(statement));
+					if(((SwitchCaseStatementWrapper)currentWrapper).getASTNode().isDefault()){
+						currentWrapper.setParentType(StatementWrapper.PARENT_SWITCHSTATEMENT_DEFAULTCASE);
+						isDefault = true; 
+					}
+					else{
+						currentWrapper.setParentType(StatementWrapper.PARENT_SWITCHSTATEMENT_FIRSTCASE);
+					}
+					item.addBranchEntries(currentWrapper);
+					item.addBranchStatementsWrapper(tempList);
+					item.addisBlockFlag(lastIsBlock);
+					tempList = new LinkedList<StatementWrapper>();
+					firstBranch = false;
+				}
+				else{
+					int parentType = isDefault?StatementWrapper.PARENT_SWITCHSTATEMENT_DEFAULTCASE:
+									(firstBranch?StatementWrapper.PARENT_SWITCHSTATEMENT_FIRSTCASE:
+												StatementWrapper.PARENT_SWITCHSTATEMENT_OTHERCASE);
+					if(((ASTNode)statement).getNodeType()==StatementWrapper.BLOCK){
+						@SuppressWarnings("rawtypes")
+						List blockStatements = ((Block)statement).statements();
+						for(Object nestedStatement: blockStatements){
+							StatementWrapper currentWrapper = nodes.get(astMap.get(nestedStatement));
+							currentWrapper.setParentType(parentType);
+							tempList.add(currentWrapper);
+							buildHierachy((ASTNode)nestedStatement);
+						}
+						lastIsBlock = true;
+						//This assertion just checks some situation that this version cannot handle yet.
+						if(i<statements.size()-1){
+							Assert.isTrue(((ASTNode)statements.get(i+1)).getNodeType()==StatementWrapper.SWITCH_CASE);
+						}
+					}
+					else{
+						StatementWrapper currentWrapper = nodes.get(astMap.get(statement));
+						currentWrapper.setParentType(parentType);
+						tempList.add(currentWrapper);
+						buildHierachy((ASTNode)statement);
+					}
+				}
 			}
+			item.addBranchStatementsWrapper(tempList);
+			item.addisBlockFlag(lastIsBlock);
 		}
 		else if(nodeType == StatementWrapper.SYNCHRONIZED_STATEMENT){
 			SynchronizedStatementWrapper item = (SynchronizedStatementWrapper) nodes.get(astMap.get(node));

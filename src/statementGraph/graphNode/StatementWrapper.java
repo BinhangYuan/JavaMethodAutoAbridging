@@ -105,7 +105,9 @@ public abstract class StatementWrapper {
 	public static final int PARENT_IFSTATEMENT_THEN = 1041;
 	public static final int PARENT_IFSTATEMENT_ELSE = 1042;
 	public static final int PARENT_LABELEDSTATEMENT = 1050;
-	public static final int PARENT_SWITCHSTATEMENT = 1060;
+	public static final int PARENT_SWITCHSTATEMENT_FIRSTCASE = 1061;
+	public static final int PARENT_SWITCHSTATEMENT_OTHERCASE = 1062;
+	public static final int PARENT_SWITCHSTATEMENT_DEFAULTCASE = 1063;
 	public static final int PARENT_SYNCHRONIZEDSTATEMENT = 1070;
 	public static final int PARENT_TRYSTATEMENT_BODY = 1081;
 	public static final int PARENT_TRYSTATEMENT_CATCH = 1082;
@@ -115,8 +117,9 @@ public abstract class StatementWrapper {
 	
 	public static Set<Integer> parentStatementsLabelSet = new HashSet<Integer>(Arrays.asList(new Integer[]{
 			PARENT_METHODDECLARATION, PARENT_DOSTATEMENT, PARENT_ENHANCEDFORSTATEMENT,PARENT_FORSTATEMENT, PARENT_IFSTATEMENT_THEN,
-			PARENT_IFSTATEMENT_ELSE, PARENT_LABELEDSTATEMENT,PARENT_SWITCHSTATEMENT,PARENT_SYNCHRONIZEDSTATEMENT, PARENT_TRYSTATEMENT_BODY, 
-			PARENT_TRYSTATEMENT_CATCH,PARENT_TRYSTATEMENT_FINAL,PARENT_WHILESTATEMENT
+			PARENT_IFSTATEMENT_ELSE, PARENT_LABELEDSTATEMENT,PARENT_SWITCHSTATEMENT_FIRSTCASE,PARENT_SWITCHSTATEMENT_OTHERCASE,
+			PARENT_SWITCHSTATEMENT_DEFAULTCASE,PARENT_SYNCHRONIZEDSTATEMENT, PARENT_TRYSTATEMENT_BODY, PARENT_TRYSTATEMENT_CATCH,
+			PARENT_TRYSTATEMENT_FINAL,PARENT_WHILESTATEMENT
 	}));
 	
 	
@@ -172,7 +175,6 @@ public abstract class StatementWrapper {
 			case VARIABLE_DECLARATION_STATEMENT: return "Variable Declaration Statement";
 			case WHILE_STATEMENT: return "While Statement";
 			default: return "Unexpected Statement Type by Code "+nodeType;
-			
 		}
 	}
 	
@@ -187,7 +189,9 @@ public abstract class StatementWrapper {
 			case PARENT_IFSTATEMENT_THEN: return "Parent IfStatement Then";
 			case PARENT_IFSTATEMENT_ELSE: return "Parent IfStatement Else";
 			case PARENT_LABELEDSTATEMENT: return "Parent LabeledStatement";
-			case PARENT_SWITCHSTATEMENT: return "Parent SwitchStatement";
+			case PARENT_SWITCHSTATEMENT_FIRSTCASE: return "Parent SwitchStatement First";
+			case PARENT_SWITCHSTATEMENT_OTHERCASE: return "Parent SwitchStatement Other";
+			case PARENT_SWITCHSTATEMENT_DEFAULTCASE:return "Parent SwitchStatement Default";
 			case PARENT_SYNCHRONIZEDSTATEMENT: return "Parent SynchronizedStatement";
 			case PARENT_TRYSTATEMENT_BODY: return "Parent TryStatement Body";
 			case PARENT_TRYSTATEMENT_CATCH: return "Parent TryStatement Catch";

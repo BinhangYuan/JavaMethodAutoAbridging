@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.BreakStatement;
@@ -27,7 +26,6 @@ import statementGraph.graphNode.ForStatementWrapper;
 import statementGraph.graphNode.IfStatementWrapper;
 import statementGraph.graphNode.LabeledStatementWrapper;
 import statementGraph.graphNode.ReturnStatementWrapper;
-import statementGraph.graphNode.SwitchCaseStatementWrapper;
 import statementGraph.graphNode.SwitchStatementWrapper;
 import statementGraph.graphNode.TryStatementWrapper;
 import statementGraph.graphNode.WhileStatementWrapper;
@@ -309,27 +307,48 @@ public class CFG {
 		else if(nodeType == StatementWrapper.SWITCH_STATEMENT){
 			@SuppressWarnings("unchecked")
 			List<Statement> branchNodes = ((SwitchStatement)node).statements();
-			SwitchStatementWrapper  switchItem =  (SwitchStatementWrapper) nodes.get(astMap.get(node));
+			SwitchStatementWrapper switchItem =  (SwitchStatementWrapper) nodes.get(astMap.get(node));
 			int i = 0;
 			for(; i<branchNodes.size()-1 ;i++){
 				Statement branchNode = branchNodes.get(i);
-				StatementWrapper branchNodeItem = nodes.get(astMap.get(branchNode));
-				if(branchNode.getNodeType()==StatementWrapper.SWITCH_CASE){
-					SwitchCaseStatementWrapper caseItem = (SwitchCaseStatementWrapper) branchNodeItem;
-					switchItem.addBranchEntries(caseItem);
+				if(branchNode.getNodeType()==StatementWrapper.BLOCK){
+					Block nestedBlock = (Block) branchNode;
+					ASTNode nestedFirstStatement = (ASTNode) nestedBlock.statements().get(0);
+					ASTNode nestedLastStatement = (ASTNode) nestedBlock.statements().get(nestedBlock.statements().size()-1);
+					StatementWrapper nestedFirstItem = nodes.get(astMap.get(nestedFirstStatement));
+					StatementWrapper nestedLastItem = nodes.get(astMap.get(nestedLastStatement));
+					StatementWrapper lastItem = (StatementWrapper)nodes.get(astMap.get(branchNodes.get(i-1)));
+					lastItem.setCFGSeqSuccessor(nestedFirstItem);
+					StatementWrapper nextItem = (StatementWrapper)nodes.get(astMap.get(branchNodes.get(i+1)));
+					nestedLastItem.setCFGSeqSuccessor(nextItem);
+					buildGraphEdges(nestedBlock);
 				}
-				StatementWrapper nextBranchNodeItem = nodes.get(astMap.get(branchNodes.get(i+1)));
-				branchNodeItem.setCFGSeqSuccessor(nextBranchNodeItem);
-				buildGraphEdges(branchNode);
+				else{
+					StatementWrapper branchNodeItem = nodes.get(astMap.get(branchNode));
+					StatementWrapper nextBranchNodeItem;
+					if(branchNodes.get(i+1).getNodeType()==StatementWrapper.BLOCK){
+						Block nestedBlock = (Block)branchNodes.get(i+1);
+						nextBranchNodeItem = nodes.get(astMap.get(nestedBlock.statements().get(0)));
+					}
+					else{
+						nextBranchNodeItem = nodes.get(astMap.get(branchNodes.get(i+1)));
+					}
+					branchNodeItem.setCFGSeqSuccessor(nextBranchNodeItem);
+					buildGraphEdges(branchNode);
+				}
 			}
 			Statement lastBranchNode = branchNodes.get(i);
-			StatementWrapper lastBranchNodeItem = nodes.get(astMap.get(lastBranchNode));
-			if(lastBranchNode.getNodeType()==StatementWrapper.SWITCH_CASE){
-				SwitchCaseStatementWrapper caseItem = (SwitchCaseStatementWrapper) lastBranchNodeItem;
-				switchItem.addBranchEntries(caseItem);
+			if(lastBranchNode.getNodeType()==StatementWrapper.BLOCK){
+				Block nestedBlock = (Block)lastBranchNode;
+				StatementWrapper lastNestedBlockItem = nodes.get(astMap.get(nestedBlock.statements().get(nestedBlock.statements().size()-1)));
+				lastNestedBlockItem.setCFGSeqSuccessor(switchItem.getCFGSeqSuccessor());
+				buildGraphEdges(lastBranchNode);
 			}
-			lastBranchNodeItem.setCFGSeqSuccessor(switchItem.getCFGSeqSuccessor());
-			buildGraphEdges(lastBranchNode);
+			else{
+				StatementWrapper lastBranchNodeItem = nodes.get(astMap.get(lastBranchNode));
+				lastBranchNodeItem.setCFGSeqSuccessor(switchItem.getCFGSeqSuccessor());
+				buildGraphEdges(lastBranchNode);
+			}
 		}
 		else if(nodeType == StatementWrapper.SYNCHRONIZED_STATEMENT){
 			//This may not be handled correctly!
