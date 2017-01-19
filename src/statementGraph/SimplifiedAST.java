@@ -18,6 +18,7 @@ import org.eclipse.jdt.core.dom.DoStatement;
 import org.eclipse.jdt.core.dom.EnhancedForStatement;
 import org.eclipse.jdt.core.dom.ForStatement;
 import org.eclipse.jdt.core.dom.IfStatement;
+import org.eclipse.jdt.core.dom.Javadoc;
 import org.eclipse.jdt.core.dom.LabeledStatement;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 
@@ -614,8 +615,10 @@ public class SimplifiedAST {
 	public String computeOutput(boolean [] solution){
 		Assert.isTrue(solution.length == this.nodes.size());
 		String result = new String();
-		//Do not consider javadoc yet, updated later!
+		Javadoc methodDoc = this.methodASTNode.getJavadoc();
+		this.methodASTNode.setJavadoc(null);
 		result = this.methodASTNode.toString().substring(0, this.methodASTNode.toString().indexOf('{')+1);
+		this.methodASTNode.setJavadoc(methodDoc);
 		result += '\n';
 		result += this.computeBody(solution);
 		result += '}';
