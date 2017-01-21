@@ -463,9 +463,10 @@ public class SimplifiedAST {
 					else{
 						currentWrapper.setParentType(StatementWrapper.PARENT_SWITCHSTATEMENT_FIRSTCASE);
 					}
-					item.addBranchEntries(currentWrapper);
 					item.addBranchStatementsWrapper(tempList);
 					item.addisBlockFlag(lastIsBlock);
+					((SwitchCaseStatementWrapper)(item.getBranchEntries().get(item.getBranchEntries().size()-1))).setBranchIsBlock(lastIsBlock);
+					item.addBranchEntries(currentWrapper);
 					tempList = new LinkedList<StatementWrapper>();
 					firstBranch = false;
 				}

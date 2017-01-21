@@ -52,7 +52,7 @@ public class LabeledStatementWrapper extends StatementWrapper{
 
 	@Override
 	public int getLineCount() {
-		return 1;
+		return this.astNode.getLabel().toString().split(System.getProperty("line.separator")).length + (this.bodyIsBlock?1:0);
 	}
 
 	@Override

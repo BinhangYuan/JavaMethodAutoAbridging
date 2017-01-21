@@ -7,6 +7,12 @@ public class SwitchCaseStatementWrapper extends StatementWrapper{
 
 	private SwitchCase astNode; 
 	
+	private boolean branchIsBlock;
+	
+	public void setBranchIsBlock(boolean flag){
+		this.branchIsBlock = flag;
+	}
+	
 	public SwitchCaseStatementWrapper(SwitchCase astNode){
 		this.astNode = astNode;
 		super.setType(astNode.getNodeType());
@@ -36,7 +42,7 @@ public class SwitchCaseStatementWrapper extends StatementWrapper{
 
 	@Override
 	public int getLineCount() {
-		return 1;
+		return this.astNode.toString().split(System.getProperty("line.separator")).length + (this.branchIsBlock?1:0);
 	}
 
 	@Override

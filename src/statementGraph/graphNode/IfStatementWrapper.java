@@ -158,6 +158,9 @@ public class IfStatementWrapper extends StatementWrapper{
 					if(nestedElse.isDisplay()){
 						result += nestedElse.computeIfOutput(level, true);
 					}
+					else{
+						result += '\n';
+					}
 				}
 				else{
 					result += '\n';
