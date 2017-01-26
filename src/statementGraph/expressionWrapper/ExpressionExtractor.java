@@ -21,12 +21,12 @@ import org.eclipse.jdt.core.dom.ConditionalExpression;
 import org.eclipse.jdt.core.dom.ConstructorInvocation;
 import org.eclipse.jdt.core.dom.ContinueStatement;
 import org.eclipse.jdt.core.dom.DoStatement;
+import org.eclipse.jdt.core.dom.EmptyStatement;
 import org.eclipse.jdt.core.dom.EnhancedForStatement;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.ForStatement;
-import org.eclipse.jdt.core.dom.IBinding;
 import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.InfixExpression;
 import org.eclipse.jdt.core.dom.InstanceofExpression;
@@ -53,6 +53,7 @@ import org.eclipse.jdt.core.dom.SynchronizedStatement;
 import org.eclipse.jdt.core.dom.ThisExpression;
 import org.eclipse.jdt.core.dom.ThrowStatement;
 import org.eclipse.jdt.core.dom.TryStatement;
+import org.eclipse.jdt.core.dom.TypeDeclarationStatement;
 import org.eclipse.jdt.core.dom.TypeLiteral;
 import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
@@ -654,8 +655,7 @@ public class ExpressionExtractor {
 		}
 		else if(expression instanceof SimpleName) {
 			SimpleName simpleName = (SimpleName)expression;
-			//Assert.isNotNull(simpleName.resolveBinding());
-			if(simpleName.resolveBinding() != null && simpleName.resolveBinding().getKind()==IBinding.VARIABLE && simpleName.isDeclaration()==isDeclaration){
+			if(simpleName.isDeclaration()==isDeclaration){
 				variableList.add(simpleName);
 			}
 		}
@@ -663,16 +663,62 @@ public class ExpressionExtractor {
 	}
 
 	//Modified by myself
-	public static List<SimpleName> getVariableSimpleNames(Statement statement, boolean isDeclaration) {
+	public static List<SimpleName> getVariableSimpleNames(Statement statement, boolean isDeclaration) throws Exception {
 		List<SimpleName> variableList = new ArrayList<SimpleName>();
-		if(statement instanceof IfStatement) {
-			IfStatement ifStatement = (IfStatement)statement;
-			Expression expression = ifStatement.getExpression();
+		
+		if(statement instanceof AssertStatement) {
+			AssertStatement assertStatement = (AssertStatement)statement;
+			Expression expression = assertStatement.getExpression();
 			variableList.addAll(getVariableSimpleNames(expression,isDeclaration));
-			variableList.addAll(getVariableSimpleNames(ifStatement.getThenStatement(),isDeclaration));
-			if(ifStatement.getElseStatement() != null) {
-				variableList.addAll(getVariableSimpleNames(ifStatement.getElseStatement(),isDeclaration));
+			Expression message = assertStatement.getMessage();
+			if(message != null){
+				variableList.addAll(getVariableSimpleNames(message,isDeclaration));
 			}
+		}
+		else if(statement instanceof BreakStatement) {
+			BreakStatement breakStatement = (BreakStatement)statement;
+			if(breakStatement.getLabel() != null){
+				variableList.addAll(getVariableSimpleNames(breakStatement.getLabel(),isDeclaration));
+			}
+		}
+		else if(statement instanceof ConstructorInvocation) {
+			ConstructorInvocation constructorInvocation = (ConstructorInvocation)statement;
+			@SuppressWarnings("unchecked")
+			List<Expression> arguments = constructorInvocation.arguments();
+			for(Expression argument : arguments){
+				variableList.addAll(getVariableSimpleNames(argument,isDeclaration));
+			}
+		}
+		else if(statement instanceof ContinueStatement) {
+			ContinueStatement continueStatement = (ContinueStatement)statement;
+			if(continueStatement.getLabel() != null){
+				variableList.addAll(getVariableSimpleNames(continueStatement.getLabel(),isDeclaration));
+			}
+		}
+		else if(statement instanceof DoStatement) {
+			DoStatement doStatement = (DoStatement)statement;
+			Expression expression = doStatement.getExpression();
+			variableList.addAll(getVariableSimpleNames(expression,isDeclaration));
+			//In my implementation, body will be taken care of in other place.
+		}
+		else if(statement instanceof EmptyStatement) {
+			//Nothing to add.
+		}
+		else if(statement instanceof EnhancedForStatement) {
+			EnhancedForStatement enhancedForStatement = (EnhancedForStatement)statement;
+			Expression expression = enhancedForStatement.getExpression();
+			SingleVariableDeclaration variableDeclaration = enhancedForStatement.getParameter();
+			variableList.addAll(getVariableSimpleNames(variableDeclaration.getName(),isDeclaration));
+			if(variableDeclaration.getInitializer() != null){
+				variableList.addAll(getVariableSimpleNames(variableDeclaration.getInitializer(),isDeclaration));
+			}
+			variableList.addAll(getVariableSimpleNames(expression,isDeclaration));
+			//In my implementation, body will be taken care of in other place.
+		}
+		else if(statement instanceof ExpressionStatement) {
+			ExpressionStatement expressionStatement = (ExpressionStatement)statement;
+			Expression expression = expressionStatement.getExpression();
+			variableList.addAll(getVariableSimpleNames(expression,isDeclaration));
 		}
 		else if(statement instanceof ForStatement) {
 			ForStatement forStatement = (ForStatement)statement;
@@ -692,59 +738,11 @@ public class ExpressionExtractor {
 			}
 			//In my implementation, body will be taken care of in other place.
 		}
-		else if(statement instanceof EnhancedForStatement) {
-			EnhancedForStatement enhancedForStatement = (EnhancedForStatement)statement;
-			Expression expression = enhancedForStatement.getExpression();
-			SingleVariableDeclaration variableDeclaration = enhancedForStatement.getParameter();
-			variableList.addAll(getVariableSimpleNames(variableDeclaration.getName(),isDeclaration));
-			if(variableDeclaration.getInitializer() != null){
-				variableList.addAll(getVariableSimpleNames(variableDeclaration.getInitializer(),isDeclaration));
-			}
+		else if(statement instanceof IfStatement) {
+			IfStatement ifStatement = (IfStatement)statement;
+			Expression expression = ifStatement.getExpression();
 			variableList.addAll(getVariableSimpleNames(expression,isDeclaration));
 			//In my implementation, body will be taken care of in other place.
-		}
-		else if(statement instanceof WhileStatement) {
-			WhileStatement whileStatement = (WhileStatement)statement;
-			Expression expression = whileStatement.getExpression();
-			variableList.addAll(getVariableSimpleNames(expression,isDeclaration));
-			//In my implementation, body will be taken care of in other place.
-		}
-		else if(statement instanceof DoStatement) {
-			DoStatement doStatement = (DoStatement)statement;
-			Expression expression = doStatement.getExpression();
-			variableList.addAll(getVariableSimpleNames(expression,isDeclaration));
-			//In my implementation, body will be taken care of in other place.
-		}
-		else if(statement instanceof ExpressionStatement) {
-			ExpressionStatement expressionStatement = (ExpressionStatement)statement;
-			Expression expression = expressionStatement.getExpression();
-			variableList.addAll(getVariableSimpleNames(expression,isDeclaration));
-		}
-		else if(statement instanceof SwitchStatement) {
-			SwitchStatement switchStatement = (SwitchStatement)statement;
-			Expression expression = switchStatement.getExpression();
-			variableList.addAll(getVariableSimpleNames(expression,isDeclaration));
-			@SuppressWarnings("unchecked")
-			List<Statement> switchStatements = switchStatement.statements();
-			for(Statement switchStatement2 : switchStatements){
-				variableList.addAll(getVariableSimpleNames(switchStatement2,isDeclaration));
-			}
-		}
-		else if(statement instanceof SwitchCase) {
-			SwitchCase switchCase = (SwitchCase)statement;
-			Expression expression = switchCase.getExpression();
-			if(expression != null){
-				variableList.addAll(getVariableSimpleNames(expression,isDeclaration));
-			}
-		}
-		else if(statement instanceof AssertStatement) {
-			AssertStatement assertStatement = (AssertStatement)statement;
-			Expression expression = assertStatement.getExpression();
-			variableList.addAll(getVariableSimpleNames(expression,isDeclaration));
-			Expression message = assertStatement.getMessage();
-			if(message != null){
-				variableList.addAll(getVariableSimpleNames(message,isDeclaration));
-			}
 		}
 		else if(statement instanceof LabeledStatement) {
 			LabeledStatement labeledStatement = (LabeledStatement)statement;
@@ -757,6 +755,30 @@ public class ExpressionExtractor {
 			ReturnStatement returnStatement = (ReturnStatement)statement;
 			Expression expression = returnStatement.getExpression();
 			variableList.addAll(getVariableSimpleNames(expression,isDeclaration));	
+		}
+		else if(statement instanceof SuperConstructorInvocation) {
+			SuperConstructorInvocation superConstructorInvocation = (SuperConstructorInvocation)statement;
+			if(superConstructorInvocation.getExpression() != null){
+				variableList.addAll(getVariableSimpleNames(superConstructorInvocation.getExpression(),isDeclaration));
+			}
+			@SuppressWarnings("unchecked")
+			List<Expression> arguments = superConstructorInvocation.arguments();
+			for(Expression argument : arguments){
+				variableList.addAll(getVariableSimpleNames(argument,isDeclaration));
+			}
+		}
+		else if(statement instanceof SwitchCase) {
+			SwitchCase switchCase = (SwitchCase)statement;
+			Expression expression = switchCase.getExpression();
+			if(expression != null){
+				variableList.addAll(getVariableSimpleNames(expression,isDeclaration));
+			}
+		}
+		else if(statement instanceof SwitchStatement) {
+			SwitchStatement switchStatement = (SwitchStatement)statement;
+			Expression expression = switchStatement.getExpression();
+			variableList.addAll(getVariableSimpleNames(expression,isDeclaration));
+			//In my implementation, body will be taken care of in other place.
 		}
 		else if(statement instanceof SynchronizedStatement) {
 			SynchronizedStatement synchronizedStatement = (SynchronizedStatement)statement;
@@ -771,12 +793,11 @@ public class ExpressionExtractor {
 		}
 		else if(statement instanceof TryStatement) {
 			TryStatement tryStatement = (TryStatement)statement;
-			
-			//List<VariableDeclarationExpression> resources = tryStatement.resources();
-			//for(VariableDeclarationExpression expression : resources) {
-			//	expressionList.addAll(getExpressions(expression,instanceChecker));
-			//}
-			
+			@SuppressWarnings("unchecked")
+			List<VariableDeclarationExpression> resources = tryStatement.resources();
+			for(VariableDeclarationExpression expression : resources) {
+				variableList.addAll(getVariableSimpleNames(expression,isDeclaration));
+			}
 			//In my implementation, body will be taken care of in other place.
 			@SuppressWarnings("unchecked")
 			List<CatchClause> catchClauses = tryStatement.catchClauses();
@@ -789,9 +810,9 @@ public class ExpressionExtractor {
 				//In my implementation, body will be taken care of in other place.
 			}
 			//In my implementation, body will be taken care of in other place.
-			//Block finallyBlock = tryStatement.getFinally();
-			//if(finallyBlock != null)
-			//	variableList.addAll(getVariableSimpleNames(finallyBlock,isDeclaration));
+		}
+		else if(statement instanceof TypeDeclarationStatement){
+			//Not handled yet.
 		}
 		else if(statement instanceof VariableDeclarationStatement) {
 			VariableDeclarationStatement variableDeclarationStatement = (VariableDeclarationStatement)statement;
@@ -802,36 +823,14 @@ public class ExpressionExtractor {
 				variableList.addAll(getVariableSimpleNames(fragment.getInitializer(),isDeclaration));
 			}
 		}
-		else if(statement instanceof ConstructorInvocation) {
-			ConstructorInvocation constructorInvocation = (ConstructorInvocation)statement;
-			@SuppressWarnings("unchecked")
-			List<Expression> arguments = constructorInvocation.arguments();
-			for(Expression argument : arguments){
-				variableList.addAll(getVariableSimpleNames(argument,isDeclaration));
-			}
+		else if(statement instanceof WhileStatement) {
+			WhileStatement whileStatement = (WhileStatement)statement;
+			Expression expression = whileStatement.getExpression();
+			variableList.addAll(getVariableSimpleNames(expression,isDeclaration));
+			//In my implementation, body will be taken care of in other place.
 		}
-		else if(statement instanceof SuperConstructorInvocation) {
-			SuperConstructorInvocation superConstructorInvocation = (SuperConstructorInvocation)statement;
-			if(superConstructorInvocation.getExpression() != null){
-				variableList.addAll(getVariableSimpleNames(superConstructorInvocation.getExpression(),isDeclaration));
-			}
-			@SuppressWarnings("unchecked")
-			List<Expression> arguments = superConstructorInvocation.arguments();
-			for(Expression argument : arguments){
-				variableList.addAll(getVariableSimpleNames(argument,isDeclaration));
-			}
-		}
-		else if(statement instanceof BreakStatement) {
-			BreakStatement breakStatement = (BreakStatement)statement;
-			if(breakStatement.getLabel() != null){
-				variableList.addAll(getVariableSimpleNames(breakStatement.getLabel(),isDeclaration));
-			}
-		}
-		else if(statement instanceof ContinueStatement) {
-			ContinueStatement continueStatement = (ContinueStatement)statement;
-			if(continueStatement.getLabel() != null){
-				variableList.addAll(getVariableSimpleNames(continueStatement.getLabel(),isDeclaration));
-			}
+		else{
+			throw new Exception("Unexpected statement type in getVariableSimpleNames()");
 		}
 		return variableList;
 	}

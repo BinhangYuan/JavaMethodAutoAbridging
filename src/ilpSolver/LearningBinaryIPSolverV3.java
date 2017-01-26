@@ -10,8 +10,8 @@ import scpsolver.constraints.LinearSmallerThanEqualsConstraint;
 import scpsolver.lpsolver.LinearProgramSolver;
 import scpsolver.lpsolver.SolverFactory;
 import scpsolver.problems.LinearProgram;
-import statementGraph.ConstraintAndFeatureEncoderV3;
-import statementGraph.DependencePair;
+import statementGraph.constraintAndFeatureEncoder.ConstraintAndFeatureEncoderV3;
+import statementGraph.constraintAndFeatureEncoder.DependencePair;
 import statementGraph.graphNode.StatementWrapper;
 
 public class LearningBinaryIPSolverV3 {

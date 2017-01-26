@@ -8,7 +8,7 @@ import scpsolver.constraints.LinearSmallerThanEqualsConstraint;
 import scpsolver.lpsolver.LinearProgramSolver;
 import scpsolver.lpsolver.SolverFactory;
 import scpsolver.problems.LinearProgram;
-import statementGraph.DependencePair;
+import statementGraph.constraintAndFeatureEncoder.DependencePair;
 
 public class NaiveBinaryIPSolver {
 	LinearProgram lp;

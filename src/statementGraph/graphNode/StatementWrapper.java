@@ -227,6 +227,14 @@ public abstract class StatementWrapper {
 			   nodeType == StatementWrapper.ENHANCED_FOR_STATEMENT;
 	}
 	
+	public static boolean containsVariableDeclarations(ASTNode node){
+		int nodeType = node.getNodeType();
+		return nodeType == StatementWrapper.VARIABLE_DECLARATION_STATEMENT ||
+			   nodeType == StatementWrapper.FOR_STATEMENT ||
+			   nodeType == StatementWrapper.ENHANCED_FOR_STATEMENT ||
+			   nodeType == StatementWrapper.TRY_STATEMENT;
+	}
+	
 	
 	public static Statement getASTNodeStatement(StatementWrapper item) throws Exception{
 		int nodeType = item.getType();

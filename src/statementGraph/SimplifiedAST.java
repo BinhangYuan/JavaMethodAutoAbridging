@@ -1,6 +1,7 @@
 package statementGraph;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -69,10 +70,19 @@ public class SimplifiedAST {
 	
 	private List<StatementWrapper> methodBlock = new LinkedList<StatementWrapper>();
 	
+	private int uncompressedLineCount;
+	
+	public int getUncompressedLineCount(){
+		return uncompressedLineCount;
+	}
+	
 	public SimplifiedAST(MethodDeclaration methodASTNode) throws Exception{
 		this.methodASTNode = methodASTNode;
 		this.buildTreeNodes(this.methodASTNode);
 		this.buildHierachy(this.methodASTNode);
+		boolean[] allDisplay = new boolean[this.nodes.size()];
+		Arrays.fill(allDisplay, true);
+		this.uncompressedLineCount = this.computeBodyLines(allDisplay);
 	}
 	
 	public StatementWrapper getItem(ASTNode node){
@@ -276,6 +286,7 @@ public class SimplifiedAST {
 			System.out.println("Unexpected Type in Simplified AST!");
 		}
 	}
+	
 	
 	private void buildHierachy(ASTNode node){
 		int nodeType = node.getNodeType();
@@ -598,6 +609,7 @@ public class SimplifiedAST {
 			return null;
 		}
 	}
+	
 	
 	public StatementWrapper getParent(StatementWrapper item) throws Exception{
 		Statement state = StatementWrapper.getASTNodeStatement(item);

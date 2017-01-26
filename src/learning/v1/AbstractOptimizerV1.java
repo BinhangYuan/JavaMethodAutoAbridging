@@ -15,7 +15,7 @@ import ilpSolver.LearningBinaryIPSolverV1;
 import learning.JaccardDistance;
 import learning.ManualLabel;
 import statementGraph.ASTParserUtils;
-import statementGraph.ConstraintAndFeatureEncoderV1;
+import statementGraph.constraintAndFeatureEncoder.ConstraintAndFeatureEncoderV1;
 import statementGraph.graphNode.StatementWrapper;
 
 public abstract class AbstractOptimizerV1 {

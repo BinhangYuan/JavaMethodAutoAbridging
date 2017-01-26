@@ -1,6 +1,7 @@
 package ASTNodeExamples;
 
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.zip.ZipEntry;
 
 public class TestMultipleCatchBlock{
@@ -8,7 +9,9 @@ public class TestMultipleCatchBlock{
 	public static void main(String args[]){
 		try{
 			int a[]=new int[5];  
-			a[5]=30/0;  
+			a[5]=30/0;
+			HashMap<Integer,Boolean> test = new HashMap<Integer,Boolean>();
+			test.clear();
 		}  
 		catch(ArithmeticException e){
 			System.out.println("task1 is completed");

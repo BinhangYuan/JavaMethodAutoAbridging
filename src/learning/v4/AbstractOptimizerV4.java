@@ -1,4 +1,4 @@
-package learning.v3;
+package learning.v4;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,19 +11,19 @@ import org.eclipse.core.runtime.Assert;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import ilpSolver.LearningBinaryIPSolverV3;
+import ilpSolver.LearningBinaryIPSolverV4;
 import learning.JaccardDistance;
 import learning.ManualLabel;
 import statementGraph.ASTParserUtils;
-import statementGraph.constraintAndFeatureEncoder.ConstraintAndFeatureEncoderV3;
+import statementGraph.constraintAndFeatureEncoder.ConstraintAndFeatureEncoderV4;
 import statementGraph.graphNode.StatementWrapper;
 
-public abstract class AbstractOptimizerV3 {
+public abstract class AbstractOptimizerV4 {
 	protected double [] parameters;
 	protected Map<Integer,Integer> typeMap;
 	protected Map<Integer,Integer> parentTypeMap;
 	protected JaccardDistance computeDistance = new JaccardDistance();
-	protected Map<LearningBinaryIPSolverV3,ManualLabel> trainingSet = new HashMap<LearningBinaryIPSolverV3,ManualLabel>();
+	protected Map<LearningBinaryIPSolverV4,ManualLabel> trainingSet = new HashMap<LearningBinaryIPSolverV4,ManualLabel>();
 
 	abstract protected double objectiveFunction(double [] paras);
 	
@@ -39,7 +39,7 @@ public abstract class AbstractOptimizerV3 {
 	}
 	
 	
-	protected AbstractOptimizerV3(){
+	protected AbstractOptimizerV4(){
 		this.typeMap = new HashMap<Integer,Integer>();
 		int i = 0;
 		for(Integer label: StatementWrapper.statementsLabelSet){
@@ -84,9 +84,9 @@ public abstract class AbstractOptimizerV3 {
 			}
 			int lineCount = dataArray.getJSONObject(index).getInt("lineCount");
 			
-			ConstraintAndFeatureEncoderV3 encoder = ASTParserUtils.parseMethodV3(true,filePath, fileName,methodName,pos,label);
+			ConstraintAndFeatureEncoderV4 encoder = ASTParserUtils.parseMethodV4(true,filePath, fileName,methodName,pos,label);
 			
-			LearningBinaryIPSolverV3 solver = new LearningBinaryIPSolverV3(encoder);
+			LearningBinaryIPSolverV4 solver = new LearningBinaryIPSolverV4(encoder);
 			solver.setDependenceConstraints(encoder.getASTConstraints(), encoder.getCFGConstraints(), encoder.getDDGConstraints());
 			solver.setLineCostConstraints(encoder.getLineCounts());
 			solver.setTypeMap(this.typeMap);

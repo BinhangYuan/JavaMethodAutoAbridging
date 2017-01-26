@@ -1,16 +1,19 @@
-package statementGraph;
+package statementGraph.constraintAndFeatureEncoder;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import statementGraph.CFG;
+import statementGraph.DDG;
+import statementGraph.SimplifiedAST;
 import statementGraph.graphNode.EdgeItem;
 import statementGraph.graphNode.StatementWrapper;
 
 
 
-public class ConstraintAndFeatureEncoderV2 {
+public class ConstraintAndFeatureEncoderV1 {
 	private SimplifiedAST sAST;
 	@SuppressWarnings("unused")
 	private CFG cfg;
@@ -32,7 +35,7 @@ public class ConstraintAndFeatureEncoderV2 {
 	private List<DependencePair> cfgConstraintsSerializer = new LinkedList<DependencePair>();
 	
 	
-	public ConstraintAndFeatureEncoderV2(SimplifiedAST sAST, CFG cfg, DDG ddg) throws Exception{
+	public ConstraintAndFeatureEncoderV1(SimplifiedAST sAST, CFG cfg, DDG ddg) throws Exception{
 		this.sAST = sAST;
 		this.cfg = cfg;
 		this.ddg = ddg;
@@ -136,10 +139,5 @@ public class ConstraintAndFeatureEncoderV2 {
 	
 	public String originProgram2String(){
 		return this.sAST.getASTNode().toString();
-		
 	}
-	
-	public List<StatementWrapper> getStatementWrapperList(){
-		return this.sAST.getAllWrapperList();
-	}	
 }

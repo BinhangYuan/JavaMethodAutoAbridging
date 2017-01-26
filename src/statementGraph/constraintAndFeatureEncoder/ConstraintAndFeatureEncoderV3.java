@@ -1,4 +1,4 @@
-package statementGraph;
+package statementGraph.constraintAndFeatureEncoder;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -7,6 +7,9 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.Assert;
 
+import statementGraph.CFG;
+import statementGraph.DDG;
+import statementGraph.SimplifiedAST;
 import statementGraph.graphNode.EdgeItem;
 import statementGraph.graphNode.StatementWrapper;
 
@@ -58,7 +61,7 @@ public class ConstraintAndFeatureEncoderV3 {
 				this.ddgConstraints.add(new EdgeItem(source,dest,EdgeItem.DDGPrority));
 			}
 		}
-		//Stub, not encoding
+
 		for(EdgeItem e: this.ddgConstraints){
 			this.ddgConstraintsSerializer.add(new DependencePair(this.index.get(e.start), this.index.get(e.end)));
 		}
