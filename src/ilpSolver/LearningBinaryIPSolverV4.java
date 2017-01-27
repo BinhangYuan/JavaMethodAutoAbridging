@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.Assert;
 
+import learning.JaccardDistance;
 import scpsolver.constraints.LinearBiggerThanEqualsConstraint;
 import scpsolver.constraints.LinearSmallerThanEqualsConstraint;
 import scpsolver.lpsolver.LinearProgramSolver;
@@ -179,6 +180,12 @@ public class LearningBinaryIPSolverV4 {
 	
 	public String outputSolveResult(){
 		return this.encoder.compressedProgram2String(this.solve());
+	}
+	
+	public double JaccordDistance2SolvedResult(boolean [] labels){
+		Assert.isTrue(labels.length == this.statementCount);
+		JaccardDistance dist = new JaccardDistance();
+		return dist.distanceBetweenSets(labels, this.solve());
 	}
 	
 	

@@ -26,7 +26,7 @@ public class ParamILSV4 extends AbstractOptimizerV4{
 	
 	private HashMap<String,Double> visitedCandidates = new HashMap<String,Double>();
 	private int iterations = 0;
-	private int maxIterations = 100000;
+	private int maxIterations = 10000;
 	private int paraLength;
 	private int paraR = 10;
 	private int paraS = 3;
@@ -257,8 +257,10 @@ public class ParamILSV4 extends AbstractOptimizerV4{
 		for(LearningBinaryIPSolverV4 solver:this.trainingSet.keySet()){
 			JSONObject current = new JSONObject();
 			current.put("Origin", solver.originalProgram2String());
-			current.put("manual", solver.outputLabeledResult(this.trainingSet.get(solver).getBooleanLabels()));
+			boolean[] manualLabel = this.trainingSet.get(solver).getBooleanLabels();
+			current.put("Manual", solver.outputLabeledResult(manualLabel));
 			current.put("Automatic", solver.outputSolveResult());
+			current.put("Distance", solver.JaccordDistance2SolvedResult(manualLabel));
 			result.put(current);
 		}
 		JSONObject obj = new JSONObject();

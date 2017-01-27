@@ -8,13 +8,15 @@ var autoEditor;
 function showProgram(){
 	if(this.value>=0){
 		originEditor.setValue(data[this.value].Origin);
-		manualEditor.setValue(data[this.value].manual);
+		manualEditor.setValue(data[this.value].Manual);
 		autoEditor.setValue(data[this.value].Automatic);
+        document.getElementById("JaccordDistance").value = parseFloat(data[this.value].Distance).toFixed(4);
 	}
 	else{
 		originEditor.setValue("");
 		manualEditor.setValue("");
 		autoEditor.setValue("");
+        document.getElementById("JaccordDistance").value = "";
 	}
 }
 
@@ -34,7 +36,7 @@ window.onload = function(){
     autoEditor.getSession().setMode("ace/mode/java");
 
     //Load my data!
-    d3.json("result/result1485483816184.json",function(error,json){
+    d3.json("result/result1485490484753.json",function(error,json){
     	if (error) throw error;
     	data = json.result;
     	//console.log(data);
