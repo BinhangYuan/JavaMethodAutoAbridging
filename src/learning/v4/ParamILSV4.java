@@ -19,7 +19,6 @@ import org.json.JSONObject;
 
 import ilpSolver.LearningBinaryIPSolverV4;
 import learning.LearningHelper;
-import statementGraph.graphNode.StatementWrapper;
 
 public class ParamILSV4 extends AbstractOptimizerV4{
 	static double[] candidate = {1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,11.0,12.0};
@@ -34,7 +33,7 @@ public class ParamILSV4 extends AbstractOptimizerV4{
 	private double restartProb = 0.01;
 	private String bestStateHash = null;
 	
-	private Logger trainlogger = Logger.getLogger("learning.ParamILS");
+	private Logger trainlogger = Logger.getLogger("learning.v4.ParamILSV4");
 	private LinkedList<Double> trainingCostRecordIterations;
 	private LinkedList<Double> trainingCostRecordMin;
 	private NaiveBayesTextClassifierV4 textClassifier;
@@ -65,7 +64,7 @@ public class ParamILSV4 extends AbstractOptimizerV4{
 	
 	public ParamILSV4(){
 		super();
-		this.paraLength = StatementWrapper.statementsLabelSet.size()+ StatementWrapper.parentStatementsLabelSet.size() +1;
+		this.paraLength = LearningBinaryIPSolverV4.PARALENGTH;
 	}
 	
 	
@@ -224,7 +223,8 @@ public class ParamILSV4 extends AbstractOptimizerV4{
 		String LowestParaLog = "";
 		LowestParaLog += LearningHelper.typeWeightMap2String(this.typeMap, this.parameters);
 		LowestParaLog += LearningHelper.parentTypeWeightMap2String(this.parentTypeMap, this.parameters);
-		LowestParaLog += "text classifier weight:"+this.parameters[this.typeMap.size()];
+		LowestParaLog += "text classifier weight:"+this.parameters[this.typeMap.size()+this.parentTypeMap.size()]+"\n";
+		LowestParaLog += "ddg penalty weight:"+this.parameters[this.typeMap.size()+this.parentTypeMap.size()+1];
 		this.trainlogger.info("Lowest loss parameters:\n" + LowestParaLog);	
 		this.outputTrainingCost2JsonFile();
 	}

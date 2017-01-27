@@ -1,9 +1,15 @@
+/*
+ * Binary solver is from http://scpsolver.org/
+ */
+
 package ilpSolver;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import org.eclipse.core.runtime.Assert;
 
 import scpsolver.constraints.LinearBiggerThanEqualsConstraint;
 import scpsolver.constraints.LinearSmallerThanEqualsConstraint;
@@ -15,21 +21,26 @@ import statementGraph.constraintAndFeatureEncoder.DependencePair;
 import statementGraph.graphNode.StatementWrapper;
 
 public class LearningBinaryIPSolverV4 {
-	ConstraintAndFeatureEncoderV4 encoder;
-	LinearProgram lp;
-	List<DependencePair> dependenceConstraints;
-	List<Integer> lineCostConstraints;
-	List<Integer> statementType;
-	List<Integer> parentStatementType;
-	List<Boolean> textClassifierResults;
-	Map<Integer,Integer> typeMap;
-	Map<Integer,Integer> parentTypeMap;
+	public static int PARALENGTH = StatementWrapper.statementsLabelSet.size()+ StatementWrapper.parentStatementsLabelSet.size() +2;
+	
+	private ConstraintAndFeatureEncoderV4 encoder;
+	private LinearProgram lp;
+	private List<DependencePair> astDependenceConstraints;
+	private List<DependencePair> cfgDependenceConstraints;
+	private List<DependencePair> ddgDependenceConstraints;
+	private List<Integer> lineCostConstraints;
+	private List<Integer> statementType;
+	private List<Integer> parentStatementType;
+	private List<Boolean> textClassifierResults;
+	private Map<Integer,Integer> typeMap;
+	private Map<Integer,Integer> parentTypeMap;
 	
 	/*
 	 * The most important thing in this class
 	 * [0,statementTypeLength-1], weight of each type;
 	 * [statementTypeLength, statmentTypeLength+StatementParentTypeLegnth-1], weight of each parent type
 	 * statementTypeLength+StatementParentTypeLegnth: weight for text classifier result;
+	 * statementTypeLength+StatementParentTypeLegnth+1: penalty weight for ddg constraints.
 	 */
 	double[] parameters;
 	int targetLineCount = -1;
@@ -38,14 +49,18 @@ public class LearningBinaryIPSolverV4 {
 	
 	public LearningBinaryIPSolverV4(ConstraintAndFeatureEncoderV4 encoder){
 		this.encoder = encoder;
-		this.dependenceConstraints = new LinkedList<DependencePair>();
+		this.astDependenceConstraints = new LinkedList<DependencePair>();
+		this.cfgDependenceConstraints = new LinkedList<DependencePair>();
+		this.ddgDependenceConstraints = new LinkedList<DependencePair>();
 	}
 	
 	public void setDependenceConstraints(List<DependencePair> astConstraints, List<DependencePair> cfgConstraints, List<DependencePair> ddgConstraints){
-		this.dependenceConstraints.clear();
-		this.dependenceConstraints.addAll(astConstraints);
-		this.dependenceConstraints.addAll(cfgConstraints);
-		this.dependenceConstraints.addAll(ddgConstraints);
+		this.astDependenceConstraints.clear();
+		this.astDependenceConstraints.addAll(astConstraints);
+		this.cfgDependenceConstraints.clear();
+		this.cfgDependenceConstraints.addAll(cfgConstraints);
+		this.ddgDependenceConstraints.clear();
+		this.ddgDependenceConstraints.addAll(ddgConstraints);
 	}
 	
 	public void setLineCostConstraints(List<Integer> lineCostConstraints){
@@ -65,6 +80,7 @@ public class LearningBinaryIPSolverV4 {
 	}
 	
 	public void setParameters(double [] para){
+		Assert.isTrue(para.length == PARALENGTH);
 		this.parameters = para;
 	}
 	
@@ -88,7 +104,7 @@ public class LearningBinaryIPSolverV4 {
 		this.textClassifierResults = predicts;
 	}
 	
-	//For this version, we only encode the type, so the implementation is simple.
+	//For this version, we encode the type, parent type and text feature, so the implementation is simple.
 	private double computeStatementWeight(int index){
 		//Weight of statementType;
 		int type = this.statementType.get(index);
@@ -101,11 +117,22 @@ public class LearningBinaryIPSolverV4 {
 		return result;
 	}
 	
+	//For now, just a simple soft constraint weight;
+	private double computeDDGConstraintsPenalty(DependencePair pair){
+		return this.parameters[this.typeMap.size()+this.parentTypeMap.size()+1];
+	}
+	
 	public boolean[] solve(){
 		//Object function: 
 		double [] objectFunc = new double[this.statementCount];
 		for(int i = 0; i < this.statementCount; i++){
 			objectFunc[i] = computeStatementWeight(i);
+		}
+		//soft constraint on DDG dependence constraints:
+		for(DependencePair pair : this.ddgDependenceConstraints){
+			double cost = computeDDGConstraintsPenalty(pair);
+			objectFunc[pair.sourceIndex] += cost;
+			objectFunc[pair.destIndex] -= cost;
 		}
 		this.lp = new LinearProgram(objectFunc);
 		//Line count constraints:
@@ -114,9 +141,9 @@ public class LearningBinaryIPSolverV4 {
 			constraint0[i] = this.lineCostConstraints.get(i);
 		}
 		this.lp.addConstraint(new LinearSmallerThanEqualsConstraint(constraint0, this.targetLineCount, "c_"));
-		//dependence constraints:
-		for(int i=0; i<this.dependenceConstraints.size();i++){
-			DependencePair pair = this.dependenceConstraints.get(i);
+		//hard constraint on AST dependence constraints:
+		for(int i=0; i<this.astDependenceConstraints.size();i++){
+			DependencePair pair = this.astDependenceConstraints.get(i);
 			double[] implyConstraint = new double[this.statementCount];
 			Arrays.fill(implyConstraint, 0);
 			implyConstraint[pair.sourceIndex] = 1.0;

@@ -224,7 +224,7 @@ public class ParamILSV3 extends AbstractOptimizerV3{
 		String LowestParaLog = "";
 		LowestParaLog += LearningHelper.typeWeightMap2String(this.typeMap, this.parameters);
 		LowestParaLog += LearningHelper.parentTypeWeightMap2String(this.parentTypeMap, this.parameters);
-		LowestParaLog += "text classifier weight:"+this.parameters[this.typeMap.size()];
+		LowestParaLog += "text classifier weight:"+this.parameters[this.typeMap.size()+this.parentTypeMap.size()];
 		this.trainlogger.info("Lowest loss parameters:\n" + LowestParaLog);	
 		this.outputTrainingCost2JsonFile();
 	}
