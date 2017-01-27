@@ -35,6 +35,8 @@ window.onload = function(){
     autoEditor.setTheme("ace/theme/chrome");
     autoEditor.getSession().setMode("ace/mode/java");
 
+    document.getElementById("JaccordDistance").value = "";
+
     //Load my data!
     d3.json("result/result1485490484753.json",function(error,json){
     	if (error) throw error;

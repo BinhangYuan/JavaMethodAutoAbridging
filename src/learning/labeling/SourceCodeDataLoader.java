@@ -57,7 +57,7 @@ public class SourceCodeDataLoader {
 	}
 	
 	public static void main(String[] args) throws Exception{
-		//showLastProgram();
-		showDataSet();
+		showLastProgram();
+		//showDataSet();
 	}
 }

@@ -383,5 +383,14 @@
 					 false,false,true],
 			"lineCount":4,
 		},
+		{
+			"file_path":"dataset/hsqldb/hsqldb/1.8.0.1/org/hsqldb/",
+		 	"file_name":"CompiledStatementExecutor.java",
+			"method":"executeDeleteStatement",
+			"pos":182,
+			"label":[false,false,false,true,true,false,false,true,true,true,
+					 false,false,true],
+			"lineCount":4,
+		},
 	]
 }
