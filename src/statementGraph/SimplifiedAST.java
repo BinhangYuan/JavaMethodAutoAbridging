@@ -501,6 +501,7 @@ public class SimplifiedAST {
 						}
 					}
 					else{
+						lastIsBlock = false;
 						StatementWrapper currentWrapper = nodes.get(astMap.get(statement));
 						currentWrapper.setParentType(parentType);
 						tempList.add(currentWrapper);
