@@ -165,7 +165,7 @@ public class NaiveBayesTextClassifierV4 {
 	
 	
 	public void outputWordDistribution2JsonFile() throws IOException{
-		FileWriter file = new FileWriter("log/NaiveBayesTextWordDistribution.json");
+		FileWriter file = new FileWriter("webDemo/result/NaiveBayesTextWordDistribution.json");
 		JSONObject obj = new JSONObject();
 		JSONArray positive = new JSONArray();
 		for(String word:this.positiveWordCounts.keySet()){

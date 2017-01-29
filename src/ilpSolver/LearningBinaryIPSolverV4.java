@@ -202,4 +202,8 @@ public class LearningBinaryIPSolverV4 {
 	public List<StatementWrapper> getStatementWrapperList(){
 		return this.encoder.getStatementWrapperList();
 	}
+	
+	public int programLineCount(String program){
+		return program.split(System.getProperty("line.separator")).length;
+	}
 }

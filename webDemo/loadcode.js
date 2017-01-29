@@ -38,7 +38,7 @@ window.onload = function(){
     document.getElementById("JaccordDistance").value = "";
 
     //Load my data!
-    d3.json("result/result1485490484753.json",function(error,json){
+    d3.json("result/result.json",function(error,json){
     	if (error) throw error;
     	data = json.result;
     	//console.log(data);

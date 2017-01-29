@@ -28,3 +28,12 @@
 circle{
 	fill:steelblue;
 }
+
+text {
+    text-anchor: middle;
+}
+
+.circle-hover{
+    stroke: black;
+    stroke-width:1.5px;
+}

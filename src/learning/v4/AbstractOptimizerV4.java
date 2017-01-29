@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -19,12 +20,14 @@ import statementGraph.constraintAndFeatureEncoder.ConstraintAndFeatureEncoderV4;
 import statementGraph.graphNode.StatementWrapper;
 
 public abstract class AbstractOptimizerV4 {
+	static private boolean shuffleFlag = false;
 	protected double [] parameters;
 	protected Map<Integer,Integer> typeMap;
 	protected Map<Integer,Integer> parentTypeMap;
 	protected JaccardDistance computeDistance = new JaccardDistance();
 	protected Map<LearningBinaryIPSolverV4,ManualLabel> trainingSet = new HashMap<LearningBinaryIPSolverV4,ManualLabel>();
-
+	protected LinkedList<LearningBinaryIPSolverV4> solverArray = new LinkedList<LearningBinaryIPSolverV4>();
+	
 	abstract protected double objectiveFunction(double [] paras);
 	
 	
@@ -63,13 +66,15 @@ public abstract class AbstractOptimizerV4 {
 		for(int i=0; i< dataArray.length(); i++){
 			shuffleArray.add(i);
 		}
-		Collections.shuffle(shuffleArray);
 		
-		System.out.println("Shuffle data set:");
-		for(Integer i: shuffleArray){
-			System.out.print(i+" ");
+		if(shuffleFlag){
+			Collections.shuffle(shuffleArray);
+			System.out.println("Shuffle data set:");
+			for(Integer i: shuffleArray){
+				System.out.print(i+" ");
+			}
+			System.out.println();
 		}
-		System.out.println();
 	 
 		for(int i = 0; i < dataArray.length(); i++) {
 			int index = shuffleArray.get(i);
@@ -96,6 +101,7 @@ public abstract class AbstractOptimizerV4 {
 			
 			solver.setTargetLineCount(lineCount);
 			ManualLabel mlabel = new ManualLabel(lineCount,label);
+			this.solverArray.add(solver);
 			this.trainingSet.put(solver,mlabel);
 		}
 	}

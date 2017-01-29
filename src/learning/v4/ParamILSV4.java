@@ -21,7 +21,7 @@ import ilpSolver.LearningBinaryIPSolverV4;
 import learning.LearningHelper;
 
 public class ParamILSV4 extends AbstractOptimizerV4{
-	static double[] candidate = {1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,11.0,12.0};
+	static double[] candidate = {1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0};
 	private Random randGenerate = new Random();
 	
 	private HashMap<String,Double> visitedCandidates = new HashMap<String,Double>();
@@ -254,27 +254,39 @@ public class ParamILSV4 extends AbstractOptimizerV4{
 	@Override
 	public void outputTrainingResult() throws IOException{
 		JSONArray result = new JSONArray();
-		for(LearningBinaryIPSolverV4 solver:this.trainingSet.keySet()){
+		for(LearningBinaryIPSolverV4 solver:this.solverArray){
 			JSONObject current = new JSONObject();
-			current.put("Origin", solver.originalProgram2String());
+			String origin = solver.originalProgram2String();
+			current.put("Origin", origin);
 			boolean[] manualLabel = this.trainingSet.get(solver).getBooleanLabels();
-			current.put("Manual", solver.outputLabeledResult(manualLabel));
-			current.put("Automatic", solver.outputSolveResult());
+			String manual = solver.outputLabeledResult(manualLabel);
+			current.put("Manual", manual);
+			String auto = solver.outputSolveResult();
+			current.put("Automatic", auto);
 			current.put("Distance", solver.JaccordDistance2SolvedResult(manualLabel));
+			current.put("Original_Lines", solver.programLineCount(origin));
+			current.put("Target_Lines", solver.programLineCount(manual));
 			result.put(current);
 		}
 		JSONObject obj = new JSONObject();
-		FileWriter file = new FileWriter("src/learning/labeling/result/result"+System.currentTimeMillis()+".json");
 		obj.put("Iterations", this.maxIterations);
 		obj.put("ObjectiveFunctionValue", this.getLowestObjectiveFunctionValue());
 		obj.put("result", result);
-		obj.write(file);
-		file.close();
+		
+		//Save log;
+		FileWriter logFile = new FileWriter("src/learning/labeling/result/result"+System.currentTimeMillis()+".json");
+		obj.write(logFile);
+		logFile.close();
+		
+		//Save to webDemo;
+		FileWriter resultFile = new FileWriter("webDemo/result/result.json");
+		obj.write(resultFile);
+		resultFile.close();
 	}
 	
 	
 	public void outputTrainingCost2JsonFile() throws IOException{
-		FileWriter file = new FileWriter("log/ParaILSTrainingCurve.json");
+		FileWriter file = new FileWriter("webDemo/result/ParaILSTrainingCurve.json");
 		JSONObject obj = new JSONObject();
 		obj.put("iterations", LearningHelper.outputTrainingCost2JSONArray(this.trainingCostRecordIterations));
 		obj.put("min", LearningHelper.outputTrainingCost2JSONArray(this.trainingCostRecordMin));

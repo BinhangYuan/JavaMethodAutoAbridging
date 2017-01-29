@@ -156,7 +156,6 @@ public class ConstraintAndFeatureEncoderV4 {
 	
 	public String originProgram2String(){
 		return this.sAST.getASTNode().toString();
-		
 	}
 	
 	public List<StatementWrapper> getStatementWrapperList(){

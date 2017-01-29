@@ -69,6 +69,94 @@ const drawLine = ()=>{
     })
 }
 
+const drawScatterplot = ()=>{
+    let svg = d3.select('#scatterplot');
+    let margin = {
+        top: 30,
+        bottom: 30,
+        right: 30,
+        left: 30
+    };
+
+    let width = svg.attr("width") - margin.left - margin.right;
+    let height = svg.attr("height") - margin.top - margin.bottom;
+
+    let g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    d3.json('result/result.json',function(error,jsonData){
+        if (error){
+            throw error;
+        }
+        let programs = jsonData.result;
+        let maxLines = d3.max(programs,(d)=>{return d.Original_Lines})
+        let dataMap = {};
+
+        programs.forEach((data,index)=>{
+            let key = data.Original_Lines + "_" + data.Target_Lines;
+            if(!dataMap[key]){
+                dataMap[key] = {
+                    x:data.Original_Lines,
+                    y:data.Target_Lines,
+                    count:0,
+                    programIDs:[]
+                }
+            }
+            dataMap[key].count += 1;
+            dataMap[key].programIDs.push(index)
+        })
+
+        let dataArray = Object.keys(dataMap).map((key)=>dataMap[key]);
+
+        let xScale = d3.scaleLinear().range([0,width]).domain([0,maxLines]);
+        let yScale = d3.scaleLinear().range([height,0]).domain([0,maxLines]);
+        let rScale = d3.scaleLinear().range([3,6]).domain([1,d3.max(dataArray,(d)=>{return d.count})])
+
+        let xAxis = d3.axisBottom().scale(xScale)
+        let yAxis = d3.axisLeft().scale(yScale)
+
+        const hovered = (flag) =>{
+             return function(d) {
+                d3.select(this)
+                .classed("circle-hover",flag);
+             }   
+        }
+
+
+        let node = g.selectAll('circle')
+        .data(dataArray)
+        .enter()
+        .append('circle')
+        .attr('cx', (d)=>xScale(d.x))
+        .attr('cy', (d)=>yScale(d.y))
+        .attr('r',(d)=>rScale(d.count))
+        .attr('fill','steelblue')
+        .on('mouseover',hovered(true))
+        .on('mouseout',hovered(false))
+
+        node.append('title')
+        .text((d)=>{
+            let string = '';
+            d.programIDs.forEach((id,i)=>{
+                if(i==0){
+                    string = 'Program '+id;
+                }
+                else{
+                    string = string +'\nProgram '+id;
+                }
+            })
+            return string;
+        })
+
+        g.append("g")
+        .attr("class", "x axis")
+        .call(xAxis)
+        .attr("transform", "translate(0," + height + ")");
+
+        g.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+    })
+}
+
 
 
 const drawWordClound = (tag,attribute)=>{
@@ -127,6 +215,7 @@ const drawWordClound = (tag,attribute)=>{
 
 window.onload = function(){
     drawLine();
+    drawScatterplot();
     drawWordClound("wordChouldPositive","positive");
     drawWordClound("wordChouldNegative","negative");
 }
