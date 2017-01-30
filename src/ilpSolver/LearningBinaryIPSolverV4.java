@@ -204,6 +204,8 @@ public class LearningBinaryIPSolverV4 {
 	}
 	
 	public int programLineCount(String program){
-		return program.split(System.getProperty("line.separator")).length;
+		int total = program.split(System.getProperty("line.separator")).length;
+		Assert.isTrue(total>=2);
+		return total-2;
 	}
 }

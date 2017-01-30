@@ -87,10 +87,8 @@ public abstract class AbstractOptimizerV4 {
 			for(int j =0; j< label.length; j++){
 				label[j] = labelJsonarray.getBoolean(j);
 			}
-			int lineCount = dataArray.getJSONObject(index).getInt("lineCount");
 			
 			ConstraintAndFeatureEncoderV4 encoder = ASTParserUtils.parseMethodV4(true,filePath, fileName,methodName,pos,label);
-			
 			LearningBinaryIPSolverV4 solver = new LearningBinaryIPSolverV4(encoder);
 			solver.setDependenceConstraints(encoder.getASTConstraints(), encoder.getCFGConstraints(), encoder.getDDGConstraints());
 			solver.setLineCostConstraints(encoder.getLineCounts());
@@ -98,7 +96,7 @@ public abstract class AbstractOptimizerV4 {
 			solver.setParentTypeMap(this.parentTypeMap);
 			solver.setStatementType(encoder.getStatementType());
 			solver.setParementStatementType(encoder.getParentStatementType());
-			
+			int lineCount = solver.programLineCount(solver.outputLabeledResult(label));
 			solver.setTargetLineCount(lineCount);
 			ManualLabel mlabel = new ManualLabel(lineCount,label);
 			this.solverArray.add(solver);
