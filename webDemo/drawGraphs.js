@@ -158,6 +158,61 @@ const drawScatterplot = ()=>{
 }
 
 
+const drawBarChart = (bins=10)=>{
+    let svg = d3.select('#barchart');
+    let margin = {
+        top: 30,
+        bottom: 30,
+        right: 30,
+        left: 30
+    };
+
+    let width = svg.attr("width") - margin.left - margin.right;
+    let height = svg.attr("height") - margin.top - margin.bottom;
+
+    let g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    d3.json('result/result.json',function(error,jsonData){
+        if (error){
+            throw error;
+        }
+
+        let programs = jsonData.result;
+        let rates = programs.map((item)=>{
+            return parseFloat(item.Target_Lines)/parseFloat(item.Original_Lines);
+        })
+        let dist = Array(bins).fill(0);
+        rates.forEach((r)=>{
+            let index = parseInt(r/(1.0/parseFloat(bins)));
+            dist[index] += 1;
+        })
+
+        let coloum = width/bins;
+        let xScale = d3.scaleLinear().range([0, width]).domain([0, 1]);
+        let yScale = d3.scaleLinear().range([height, 0]).domain([0, d3.max(dist)+10]);
+        let xAxis = d3.axisBottom().scale(xScale)
+        let yAxis = d3.axisLeft().scale(yScale)
+
+        g.selectAll(".bar")
+        .data(dist)
+        .enter().append("rect")
+        .attr("class", "bar")
+        .attr("fill","steelblue")
+        .attr("x", function(d,i) { return xScale(parseFloat(i)/parseFloat(bins));})
+        .attr("y", function(d) { return yScale(d);})
+        .attr("width", coloum)
+        .attr("height", function(d) { return height - yScale(d); });
+
+        g.append("g")
+        .attr("class", "x axis")
+        .call(xAxis)
+        .attr("transform", "translate(0," + height + ")");
+
+        g.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+    })
+}
+
 
 const drawWordClound = (tag,attribute)=>{
     
@@ -216,6 +271,7 @@ const drawWordClound = (tag,attribute)=>{
 window.onload = function(){
     drawLine();
     drawScatterplot();
+    drawBarChart(bins=10);
     drawWordClound("wordChouldPositive","positive");
     drawWordClound("wordChouldNegative","negative");
 }

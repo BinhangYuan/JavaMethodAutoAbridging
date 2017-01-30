@@ -1,5 +1,6 @@
 package statementGraph.constraintAndFeatureEncoder;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -155,7 +156,9 @@ public class ConstraintAndFeatureEncoderV4 {
 	}
 	
 	public String originProgram2String(){
-		return this.sAST.getASTNode().toString();
+		boolean[] allTrue = new boolean[this.statementItems.size()];
+		Arrays.fill(allTrue, true);
+		return this.sAST.computeOutput(allTrue);
 	}
 	
 	public List<StatementWrapper> getStatementWrapperList(){
