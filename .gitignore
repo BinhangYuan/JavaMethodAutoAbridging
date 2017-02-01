@@ -10,6 +10,10 @@ webDemo/result
 
 webDemo/ace-builds
 
+userStudy/FrontEnd/node_modules
+
+userStudy/FrontEnd/dist
+
 .classpath
 
 *.class
