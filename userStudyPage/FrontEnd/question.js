@@ -1,3 +1,5 @@
+let url = "http://127.0.0.1:10006";
+
 var editor;
 var questions;
 var index = 0;
@@ -106,11 +108,17 @@ const nextClickHandler = ()=>{
 
 
 window.onload = function(){
+    let formData = location.search.substring(1);
+    let formArray = formData.split("&");
+    console.log(formArray)
+
+
 	editor = ace.edit("editor");
     editor.setTheme("ace/theme/chrome");
     editor.getSession().setMode("ace/mode/java");
-
-    d3.json("./questionStub.json",function(error,json){
+    console.log(`${url}/questions`)
+    d3.json(`${url}/questions`,function(error,json){
+        console.log(`${url}/questions`)
         if (error) throw error;
         questions = json.questions;
         console.log(questions);
