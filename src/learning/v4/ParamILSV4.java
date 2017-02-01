@@ -26,11 +26,11 @@ public class ParamILSV4 extends AbstractOptimizerV4{
 	
 	private HashMap<String,Double> visitedCandidates = new HashMap<String,Double>();
 	private int iterations = 0;
-	private int maxIterations = 10000;
+	private int maxIterations = 100000;
 	private int paraLength;
 	private int paraR = 10;
 	private int paraS = 3;
-	private double restartProb = 0.01;
+	private double restartProb = 0.001;
 	private String bestStateHash = null;
 	
 	private Logger trainlogger = Logger.getLogger("learning.v4.ParamILSV4");

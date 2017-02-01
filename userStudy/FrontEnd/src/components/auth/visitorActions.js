@@ -10,7 +10,9 @@ export function visitorAction(email, level) {
         return resource('POST', 'visitor', {email, level})
         .then((response) => {
             dispatch({type: Action.VISIT, level: response.level, email:response.email})
-            dispatch(nav2Question())
+            dispatch(getQuestion()).then(()=>{
+            	return dispatch(nav2Question())
+            })
         }).catch((err) => {
             dispatch(displayErrorMsg(`Invalid input: ${email}, ${level}`))
         })

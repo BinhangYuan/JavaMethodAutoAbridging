@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Vistor from './vistor'
+import Vistor from './visitor'
 
 
 //The landing page JSX

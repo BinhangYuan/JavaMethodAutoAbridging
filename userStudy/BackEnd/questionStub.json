@@ -1,0 +1,36 @@
+{
+	"questions":{
+		"1":{
+			"code":"String stub1=null",
+			"Alternatives":[
+				"Stub A Q1",
+				"Stub B",
+				"Stub C"
+			]
+		},
+		"2":{
+			"code":"String stub2=null",
+			"Alternatives":[
+				"Stub A Q2",
+				"Stub B",
+				"Stub C"
+			]
+		},
+		"3":{
+			"code":"String stub3=null",
+			"Alternatives":[
+				"Stub A Q3",
+				"Stub B",
+				"Stub C"
+			]
+		},
+		"4":{
+			"code":"String stub4=null",
+			"Alternatives":[
+				"Stub A Q4",
+				"Stub B",
+				"Stub C"
+			]
+		}
+	}
+}

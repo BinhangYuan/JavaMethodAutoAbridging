@@ -29,7 +29,7 @@ export function displaySuccessMsg(msg){
 }
 
 export function nav2Question(){
-    return {type: Action.NAV2MAIN};
+    return {type: Action.NAV2QUESTION};
 }
 
 export function nav2End(){

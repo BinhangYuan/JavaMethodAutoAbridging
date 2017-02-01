@@ -1,5 +1,5 @@
 {
-  "name": "User Study",
+  "name": "UserStudy",
   "version": "1.0.0",
   "description": "User study web application",
   "main": "./src/index.js",
@@ -89,5 +89,8 @@
     "webpack": "^1.13.0",
     "webpack-dev-server": "^1.14.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "react-ace": "^4.1.1",
+    "url-loader": "^0.5.7"
+  }
 }
