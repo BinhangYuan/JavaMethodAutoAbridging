@@ -526,7 +526,15 @@
 					 false,true,false,false,false,false,true,true,true,true,
 					 true,true,true]
 		},
-
+		{
+			"file_path":"dataset/com/google/guava/guava/12.0-rc2/com/google/common/collect/",
+		 	"file_name":"ImmutableSetMultimap.java",
+			"method":"readObject",
+			"pos":463,
+			"label":[false,true,false,false,true,false,true,true,true,false,
+					 false,true,true,true,true,false,false,true,true,true,
+					 true,true,false,true,true]
+		},
 	
 	]
 }
