@@ -22,6 +22,7 @@ export function shared(state = {location:'', errorMsg:'', successMsg:''}, action
 export function questions(state = {questions:{}},action){
 	switch(action.type){
 		case Action.UPDATEQUESTION:
+		case Action.ADDANSWER:
 			return { ...state, questions:action.questions};
 		default:
 			return state;

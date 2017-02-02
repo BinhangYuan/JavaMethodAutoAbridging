@@ -6,7 +6,7 @@ import Action, {displayErrorMsg, displaySuccessMsg} from '../actions'
 //React component to show messages
 
 export const Message = ({errorMsg, successMsg}) => (
-	<div className="row text-center">
+	<div className="text-center">
 		{errorMsg===''?'':
 			<div id="error_message" className="alert alert-danger"> {errorMsg} </div>
 		}

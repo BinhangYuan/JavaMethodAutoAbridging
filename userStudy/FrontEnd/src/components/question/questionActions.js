@@ -10,3 +10,12 @@ export function getQuestion(){
 		})
 	}
 }
+
+export function checkOneQuestion(index, answer, time){
+	return (dispatch, getState) => {
+		let questions = getState().questions.questions;
+		questions[index].answer = answer;
+		questions[index].time = time;
+		return dispatch({type:Action.ADDANSWER, questions});
+	}
+}

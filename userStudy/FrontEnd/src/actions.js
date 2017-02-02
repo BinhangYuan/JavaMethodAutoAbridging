@@ -15,7 +15,8 @@ const Action = {
 
     VISIT: 'visit',
 
-    UPDATEQUESTION: 'update questions'
+    UPDATEQUESTION: 'update questions',
+    ADDANSWER: 'add an answer'
 }
 
 export default Action
