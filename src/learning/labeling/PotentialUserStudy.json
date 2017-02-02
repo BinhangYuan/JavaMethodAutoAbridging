@@ -1,0 +1,23 @@
+{
+	"data": [		
+		{
+			"file_path":"dataset/com/google/guava/guava/12.0-rc2/com/google/common/collect/",
+		 	"file_name":"GeneralRange.java",
+			"method":"intersect",
+			"pos":167,
+			"label":[false,false,false,false,false,true,true,true,true,true,
+					 true,true,true,true,false,false,false,true,false,false,
+					 false,true,false,false,false,false,true,true,true,true,
+					 true,true,true]
+		},
+		{
+			"file_path":"dataset/org/eclipse/core/org.eclipse.core.resources/3.6.0.v20100526-0737/org/eclipse/core/internal/dtree/",
+		 	"file_name":"AbstractDataTreeNode.java",
+			"method":"assembleWith",
+			"pos":71,
+			"label":[false,false,true,false,false,false,true,true,true,false,
+					 false,false,true,false,true,false,false,false,true,false,
+					 true,false,false,false,true,true,true]
+		},
+	]
+}
