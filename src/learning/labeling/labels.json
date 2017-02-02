@@ -563,5 +563,13 @@
 					 false,true,false,false,false,false,true,true,true,true,
 					 true]
 		},
+		{
+			"file_path":"dataset/org/eclipse/core/org.eclipse.core.resources/3.6.0.v20100526-0737/org/eclipse/core/internal/dtree/",
+		 	"file_name":"DeltaDataTree.java",
+			"method":"lookup",
+			"pos":652,
+			"label":[false,true,true,true,true,true,false,false,true,true,
+					 true,true,true,true,false,false,true]
+		},
 	]
 }
