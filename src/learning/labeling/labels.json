@@ -571,5 +571,15 @@
 			"label":[false,true,true,true,true,true,false,false,true,true,
 					 true,true,true,true,false,false,true]
 		},
+		{
+			"file_path":"dataset/org/w3c/css/css-validator/20100131/org/w3c/css/css/",
+		 	"file_name":"CssCascadingOrder.java",
+			"method":"order",
+			"pos":107,
+			"label":[true,true,false,true,true,false,true,false,false,false,
+					 false,true,true,false,true,false,false,true,true,true,
+					 false,false,false,true]
+		},
+
 	]
 }
