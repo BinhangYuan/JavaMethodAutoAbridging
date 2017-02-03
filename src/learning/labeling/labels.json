@@ -644,6 +644,13 @@
 					 true,false,false,false,false,true,true,true,true,true,
 					 true,true,true,true,false,false]
 		},
-
+		{
+			"file_path":"dataset/org/w3c/css/css-validator/20100131/org/w3c/css/parser/",
+		 	"file_name":"CssFouffa.java",
+			"method":"handleDeclaration",
+			"pos":514,
+			"label":[false,false,false,true,true,true,true,false,false,false,
+					 false,false,false,false,false,true]
+		},
 	]
 }
