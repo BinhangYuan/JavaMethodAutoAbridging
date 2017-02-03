@@ -580,6 +580,34 @@
 					 false,true,true,false,true,false,false,true,true,true,
 					 false,false,false,true]
 		},
+		{
+			"file_path":"dataset/org/w3c/css/css-validator/20100131/org/w3c/css/css/",
+		 	"file_name":"StyleSheetParser.java",
+			"method":"parseURL",
+			"pos":165,
+			"label":[false,false,false,false,false,false,false,true,true,true,
+					 true,true,true,true,true,true,true,true,true,false,
+					 false,false,false,true,false,false,false]
+		},
+		{
+			"file_path":"dataset/org/w3c/css/css-validator/20100131/org/w3c/css/css/",
+		 	"file_name":"StyleSheetParser.java",
+			"method":"parseStyleElement",
+			"pos":239,
+			"label":[false,false,false,true,true,true,true,true,true,true,
+					 true,true,true,false,false,false,false,true,false,false,
+					 false,false,false,false,false,false,false,false,false,false,
+					 false,false,false,false,false,false,false]
+		},
+		{
+			"file_path":"dataset/org/w3c/css/css-validator/20100131/org/w3c/css/css/",
+		 	"file_name":"StyleSheetParser.java",
+			"method":"parseStyleAttribute",
+			"pos":332,
+			"label":[false,true,false,false,true,true,true,true,true,true,
+					 true,true,true,true,true,false,false,false,true,false,
+					 false,false]
+		},
 
 	]
 }
