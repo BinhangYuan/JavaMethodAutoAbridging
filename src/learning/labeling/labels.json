@@ -652,5 +652,14 @@
 			"label":[false,false,false,true,true,true,true,false,false,false,
 					 false,false,false,false,false,true]
 		},
+		{
+			"file_path":"dataset/org/w3c/css/css-validator/20100131/org/w3c/css/parser/",
+		 	"file_name":"CssPropertyFactory.java",
+			"method":"createMediaFeature",
+			"pos":102,
+			"label":[true,true,true,true,true,true,true,true,true,true,
+					 true,true,true,true,true,false,false,false,false,true,
+					 true,true,true,true,true,true,true,false,false,false]
+		},
 	]
 }
