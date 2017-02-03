@@ -618,6 +618,21 @@
 					 true,true,true,true,false,true,true,true,true,true,
 					 true,false,false,false,true,true,true,true,false,false,]
 		},
+		{
+			"file_path":"dataset/org/w3c/css/css-validator/20100131/org/w3c/css/css/",
+		 	"file_name":"TagSoupStyleSheetHandler.java",
+			"method":"startElement",
+			"pos":221,
+			"label":[true,true,true,true,true,false,false,false,true,true,
+					 true,true,false,true,false,false,false,false,false,false,
+					 false,true,true,true,false,false,false,false,false,false,
+					 false,false,false,false,false,true,true,true,true,true,
+					 true,true,false,false,false,true,true,true,true,false,
+					 false,true,false,false,false,true,true,false,false,true,
+					 false,false,false,false,false,false,false,true,true,true,
+					 true,true,true,true,true,true,true,true,true,true,
+					 true]
+		},
 
 	]
 }
