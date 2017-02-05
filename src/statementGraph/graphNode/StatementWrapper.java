@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.Statement;
@@ -455,6 +456,17 @@ public abstract class StatementWrapper {
 	
 	public Set<String> getDefinedVariableSet(){
 		return this.definedVariableSet;
+	}
+	
+	private int nestedLevel = -1;
+	
+	public int getNestedLevel(){
+		Assert.isTrue(this.nestedLevel!=-1);
+		return this.nestedLevel;
+	}
+	
+	public void setNestedLevel(int level){
+		this.nestedLevel = level;
 	}
 	
 	public abstract int getLineCount();

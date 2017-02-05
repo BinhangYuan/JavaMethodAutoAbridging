@@ -28,7 +28,12 @@ import org.eclipse.jdt.core.dom.TryStatement;
 import org.eclipse.jdt.core.dom.TypeDeclarationStatement;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
+import statementGraph.ASTParserUtils;
+import statementGraph.constraintAndFeatureEncoder.ConstraintAndFeatureEncoderV4;
+import statementGraph.expressionWrapper.ExpressionExtractor;
 import statementGraph.graphNode.AssertStatementWrapper;
 import statementGraph.graphNode.BreakStatementWrapper;
 import statementGraph.graphNode.ConstructorInvocationStatementWrapper;
@@ -54,6 +59,7 @@ import statementGraph.graphNode.WhileStatementWrapper;
 public class TextUtils {
 	
 	static private boolean removeKeyword = true;
+	static private boolean debug = false;
 	
 	static private Set<String> javaKeyword = new HashSet<String>(Arrays.asList(new String[]{"abstract","continue","for","new","switch","assert",
 			"default","goto","package","synchronized","boolean","do","if","private","this","break","double","implements","protected","throw",
@@ -104,7 +110,7 @@ public class TextUtils {
 	/*
 	 * Parse code fragment into word list by java naming conventions
 	 */
-	static public LinkedList<String> parseCodeFragment(String codeFragment){
+	static private LinkedList<String> parseCodeFragment(String codeFragment){
 		LinkedList<String> result = new LinkedList<String>();
 		//Remove operators;
 		codeFragment = codeFragment.replace('+', ' ');
@@ -164,12 +170,14 @@ public class TextUtils {
 		return result;
 	}
 	
-	
 	/*
 	 * Parse statement into word list by java naming conventions
 	 */
 	public static LinkedList<String> parseStatement(StatementWrapper item) throws Exception{
 		LinkedList<String> result = new LinkedList<String>();
+		for(int i=0; i<ExpressionExtractor.getNumberLiterals(StatementWrapper.getASTNodeStatement(item)).size();i++){
+			result.add("NumberLiteral");
+		}
 		int nodeType = item.getType();
 		if(nodeType == StatementWrapper.ASSERT_STATEMENT){
 			AssertStatement statement = ((AssertStatementWrapper)item).getASTNode();
@@ -292,14 +300,40 @@ public class TextUtils {
 				}
 			}
 		}
+		if(debug){
+			System.out.print(item.toString()+"=>");
+			for(String s: result){
+				System.out.print(s+" ");
+			}
+			System.out.println();
+		}
 		return result;
 	}
 	
 	
-	public static void main(String[] args){
-		String codeFragment = "private Map<StatementWrapper,Integer> index = new HashMap<StatementWrapper,Integer>();";
-		for(String temp:parseCodeFragment(codeFragment)){
-			System.out.println(temp);
+	public static void main(String[] args) throws Exception{
+		String  labelString = ASTParserUtils.readFileToString("src/learning/labeling/labels.json");
+		JSONObject obj = new JSONObject(labelString);
+		
+		JSONArray dataArray = obj.getJSONArray("data");
+		
+		if(dataArray.length()>0){
+			
+			int i = dataArray.length()-1;
+			System.out.println("No. "+i+ " program");
+			String filePath = dataArray.getJSONObject(i).getString("file_path");
+			String fileName = dataArray.getJSONObject(i).getString("file_name");
+			String methodName = dataArray.getJSONObject(i).getString("method");
+			int pos = dataArray.getJSONObject(i).getInt("pos");
+			JSONArray labelJsonarray = dataArray.getJSONObject(i).getJSONArray("label");
+			boolean [] labels = new boolean[labelJsonarray.length()];
+			for(int j =0; j< labels.length; j++){
+				labels[j] = labelJsonarray.getBoolean(j);
+			}
+			ConstraintAndFeatureEncoderV4 encoder = ASTParserUtils.parseMethodV4(true, filePath, fileName,methodName,pos,labels);
+			for(StatementWrapper item:encoder.getSimplifiedAST().getAllWrapperList()){
+				parseStatement(item);
+			}
 		}
 	}
 }

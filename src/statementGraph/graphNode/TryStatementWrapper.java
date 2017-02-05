@@ -28,6 +28,10 @@ public class TryStatementWrapper extends StatementWrapper{
 		this.bodyWrappers.add(item);
 	}
 	
+	public int getBodyLength(){
+		return this.bodyWrappers.size();
+	}
+	
 	private List<StatementWrapper> finalBodyWrappers = new LinkedList<StatementWrapper>();
 	
 	public List<StatementWrapper> getFinalBodyWrappers(){

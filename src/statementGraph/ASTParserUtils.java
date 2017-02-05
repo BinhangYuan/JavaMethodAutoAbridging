@@ -366,6 +366,7 @@ public class ASTParserUtils {
 				System.out.println("Node "+i+": <========");
 				System.out.println(item.toString());
 				//System.out.println("Parent type:"+StatementWrapper.parentStatementTypeInt2String(item.getParentType()));
+				System.out.println("Nested Level: "+item.getNestedLevel());
 				System.out.println("========>");
 			}
 						

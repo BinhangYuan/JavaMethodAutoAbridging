@@ -38,6 +38,10 @@ public class IfStatementWrapper extends StatementWrapper{
 		return this.thenBodyWrappers;
 	}
 	
+	public int getThenBodyLength(){
+		return this.thenBodyWrappers.size();
+	}
+	
 	public void addThenBodyWrapper(StatementWrapper item){
 		this.thenBodyWrappers.add(item);
 	}
@@ -46,6 +50,10 @@ public class IfStatementWrapper extends StatementWrapper{
 	
 	public List<StatementWrapper> getElseBodyWrappers(){
 		return this.elseBodyWrappers;
+	}
+	
+	public int getElseBodyLength(){
+		return this.elseBodyWrappers.size();
 	}
 	
 	public void addElseBodyWrapper(StatementWrapper item){

@@ -28,6 +28,10 @@ public class WhileStatementWrapper extends StatementWrapper{
 		return this.bodyWrappers;
 	}
 	
+	public int getBodyLength(){
+		return this.bodyWrappers.size();
+	}
+	
 	public void addBodyWrapper(StatementWrapper item){
 		this.bodyWrappers.add(item);
 	}

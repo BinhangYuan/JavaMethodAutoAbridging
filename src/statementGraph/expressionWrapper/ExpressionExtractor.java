@@ -834,4 +834,317 @@ public class ExpressionExtractor {
 		}
 		return variableList;
 	}
+	
+	
+	//Modified by myself
+	public static List<NumberLiteral> getNumberLiterals(Expression expression) {
+		List<NumberLiteral> numberList = new ArrayList<NumberLiteral>();
+		if(expression instanceof ArrayAccess) {
+			ArrayAccess arrayAccess = (ArrayAccess)expression;
+			numberList.addAll(getNumberLiterals(arrayAccess.getArray()));
+			numberList.addAll(getNumberLiterals(arrayAccess.getIndex()));
+		}
+		else if(expression instanceof ArrayCreation) {
+			ArrayCreation arrayCreation = (ArrayCreation)expression;
+			@SuppressWarnings("unchecked")
+			List<Expression> dimensions = arrayCreation.dimensions();
+			for(Expression dimension : dimensions){
+				numberList.addAll(getNumberLiterals(dimension));
+			}
+			numberList.addAll(getNumberLiterals(arrayCreation.getInitializer()));
+		}
+		else if(expression instanceof ArrayInitializer) {
+			ArrayInitializer arrayInitializer = (ArrayInitializer)expression;
+			@SuppressWarnings("unchecked")
+			List<Expression> expressions = arrayInitializer.expressions();
+			for(Expression arrayInitializerExpression : expressions){
+				numberList.addAll(getNumberLiterals(arrayInitializerExpression));
+			}
+		}
+		else if(expression instanceof Assignment) {
+			Assignment assignment = (Assignment)expression;
+			numberList.addAll(getNumberLiterals(assignment.getLeftHandSide()));
+			numberList.addAll(getNumberLiterals(assignment.getRightHandSide()));
+		}
+		else if(expression instanceof CastExpression) {
+			CastExpression castExpression = (CastExpression)expression;
+			numberList.addAll(getNumberLiterals(castExpression.getExpression()));
+		}
+		else if(expression instanceof ClassInstanceCreation) {
+			ClassInstanceCreation classInstanceCreation = (ClassInstanceCreation)expression;
+			if(classInstanceCreation.getExpression() != null){
+				numberList.addAll(getNumberLiterals(classInstanceCreation.getExpression()));
+			}
+			@SuppressWarnings("unchecked")
+			List<Expression> arguments = classInstanceCreation.arguments();
+			for(Expression argument : arguments){
+				numberList.addAll(getNumberLiterals(argument));
+			}
+			/*
+				//We ignore this for now!
+				AnonymousClassDeclaration anonymousClassDeclaration = classInstanceCreation.getAnonymousClassDeclaration();
+				if(anonymousClassDeclaration != null) {
+					variableList.addAll(getVariableSimpleNames(anonymousClassDeclaration,isDeclaration));
+				}
+			*/
+		}
+		else if(expression instanceof ConditionalExpression) {
+			ConditionalExpression conditionalExpression = (ConditionalExpression)expression;
+			numberList.addAll(getNumberLiterals(conditionalExpression.getExpression()));
+			numberList.addAll(getNumberLiterals(conditionalExpression.getThenExpression()));
+			numberList.addAll(getNumberLiterals(conditionalExpression.getElseExpression()));
+		}
+		else if(expression instanceof FieldAccess) {
+			FieldAccess fieldAccess = (FieldAccess)expression;
+			numberList.addAll(getNumberLiterals(fieldAccess.getExpression()));
+			numberList.addAll(getNumberLiterals(fieldAccess.getName()));
+		}
+		else if(expression instanceof InfixExpression) {
+			InfixExpression infixExpression = (InfixExpression)expression;
+			numberList.addAll(getNumberLiterals(infixExpression.getLeftOperand()));
+			numberList.addAll(getNumberLiterals(infixExpression.getRightOperand()));
+			@SuppressWarnings("unchecked")
+			List<Expression> extendedOperands = infixExpression.extendedOperands();
+			for(Expression operand : extendedOperands){
+				numberList.addAll(getNumberLiterals(operand));
+			}
+		}
+		else if(expression instanceof InstanceofExpression) {
+			InstanceofExpression instanceofExpression = (InstanceofExpression)expression;
+			numberList.addAll(getNumberLiterals(instanceofExpression.getLeftOperand()));
+		}
+		else if(expression instanceof MethodInvocation) {
+			MethodInvocation methodInvocation = (MethodInvocation)expression;
+			if(methodInvocation.getExpression() != null){
+				numberList.addAll(getNumberLiterals(methodInvocation.getExpression()));
+			}
+			@SuppressWarnings("unchecked")
+			List<Expression> arguments = methodInvocation.arguments();
+			for(Expression argument : arguments){
+				numberList.addAll(getNumberLiterals(argument));
+			}
+		}
+		else if(expression instanceof ParenthesizedExpression) {
+			ParenthesizedExpression parenthesizedExpression = (ParenthesizedExpression)expression;
+			numberList.addAll(getNumberLiterals(parenthesizedExpression.getExpression()));
+		}
+		else if(expression instanceof PostfixExpression) {
+			PostfixExpression postfixExpression = (PostfixExpression)expression;
+			numberList.addAll(getNumberLiterals(postfixExpression.getOperand()));
+		}
+		else if(expression instanceof PrefixExpression) {
+			PrefixExpression prefixExpression = (PrefixExpression)expression;
+			numberList.addAll(getNumberLiterals(prefixExpression.getOperand()));
+		}
+		else if(expression instanceof SuperMethodInvocation) {
+			SuperMethodInvocation superMethodInvocation = (SuperMethodInvocation)expression;
+			@SuppressWarnings("unchecked")
+			List<Expression> arguments = superMethodInvocation.arguments();
+			for(Expression argument : arguments){
+				numberList.addAll(getNumberLiterals(argument));
+			}
+		}
+		else if(expression instanceof VariableDeclarationExpression) {
+			VariableDeclarationExpression variableDeclarationExpression = (VariableDeclarationExpression)expression;
+			@SuppressWarnings("unchecked")
+			List<VariableDeclarationFragment> fragments = variableDeclarationExpression.fragments();
+			for(VariableDeclarationFragment fragment : fragments) {
+				Expression nameExpression = fragment.getName();
+				numberList.addAll(getNumberLiterals(nameExpression));
+				Expression initializerExpression = fragment.getInitializer();
+				numberList.addAll(getNumberLiterals(initializerExpression));
+			}
+		}
+		else if(expression instanceof QualifiedName) {
+			QualifiedName qualifiedName = (QualifiedName)expression;
+			numberList.addAll(getNumberLiterals(qualifiedName.getQualifier()));
+			numberList.addAll(getNumberLiterals(qualifiedName.getName()));
+		}
+		else if(expression instanceof SuperFieldAccess) {
+			SuperFieldAccess superFieldAccess = (SuperFieldAccess)expression;
+			numberList.addAll(getNumberLiterals(superFieldAccess.getName()));
+		}
+		else if(expression instanceof ThisExpression) {
+			ThisExpression thisExpression = (ThisExpression)expression;
+			if(thisExpression.getQualifier() != null){
+				numberList.addAll(getNumberLiterals(thisExpression.getQualifier()));
+			}
+		}
+		else if(expression instanceof NumberLiteral){
+			numberList.add((NumberLiteral) expression);
+		}
+		return numberList;
+	}
+
+	//Modified by myself
+	public static List<NumberLiteral> getNumberLiterals(Statement statement) throws Exception {
+		List<NumberLiteral> numberList = new ArrayList<NumberLiteral>();
+		if(statement instanceof AssertStatement) {
+			AssertStatement assertStatement = (AssertStatement)statement;
+			Expression expression = assertStatement.getExpression();
+			numberList.addAll(getNumberLiterals(expression));
+			Expression message = assertStatement.getMessage();
+			if(message != null){
+				numberList.addAll(getNumberLiterals(message));
+			}
+		}
+		else if(statement instanceof BreakStatement) {
+			BreakStatement breakStatement = (BreakStatement)statement;
+			if(breakStatement.getLabel() != null){
+				numberList.addAll(getNumberLiterals(breakStatement.getLabel()));
+			}
+		}
+		else if(statement instanceof ConstructorInvocation) {
+				ConstructorInvocation constructorInvocation = (ConstructorInvocation)statement;
+				@SuppressWarnings("unchecked")
+				List<Expression> arguments = constructorInvocation.arguments();
+				for(Expression argument : arguments){
+					numberList.addAll(getNumberLiterals(argument));
+				}
+			}
+			else if(statement instanceof ContinueStatement) {
+				ContinueStatement continueStatement = (ContinueStatement)statement;
+				if(continueStatement.getLabel() != null){
+					numberList.addAll(getNumberLiterals(continueStatement.getLabel()));
+				}
+			}
+			else if(statement instanceof DoStatement) {
+				DoStatement doStatement = (DoStatement)statement;
+				Expression expression = doStatement.getExpression();
+				numberList.addAll(getNumberLiterals(expression));
+				//In my implementation, body will be taken care of in other place.
+			}
+			else if(statement instanceof EmptyStatement) {
+				//Nothing to add.
+			}
+			else if(statement instanceof EnhancedForStatement) {
+				EnhancedForStatement enhancedForStatement = (EnhancedForStatement)statement;
+				Expression expression = enhancedForStatement.getExpression();
+				SingleVariableDeclaration variableDeclaration = enhancedForStatement.getParameter();
+				numberList.addAll(getNumberLiterals(variableDeclaration.getName()));
+				if(variableDeclaration.getInitializer() != null){
+					numberList.addAll(getNumberLiterals(variableDeclaration.getInitializer()));
+				}
+				numberList.addAll(getNumberLiterals(expression));
+				//In my implementation, body will be taken care of in other place.
+			}
+			else if(statement instanceof ExpressionStatement) {
+				ExpressionStatement expressionStatement = (ExpressionStatement)statement;
+				Expression expression = expressionStatement.getExpression();
+				numberList.addAll(getNumberLiterals(expression));
+			}
+			else if(statement instanceof ForStatement) {
+				ForStatement forStatement = (ForStatement)statement;
+				@SuppressWarnings("unchecked")
+				List<Expression> initializers = forStatement.initializers();
+				for(Expression initializer : initializers){
+					numberList.addAll(getNumberLiterals(initializer));
+				}
+				Expression expression = forStatement.getExpression();
+				if(expression != null){
+					numberList.addAll(getNumberLiterals(expression));
+				}
+				@SuppressWarnings("unchecked")
+				List<Expression> updaters = forStatement.updaters();
+				for(Expression updater : updaters){
+					numberList.addAll(getNumberLiterals(updater));
+				}
+				//In my implementation, body will be taken care of in other place.
+			}
+			else if(statement instanceof IfStatement) {
+				IfStatement ifStatement = (IfStatement)statement;
+				Expression expression = ifStatement.getExpression();
+				numberList.addAll(getNumberLiterals(expression));
+				//In my implementation, body will be taken care of in other place.
+			}
+			else if(statement instanceof LabeledStatement) {
+				LabeledStatement labeledStatement = (LabeledStatement)statement;
+				if(labeledStatement.getLabel() != null){
+					numberList.addAll(getNumberLiterals(labeledStatement.getLabel()));
+				}
+				//In my implementation, body will be taken care of in other place.
+			}
+			else if(statement instanceof ReturnStatement) {
+				ReturnStatement returnStatement = (ReturnStatement)statement;
+				Expression expression = returnStatement.getExpression();
+				numberList.addAll(getNumberLiterals(expression));	
+			}
+			else if(statement instanceof SuperConstructorInvocation) {
+				SuperConstructorInvocation superConstructorInvocation = (SuperConstructorInvocation)statement;
+				if(superConstructorInvocation.getExpression() != null){
+					numberList.addAll(getNumberLiterals(superConstructorInvocation.getExpression()));
+				}
+				@SuppressWarnings("unchecked")
+				List<Expression> arguments = superConstructorInvocation.arguments();
+				for(Expression argument : arguments){
+					numberList.addAll(getNumberLiterals(argument));
+				}
+			}
+			else if(statement instanceof SwitchCase) {
+				SwitchCase switchCase = (SwitchCase)statement;
+				Expression expression = switchCase.getExpression();
+				if(expression != null){
+					numberList.addAll(getNumberLiterals(expression));
+				}
+			}
+			else if(statement instanceof SwitchStatement) {
+				SwitchStatement switchStatement = (SwitchStatement)statement;
+				Expression expression = switchStatement.getExpression();
+				numberList.addAll(getNumberLiterals(expression));
+				//In my implementation, body will be taken care of in other place.
+			}
+			else if(statement instanceof SynchronizedStatement) {
+				SynchronizedStatement synchronizedStatement = (SynchronizedStatement)statement;
+				Expression expression = synchronizedStatement.getExpression();
+				numberList.addAll(getNumberLiterals(expression));
+				//In my implementation, body will be taken care of in other place.
+			}
+			else if(statement instanceof ThrowStatement) {
+				ThrowStatement throwStatement = (ThrowStatement)statement;
+				Expression expression = throwStatement.getExpression();
+				numberList.addAll(getNumberLiterals(expression));
+			}
+			else if(statement instanceof TryStatement) {
+				TryStatement tryStatement = (TryStatement)statement;
+				@SuppressWarnings("unchecked")
+				List<VariableDeclarationExpression> resources = tryStatement.resources();
+				for(VariableDeclarationExpression expression : resources) {
+					numberList.addAll(getNumberLiterals(expression));
+				}
+				//In my implementation, body will be taken care of in other place.
+				@SuppressWarnings("unchecked")
+				List<CatchClause> catchClauses = tryStatement.catchClauses();
+				for(CatchClause catchClause : catchClauses) {
+					SingleVariableDeclaration variableDeclaration = catchClause.getException();
+					numberList.addAll(getNumberLiterals(variableDeclaration.getName()));
+					if(variableDeclaration.getInitializer() != null){
+						numberList.addAll(getNumberLiterals(variableDeclaration.getInitializer()));
+					}
+					//In my implementation, body will be taken care of in other place.
+				}
+				//In my implementation, body will be taken care of in other place.
+			}
+			else if(statement instanceof TypeDeclarationStatement){
+				//Not handled yet.
+			}
+			else if(statement instanceof VariableDeclarationStatement) {
+				VariableDeclarationStatement variableDeclarationStatement = (VariableDeclarationStatement)statement;
+				@SuppressWarnings("unchecked")
+				List<VariableDeclarationFragment> fragments = variableDeclarationStatement.fragments();
+				for(VariableDeclarationFragment fragment : fragments) {
+					numberList.addAll(getNumberLiterals(fragment.getName()));
+					numberList.addAll(getNumberLiterals(fragment.getInitializer()));
+				}
+			}
+			else if(statement instanceof WhileStatement) {
+				WhileStatement whileStatement = (WhileStatement)statement;
+				Expression expression = whileStatement.getExpression();
+				numberList.addAll(getNumberLiterals(expression));
+				//In my implementation, body will be taken care of in other place.
+			}
+			else{
+				throw new Exception("Unexpected statement type in getVariableSimpleNames()");
+			}
+			return numberList;
+		}
 }

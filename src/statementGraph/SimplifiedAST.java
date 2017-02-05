@@ -78,7 +78,7 @@ public class SimplifiedAST {
 	
 	public SimplifiedAST(MethodDeclaration methodASTNode) throws Exception{
 		this.methodASTNode = methodASTNode;
-		this.buildTreeNodes(this.methodASTNode);
+		this.buildTreeNodes(this.methodASTNode,0);
 		this.buildHierachy(this.methodASTNode);
 		boolean[] allDisplay = new boolean[this.nodes.size()];
 		Arrays.fill(allDisplay, true);
@@ -94,7 +94,7 @@ public class SimplifiedAST {
 		}
 	}
 	
-	private void buildTreeNodes(ASTNode node) throws Exception{
+	private void buildTreeNodes(ASTNode node,int level) throws Exception{
 		int nodeType = node.getNodeType();
 		if(nodeType == StatementWrapper.METHOD_DECLARATION){
 			if(((MethodDeclaration)node).getBody()==null){
@@ -102,183 +102,204 @@ public class SimplifiedAST {
 			}
 			else{
 				for(Object statement:((MethodDeclaration)node).getBody().statements()){
-					buildTreeNodes((ASTNode)statement);
+					buildTreeNodes((ASTNode)statement,level+1);
 				}
 			}
 		}
 		else if(nodeType == StatementWrapper.BLOCK){
 			for(Object statement:((Block)node).statements()){
-				buildTreeNodes((ASTNode)statement);
+				buildTreeNodes((ASTNode)statement,level);
 			}
 		}
 		else if(nodeType == StatementWrapper.ASSERT_STATEMENT){
 			AssertStatementWrapper item = (AssertStatementWrapper) this.factory.createWrapper(node);
+			item.setNestedLevel(level);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
 		}
 		else if(nodeType == StatementWrapper.BREAK_STATEMENT){
 			BreakStatementWrapper item = (BreakStatementWrapper) this.factory.createWrapper(node);
+			item.setNestedLevel(level);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
 		}
 		else if(nodeType == StatementWrapper.CONSTRUCTOR_INVOCATION){
 			ConstructorInvocationStatementWrapper item = (ConstructorInvocationStatementWrapper) this.factory.createWrapper(node);
+			item.setNestedLevel(level);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
 		}
 		else if(nodeType == StatementWrapper.CONTINUE_STATEMENT){
 			ContinueStatementWrapper item = (ContinueStatementWrapper) this.factory.createWrapper(node);
+			item.setNestedLevel(level);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
 		}
 		else if(nodeType == StatementWrapper.DO_STATEMENT){
 			DoStatementWrapper item = (DoStatementWrapper) this.factory.createWrapper(node);;
+			item.setNestedLevel(level);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
 			if(((DoStatement)node).getBody().getNodeType() != StatementWrapper.BLOCK){
-				buildTreeNodes((ASTNode)(((DoStatement)node).getBody()));
+				buildTreeNodes((ASTNode)(((DoStatement)node).getBody()),level+1);
 			}
 			else{
 				Block body = (Block)((DoStatement)node).getBody();
 				for(Object statement: body.statements()){
-					buildTreeNodes((ASTNode)statement);
+					buildTreeNodes((ASTNode)statement,level+1);
 				}
 			}
 		}
 		else if(nodeType == StatementWrapper.EMPTY_STATEMENT){
 			EmptyStatementWrapper item = (EmptyStatementWrapper) this.factory.createWrapper(node);
+			item.setNestedLevel(level);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
 		}
 		else if(nodeType == StatementWrapper.ENHANCED_FOR_STATEMENT){
 			EnhancedForStatementWrapper item = (EnhancedForStatementWrapper) this.factory.createWrapper(node);;
+			item.setNestedLevel(level);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
 			if(((EnhancedForStatement)node).getBody().getNodeType() != StatementWrapper.BLOCK){
-				buildTreeNodes((ASTNode)(((EnhancedForStatement)node).getBody()));
+				buildTreeNodes((ASTNode)(((EnhancedForStatement)node).getBody()),level+1);
 			}
 			else{
 				Block body = (Block)((EnhancedForStatement)node).getBody();
 				for(Object statement: body.statements()){
-					buildTreeNodes((ASTNode)statement);
+					buildTreeNodes((ASTNode)statement,level+1);
 				}
 			}
 		}
 		else if(nodeType == StatementWrapper.EXPRESSION_STATEMENT){
 			ExpressionStatementWrapper item = (ExpressionStatementWrapper) this.factory.createWrapper(node);
+			item.setNestedLevel(level);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
 		}
 		else if(nodeType == StatementWrapper.FOR_STATEMENT){
 			ForStatementWrapper item = (ForStatementWrapper) this.factory.createWrapper(node);;
+			item.setNestedLevel(level);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
 			if(((ForStatement)node).getBody().getNodeType() != StatementWrapper.BLOCK){
-				buildTreeNodes((ASTNode)(((ForStatement)node).getBody()));
+				buildTreeNodes((ASTNode)(((ForStatement)node).getBody()),level+1);
 			}
 			else{
 				Block body = (Block)((ForStatement)node).getBody();
 				for(Object statement: body.statements()){
-					buildTreeNodes((ASTNode)statement);
+					buildTreeNodes((ASTNode)statement,level+1);
 				}
 			}
 		}
 		else if(nodeType == StatementWrapper.IF_STATEMENT){
 			IfStatementWrapper item = (IfStatementWrapper) this.factory.createWrapper(node);
+			item.setNestedLevel(level);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
-			buildTreeNodes((ASTNode)(((IfStatement)(node)).getThenStatement()));
+			buildTreeNodes((ASTNode)(((IfStatement)(node)).getThenStatement()),level+1);
 			if(((IfStatement)(node)).getElseStatement() != null){
-				buildTreeNodes((ASTNode)(((IfStatement)(node)).getElseStatement()));
+				buildTreeNodes((ASTNode)(((IfStatement)(node)).getElseStatement()),level+1);
 			}
 		}
 		else if(nodeType == StatementWrapper.LABELED_STATEMENT){
 			LabeledStatementWrapper item = (LabeledStatementWrapper) this.factory.createWrapper(node);
+			item.setNestedLevel(level);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
-			buildTreeNodes((ASTNode)(((LabeledStatement)(node)).getBody()));
+			buildTreeNodes((ASTNode)(((LabeledStatement)(node)).getBody()),level+1);
 		}
 		else if(nodeType == StatementWrapper.RETURN_STATEMENT){
 			ReturnStatementWrapper item = (ReturnStatementWrapper) this.factory.createWrapper(node);
+			item.setNestedLevel(level);
 			astMap.put(node,nodes.size());
 			nodes.add(item);
 		}
 		else if(nodeType == StatementWrapper.SUPER_CONSTRUCTOR_INVOCATION){
 			SuperConstructorInvocationStatementWrapper item = (SuperConstructorInvocationStatementWrapper) this.factory.createWrapper(node);
+			item.setNestedLevel(level);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
 		}
 		else if(nodeType == StatementWrapper.SWITCH_CASE){
 			SwitchCaseStatementWrapper item = (SwitchCaseStatementWrapper) this.factory.createWrapper(node);
+			item.setNestedLevel(level);
 			astMap.put(node,nodes.size());
 			nodes.add(item);
 		}
 		else if(nodeType == StatementWrapper.SWITCH_STATEMENT){
 			SwitchStatementWrapper item = (SwitchStatementWrapper) this.factory.createWrapper(node);
+			item.setNestedLevel(level);
 			astMap.put(node,nodes.size());
 			nodes.add(item);
 			for(Object statement:((SwitchStatement)node).statements()){
-				buildTreeNodes((ASTNode)statement);
+				buildTreeNodes((ASTNode)statement,level+1);
 			}
 		}
 		else if(nodeType == StatementWrapper.SYNCHRONIZED_STATEMENT){
 			SynchronizedStatementWrapper item = (SynchronizedStatementWrapper) this.factory.createWrapper(node);
+			item.setNestedLevel(level);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
 			Block body = (Block)((SynchronizedStatement)node).getBody();
 			for(Object statement: body.statements()){
-				buildTreeNodes((ASTNode)statement);
+				buildTreeNodes((ASTNode)statement,level+1);
 			}
 		}
 		else if(nodeType == StatementWrapper.THROW_STATEMENT){
 			ThrowStatementWrapper item = (ThrowStatementWrapper) this.factory.createWrapper(node);
+			item.setNestedLevel(level);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
 		}
 		else if(nodeType == StatementWrapper.TRY_STATEMENT){
 			TryStatementWrapper item = (TryStatementWrapper) this.factory.createWrapper(node);
+			item.setNestedLevel(level);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
 			Block body = (Block)((TryStatement)node).getBody();
 			for(Object statement: body.statements()){
-				buildTreeNodes((ASTNode)statement);
+				buildTreeNodes((ASTNode)statement,level+1);
 			}
 			@SuppressWarnings("unchecked")
 			List<CatchClause> catchClauses = ((TryStatement)node).catchClauses();
 			for(CatchClause catchItem: catchClauses){
 				Block catchbody = catchItem.getBody();
 				for(Object statement: catchbody.statements()){
-					buildTreeNodes((ASTNode)statement);
+					buildTreeNodes((ASTNode)statement,level+1);
 				}
 			}
 			Block finalbody = (Block)((TryStatement)node).getFinally();
 			if(finalbody!=null){
 				for(Object statement: finalbody.statements()){
-					buildTreeNodes((ASTNode)statement);
+					buildTreeNodes((ASTNode)statement,level+1);
 				}
 			}
 		}
 		else if(nodeType == StatementWrapper.TYPE_DECLARATION_STATEMENT){
 			TypeDeclarationStatementWrapper item = (TypeDeclarationStatementWrapper) this.factory.createWrapper(node);
+			item.setNestedLevel(level);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
 		}
 		else if(nodeType == StatementWrapper.VARIABLE_DECLARATION_STATEMENT){
 			VariableDeclarationStatementWrapper item = (VariableDeclarationStatementWrapper) this.factory.createWrapper(node);
+			item.setNestedLevel(level);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
 		}
 		else if(nodeType == StatementWrapper.WHILE_STATEMENT){
 			WhileStatementWrapper item = (WhileStatementWrapper) this.factory.createWrapper(node);;
+			item.setNestedLevel(level);
 			astMap.put(node, nodes.size());
 			nodes.add(item);
 			if(((WhileStatement)node).getBody().getNodeType() != StatementWrapper.BLOCK){
-				buildTreeNodes((ASTNode)(((WhileStatement)node).getBody()));
+				buildTreeNodes((ASTNode)(((WhileStatement)node).getBody()),level+1);
 			}
 			else{
 				Block body = (Block)((WhileStatement)node).getBody();
 				for(Object statement: body.statements()){
-					buildTreeNodes((ASTNode)statement);
+					buildTreeNodes((ASTNode)statement,level+1);
 				}
 			}
 		}

@@ -17,6 +17,10 @@ public class EnhancedForStatementWrapper extends StatementWrapper{
 	
 	private List<StatementWrapper> bodyWrappers = new LinkedList<StatementWrapper>();
 	
+	public int getBodyLength(){
+		return this.bodyWrappers.size();
+	}
+	
 	public List<StatementWrapper> getBodyWrappers(){
 		return this.bodyWrappers;
 	}

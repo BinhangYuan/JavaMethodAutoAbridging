@@ -163,5 +163,9 @@ public class ConstraintAndFeatureEncoderV4 {
 	
 	public List<StatementWrapper> getStatementWrapperList(){
 		return this.sAST.getAllWrapperList();
-	}	
+	}
+	
+	public SimplifiedAST getSimplifiedAST(){
+		return this.sAST;
+	}
 }
