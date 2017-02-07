@@ -95,7 +95,8 @@ public abstract class AbstractOptimizerV5 {
 			solver.setTypeMap(this.typeMap);
 			solver.setParentTypeMap(this.parentTypeMap);
 			solver.setStatementType(encoder.getStatementType());
-			solver.setParementStatementType(encoder.getParentStatementType());
+			solver.setParentStatementType(encoder.getParentStatementType());
+			solver.setNestedLevels(encoder.getNestedLevel());
 			int lineCount = solver.programLineCount(solver.outputLabeledResult(label));
 			solver.setTargetLineCount(lineCount);
 			ManualLabel mlabel = new ManualLabel(lineCount,label);

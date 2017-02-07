@@ -21,7 +21,8 @@ import ilpSolver.LearningBinaryIPSolverV5;
 import learning.LearningHelper;
 
 public class ParamILSV5 extends AbstractOptimizerV5{
-	static double[] candidate = {1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0};
+	static double[] binaryCandidates = {-9.0,-8.0,-7.0,-6.0,-5.0,-4.0,-3.0,-2.0,-1.0,0.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0};
+	static double[] integerCandidates = {-5.0,-3.0,-2.0,-1.0,-0.5,-0.2,0.0,0.2,0.5,1.0,3.0,5.0};
 	private Random randGenerate = new Random();
 	
 	private HashMap<String,Double> visitedCandidates = new HashMap<String,Double>();
@@ -30,7 +31,7 @@ public class ParamILSV5 extends AbstractOptimizerV5{
 	private int paraLength;
 	private int paraR = 10;
 	private int paraS = 3;
-	private double restartProb = 0.001;
+	private double restartProb = 0.0003;
 	private String bestStateHash = null;
 	
 	private Logger trainlogger = Logger.getLogger("learning.v5.ParamILSV5");
@@ -104,8 +105,12 @@ public class ParamILSV5 extends AbstractOptimizerV5{
 	
 	private double[] randomState(){
 		double[] state = new double [this.paraLength];
-		for(int i=0;i<state.length;i++){
-			state[i] = candidate[this.randGenerate.nextInt(candidate.length)];
+		int i = 0;
+		for(;i<LearningBinaryIPSolverV5.BINARYPARALENGTH;i++){
+			state[i] = binaryCandidates[this.randGenerate.nextInt(binaryCandidates.length)];
+		}
+		for(;i<this.paraLength;i++){
+			state[i] = integerCandidates[this.randGenerate.nextInt(integerCandidates.length)];
 		}
 		return state;
 	}
@@ -132,17 +137,35 @@ public class ParamILSV5 extends AbstractOptimizerV5{
 	private ArrayList<LinkedList<Double>> getNeighbours(double [] currentState){
 		ArrayList<LinkedList<Double>> neighbours = new ArrayList<LinkedList<Double>>();
 		for(int i=0; i<currentState.length; i++){
-			for(int j=0; j<candidate.length;j++){
-				if(Math.abs(currentState[i]-candidate[j])>0.001){ //Not the current value;
-					double[] tempNeighbour = new double[currentState.length];
-					System.arraycopy(currentState, 0, tempNeighbour, 0, currentState.length);
-					tempNeighbour[i] = candidate[j];
-					if(!this.visitedCandidates.containsKey(LearningHelper.hashKeyDoubleArray2String(tempNeighbour))){
-						LinkedList<Double> tempNeighbourList = new LinkedList<Double>();
-						for(double value:tempNeighbour){
-							tempNeighbourList.add(value);
+			if(i<LearningBinaryIPSolverV5.BINARYPARALENGTH){
+				for(int j=0; j<binaryCandidates.length;j++){
+					if(Math.abs(currentState[i]-binaryCandidates[j])>0.001){ //Not the current value;
+						double[] tempNeighbour = new double[currentState.length];
+						System.arraycopy(currentState, 0, tempNeighbour, 0, currentState.length);
+						tempNeighbour[i] = binaryCandidates[j];
+						if(!this.visitedCandidates.containsKey(LearningHelper.hashKeyDoubleArray2String(tempNeighbour))){
+							LinkedList<Double> tempNeighbourList = new LinkedList<Double>();
+							for(double value:tempNeighbour){
+								tempNeighbourList.add(value);
+							}
+							neighbours.add(tempNeighbourList);
 						}
-						neighbours.add(tempNeighbourList);
+					}
+				}
+			}
+			else{
+				for(int j=0; j<integerCandidates.length;j++){
+					if(Math.abs(currentState[i]-integerCandidates[j])>0.001){ //Not the current value;
+						double[] tempNeighbour = new double[currentState.length];
+						System.arraycopy(currentState, 0, tempNeighbour, 0, currentState.length);
+						tempNeighbour[i] = integerCandidates[j];
+						if(!this.visitedCandidates.containsKey(LearningHelper.hashKeyDoubleArray2String(tempNeighbour))){
+							LinkedList<Double> tempNeighbourList = new LinkedList<Double>();
+							for(double value:tempNeighbour){
+								tempNeighbourList.add(value);
+							}
+							neighbours.add(tempNeighbourList);
+						}
 					}
 				}
 			}
@@ -224,7 +247,8 @@ public class ParamILSV5 extends AbstractOptimizerV5{
 		LowestParaLog += LearningHelper.typeWeightMap2String(this.typeMap, this.parameters);
 		LowestParaLog += LearningHelper.parentTypeWeightMap2String(this.parentTypeMap, this.parameters);
 		LowestParaLog += "text classifier weight:"+this.parameters[this.typeMap.size()+this.parentTypeMap.size()]+"\n";
-		LowestParaLog += "ddg penalty weight:"+this.parameters[this.typeMap.size()+this.parentTypeMap.size()+1];
+		LowestParaLog += "ddg penalty weight:"+this.parameters[this.typeMap.size()+this.parentTypeMap.size()+1]+"\n";
+		LowestParaLog += "nested level weight:"+this.parameters[this.typeMap.size()+this.parentTypeMap.size()+2];
 		this.trainlogger.info("Lowest loss parameters:\n" + LowestParaLog);	
 		this.outputTrainingCost2JsonFile();
 	}

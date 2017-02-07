@@ -28,6 +28,7 @@ public class ConstraintAndFeatureEncoderV5 {
 	private List<Integer> lineCountConstraints = new LinkedList<Integer>();
 	private List<Integer> feature_statementTypes = new LinkedList<Integer>();
 	private List<Integer> feature_parentStatementTypes = new LinkedList<Integer>();
+	private List<Integer> feature_nestedLevel = new LinkedList<Integer>();
 	
 	private List<DependencePair> ddgConstraintsSerializer = new LinkedList<DependencePair>();
 	
@@ -42,20 +43,20 @@ public class ConstraintAndFeatureEncoderV5 {
 		this.ddg = ddg;
 		this.statementItems = cfg.getNodes();
 		
-		for(int i=0; i<this.statementItems.size();i++){
-			this.index.put(this.statementItems.get(i), i);
-			this.lineCountConstraints.add(this.statementItems.get(i).getLineCount());
-		}
+		this.encodeLineConstraints();
 		this.encodeDDG();
 		this.encodeAST();
 		this.encodeCFG();
 		this.encodeFeatureStatementType();
 		this.encodeFeatureParentStatementType();
+		this.encodeFeatureNestedLevel();
 	}
 	
-	public void encodeDDG(){
+	private void encodeDDG(){
 		for(StatementWrapper source: this.statementItems){
 			for(StatementWrapper dest: source.getDDGUsageSuccessor()){
+				Assert.isNotNull(source);
+				Assert.isNotNull(dest);
 				DependencePair newEdge = new DependencePair(this.index.get(source), this.index.get(dest), DependencePair.TYPE_DDG);
 				boolean done = false;
 				for(SimpleName usedVar: dest.getUsageVariables()){
@@ -76,11 +77,12 @@ public class ConstraintAndFeatureEncoderV5 {
 	}
 	
 	
-	public void encodeCFG(){
+	private void encodeCFG(){
 		
 	}
 	
-	public void encodeAST() throws Exception{
+	
+	private void encodeAST() throws Exception{
 		for(StatementWrapper dest: this.statementItems){
 			StatementWrapper parent = sAST.getParent(dest);
 			if(parent!=null){
@@ -89,18 +91,36 @@ public class ConstraintAndFeatureEncoderV5 {
 		}
 	}
 	
-	public void encodeFeatureStatementType(){
+	
+	private void encodeLineConstraints(){
+		for(int i=0; i<this.statementItems.size();i++){
+			this.index.put(this.statementItems.get(i), i);
+			this.lineCountConstraints.add(this.statementItems.get(i).getLineCount());
+		}
+	}
+	
+	
+	private void encodeFeatureStatementType(){
 		for(StatementWrapper statementWrapper: this.statementItems){
 			this.feature_statementTypes.add(statementWrapper.getType());
 		}
 	}
 	
-	public void encodeFeatureParentStatementType(){
+	
+	private void encodeFeatureParentStatementType(){
 		for(StatementWrapper statementWrapper: this.statementItems){
 			Assert.isTrue(statementWrapper.getParentType()!=StatementWrapper.PARENT_ILLEGAL);
 			this.feature_parentStatementTypes.add(statementWrapper.getParentType());
 		}
 	}
+	
+	
+	private void encodeFeatureNestedLevel(){
+		for(StatementWrapper statementWrapper: this.statementItems){
+			this.feature_nestedLevel.add(statementWrapper.getNestedLevel());
+		}
+	}
+	
 	
 	public void printConstraints(){
 		for(int i=0; i<this.statementItems.size(); i++){
@@ -149,6 +169,10 @@ public class ConstraintAndFeatureEncoderV5 {
 	
 	public List<Integer> getParentStatementType(){
 		return this.feature_parentStatementTypes;
+	}
+	
+	public List<Integer> getNestedLevel(){
+		return this.feature_nestedLevel;
 	}
 	
 	public String compressedProgram2String(boolean [] flags){
