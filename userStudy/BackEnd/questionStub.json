@@ -1,6 +1,11 @@
 {
 	"questions":{
 		"1":{
+			"type":"T1",
+			"description":"This is a stub description",
+			"codes":["Code fragment1","Code fragment2","Code fragment3","Code fragment4"]
+		},
+		"2":{
 			"type":"T2",
 			"code":"String stub1=null",
 			"Alternatives":[
@@ -10,7 +15,7 @@
 				"Impossible to decide"
 			]
 		},
-		"2":{
+		"3":{
 			"type":"T2",
 			"code":"String stub2=null",
 			"Alternatives":[
@@ -20,7 +25,7 @@
 				"Impossible to decide"
 			]
 		},
-		"3":{
+		"4":{
 			"type":"T2",
 			"code":"String stub3=null",
 			"Alternatives":[
@@ -30,7 +35,7 @@
 				"Impossible to decide"
 			]
 		},
-		"4":{
+		"5":{
 			"type":"T2",
 			"code":"String stub4=null",
 			"Alternatives":[
@@ -40,7 +45,7 @@
 				"Impossible to decide"
 			]
 		},
-		"5":{
+		"6":{
 			"type":"T2",
 			"code":"String stub5=null",
 			"Alternatives":[
@@ -50,17 +55,17 @@
 				"Impossible to decide"
 			]
 		},
-		"6":{
+		"7":{
 			"type":"T3",
 			"method":"non-reduced code",
 			"code":"String T3stub1 = null"
 		},
-		"7":{
+		"8":{
 			"type":"T3",
 			"method":"Reduced code by Method A",
 			"code":"String T3stub1 = null"
 		},
-		"8":{
+		"9":{
 			"type":"T3",
 			"method":"Reduced code by Method B",
 			"code":"String T3stub2 = null"
