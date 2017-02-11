@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import Landing from './auth/landing'
-import Question from './question/question'
+import QuestionView from './question/questionView'
 import End from './end/end'
 
 
@@ -10,7 +10,7 @@ import End from './end/end'
 const App = ({location}) => {
 	let view;
 	if (location === 'QUESTION_PAGE') {
-		view = <Question/>;
+		view = <QuestionView/>;
 	} 
 	else if (location === 'END_PAGE') {
 		view = <End/>;

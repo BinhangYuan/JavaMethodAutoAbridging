@@ -11,8 +11,8 @@ class ListItem extends Component{
 		return(
 			<li>
 				{this.props.active?
-					<a href="#" className="alert alert-info">{"Question "+this.props.index}</a>:
-					<a href="#">{"Question "+this.props.index}</a>
+					<a href="#" className="alert alert-info">{this.props.title}</a>:
+					<a href="#">{this.props.title}</a>
 				}			
 			</li>
 		)

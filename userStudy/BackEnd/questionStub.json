@@ -1,36 +1,69 @@
 {
 	"questions":{
 		"1":{
+			"type":"T2",
 			"code":"String stub1=null",
 			"Alternatives":[
 				"Stub A Q1",
 				"Stub B",
-				"Stub C"
+				"Stub C",
+				"Impossible to decide"
 			]
 		},
 		"2":{
+			"type":"T2",
 			"code":"String stub2=null",
 			"Alternatives":[
 				"Stub A Q2",
 				"Stub B",
-				"Stub C"
+				"Stub C",
+				"Impossible to decide"
 			]
 		},
 		"3":{
+			"type":"T2",
 			"code":"String stub3=null",
 			"Alternatives":[
 				"Stub A Q3",
 				"Stub B",
-				"Stub C"
+				"Stub C",
+				"Impossible to decide"
 			]
 		},
 		"4":{
+			"type":"T2",
 			"code":"String stub4=null",
+			"Alternatives":[
+				"Stub A Q3",
+				"Stub B",
+				"Stub C",
+				"Impossible to decide"
+			]
+		},
+		"5":{
+			"type":"T2",
+			"code":"String stub5=null",
 			"Alternatives":[
 				"Stub A Q4",
 				"Stub B",
-				"Stub C"
+				"Stub C",
+				"Impossible to decide"
 			]
-		}
+		},
+		"6":{
+			"type":"T3",
+			"method":"non-reduced code",
+			"code":"String T3stub1 = null"
+		},
+		"7":{
+			"type":"T3",
+			"method":"Reduced code by Method A",
+			"code":"String T3stub1 = null"
+		},
+		"8":{
+			"type":"T3",
+			"method":"Reduced code by Method B",
+			"code":"String T3stub2 = null"
+		}		
 	}
 }

@@ -5,7 +5,7 @@
 			"file_name":"AdaptedGaussianPriorObjectiveFunction.java",
 			"method":"calculateCL",
 			"pos":39,
-			"label":[true,true,false,false,false,false,false,false,false,false,
+			"label":[false,false,false,false,false,false,false,false,false,false,
 					 true,true,true,true,true,true,false,false,false,false,
 					 true,false,false,false,false,false,false,false,true,true,
 					 true,true,true,true]

@@ -23,7 +23,7 @@ export class End extends Component{
 						(<div>
 							<div className="alert alert-info">Please click submit button to finish the survey!</div>
 							<button type="button" className="btn btn-primary" onClick={()=>{
-								this.props.dispatch(submitStudy(this.props.visit, this.props.questions))
+								this.props.dispatch(submitStudy(this.props.visit, this.props.questions, this.props.survey))
 								this.submitted = true;
 								this.forceUpdate();
 							}}>Submit!</button>
@@ -40,6 +40,7 @@ export class End extends Component{
 export default connect((state) => {
 	return {
 		visit: state.visit,
-		questions:state.questions.questions
+		questions:state.questions.questions,
+		survey: state.survey.answers
 	}
 })(End)

@@ -19,11 +19,12 @@ export function shared(state = {location:'', errorMsg:'', successMsg:''}, action
 	}
 }	
 
-export function questions(state = {questions:{}},action){
+export function questions(state = {questions:{},index:1,answer: "Not done!"},action){
 	switch(action.type){
 		case Action.UPDATEQUESTION:
+			return { ...state, questions:action.questions,index:1,answer: "Not done!"};
 		case Action.ADDANSWER:
-			return { ...state, questions:action.questions};
+			return { ...state, questions:action.questions,index:action.index+1,answer: "Not done!"};
 		default:
 			return state;
 	}
@@ -38,8 +39,17 @@ export function visit(state = {email:'',level:''},action){
 	}
 }
 
+export function survey(state = {answers:{}},action){
+	switch(action.type){
+		case Action.UPDATESURVEY:
+			return { ...state, answers:action.answers};
+		default:
+			return state;
+	}
+}
+
 const Reducer = combineReducers({
-	questions, visit, shared
+	questions, visit, shared, survey
 })
 
 export default Reducer
