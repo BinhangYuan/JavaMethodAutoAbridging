@@ -248,7 +248,8 @@ public class ParamILSV5 extends AbstractOptimizerV5{
 		LowestParaLog += LearningHelper.parentTypeWeightMap2String(this.parentTypeMap, this.parameters);
 		LowestParaLog += "text classifier weight:"+this.parameters[this.typeMap.size()+this.parentTypeMap.size()]+"\n";
 		LowestParaLog += "ddg penalty weight:"+this.parameters[this.typeMap.size()+this.parentTypeMap.size()+1]+"\n";
-		LowestParaLog += "nested level weight:"+this.parameters[this.typeMap.size()+this.parentTypeMap.size()+2];
+		LowestParaLog += "nested level weight:"+this.parameters[this.typeMap.size()+this.parentTypeMap.size()+2]+"\n";
+		LowestParaLog += "referenced variable count:"+this.parameters[this.typeMap.size()+this.parentTypeMap.size()+3];
 		this.trainlogger.info("Lowest loss parameters:\n" + LowestParaLog);	
 		this.outputTrainingCost2JsonFile();
 	}

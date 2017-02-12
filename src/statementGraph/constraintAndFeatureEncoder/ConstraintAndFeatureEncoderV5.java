@@ -29,6 +29,7 @@ public class ConstraintAndFeatureEncoderV5 {
 	private List<Integer> feature_statementTypes = new LinkedList<Integer>();
 	private List<Integer> feature_parentStatementTypes = new LinkedList<Integer>();
 	private List<Integer> feature_nestedLevel = new LinkedList<Integer>();
+	private List<Integer> feature_referencedVariableCounts = new LinkedList<Integer>();
 	
 	private List<DependencePair> ddgConstraintsSerializer = new LinkedList<DependencePair>();
 	
@@ -50,6 +51,7 @@ public class ConstraintAndFeatureEncoderV5 {
 		this.encodeFeatureStatementType();
 		this.encodeFeatureParentStatementType();
 		this.encodeFeatureNestedLevel();
+		this.encodeFeatureReferenceVariable();
 	}
 	
 	private void encodeDDG(){
@@ -122,6 +124,12 @@ public class ConstraintAndFeatureEncoderV5 {
 	}
 	
 	
+	private void encodeFeatureReferenceVariable(){
+		for(StatementWrapper statementWrapper: this.statementItems){
+			this.feature_referencedVariableCounts.add(statementWrapper.getReferencedVariables());
+		}
+	}
+	
 	public void printConstraints(){
 		for(int i=0; i<this.statementItems.size(); i++){
 			System.out.println("Node <"+i+">");
@@ -173,6 +181,10 @@ public class ConstraintAndFeatureEncoderV5 {
 	
 	public List<Integer> getNestedLevel(){
 		return this.feature_nestedLevel;
+	}
+	
+	public List<Integer> getReferencedVariableCounts(){
+		return this.feature_referencedVariableCounts;
 	}
 	
 	public String compressedProgram2String(boolean [] flags){

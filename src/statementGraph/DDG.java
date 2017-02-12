@@ -16,6 +16,7 @@ import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
 import statementGraph.expressionWrapper.ExpressionExtractor;
+import statementGraph.expressionWrapper.ExpressionInstanceChecker;
 import statementGraph.graphNode.StatementWrapper;
 
 
@@ -94,6 +95,12 @@ public class DDG {
 				}
 			}
 			item.addUsageVariables(ExpressionExtractor.getVariableSimpleNames(statement, false));
+		}
+		//Update reference varible count;
+		for(StatementWrapper item:this.sAST.getAllWrapperList()){
+			Statement statement = StatementWrapper.getASTNodeStatement(item);
+			int count = ExpressionExtractor.getExpressions(statement, new ExpressionInstanceChecker(ASTNode.SIMPLE_NAME)).size();
+			item.addVariableCount(count);
 		}
 	}
 	

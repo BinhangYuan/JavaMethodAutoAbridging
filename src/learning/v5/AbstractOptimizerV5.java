@@ -97,6 +97,7 @@ public abstract class AbstractOptimizerV5 {
 			solver.setStatementType(encoder.getStatementType());
 			solver.setParentStatementType(encoder.getParentStatementType());
 			solver.setNestedLevels(encoder.getNestedLevel());
+			solver.setReferencedVariableCounts(encoder.getReferencedVariableCounts());
 			int lineCount = solver.programLineCount(solver.outputLabeledResult(label));
 			solver.setTargetLineCount(lineCount);
 			ManualLabel mlabel = new ManualLabel(lineCount,label);

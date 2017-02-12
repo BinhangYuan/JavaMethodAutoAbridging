@@ -22,9 +22,9 @@ import statementGraph.constraintAndFeatureEncoder.DependencePair;
 import statementGraph.graphNode.StatementWrapper;
 
 public class LearningBinaryIPSolverV5 {
-	public static int PARALENGTH = StatementWrapper.statementsLabelSet.size()+ StatementWrapper.parentStatementsLabelSet.size() +3;
+	public static int PARALENGTH = StatementWrapper.statementsLabelSet.size()+ StatementWrapper.parentStatementsLabelSet.size() +4;
 	public static int BINARYPARALENGTH = StatementWrapper.statementsLabelSet.size()+ StatementWrapper.parentStatementsLabelSet.size() + 2;
-	public static int NUMERICALPARALENGTH = 1;
+	public static int NUMERICALPARALENGTH = 2;
 	
 	
 	private ConstraintAndFeatureEncoderV5 encoder;
@@ -37,6 +37,7 @@ public class LearningBinaryIPSolverV5 {
 	private List<Integer> parentStatementType;
 	private List<Boolean> textClassifierResults;
 	private List<Integer> nestedLevels;
+	private List<Integer> referencedVariableCounts;
 	private Map<Integer,Integer> typeMap;
 	private Map<Integer,Integer> parentTypeMap;
 	
@@ -47,6 +48,7 @@ public class LearningBinaryIPSolverV5 {
 	 * statementTypeLength+StatementParentTypeLegnth: weight for text classifier result;
 	 * statementTypeLength+StatementParentTypeLegnth+1: penalty weight for ddg constraints.
 	 * statementTypeLength+StatementParentTypeLegnth+2: weight for nested level.
+	 * statementTypeLength+StatementParentTypeLegnth+3: referenced variable count.
 	 */
 	double[] parameters;
 	int targetLineCount = -1;
@@ -114,6 +116,10 @@ public class LearningBinaryIPSolverV5 {
 		this.nestedLevels = levels;
 	}
 	
+	public void setReferencedVariableCounts(List<Integer> counts){
+		this.referencedVariableCounts = counts;
+	}
+	
 	//For this version, we encode the type, parent type and text feature, and nested level.
 	private double computeStatementWeight(int index){
 		//Weight of statementType;
@@ -126,6 +132,8 @@ public class LearningBinaryIPSolverV5 {
 		result += this.textClassifierResults.get(index)?this.parameters[this.typeMap.size()+this.parentTypeMap.size()]:0;
 		//Weight for nested level;
 		result += this.nestedLevels.get(index)*this.parameters[this.typeMap.size()+this.parentTypeMap.get(parentType)+2];
+		//Weight for referenced variable count;
+		result += this.referencedVariableCounts.get(index)*this.parameters[this.typeMap.size()+this.parentTypeMap.get(parentType)+3];
 		return result;
 	}
 	

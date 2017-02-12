@@ -469,6 +469,16 @@ public abstract class StatementWrapper {
 		this.nestedLevel = level;
 	}
 	
+	private int variableCount = 0;
+	
+	public void addVariableCount(int count){
+		this.variableCount += count;
+	}
+	
+	public int getReferencedVariables(){
+		return this.variableCount;
+	}
+	
 	public abstract int getLineCount();
 	
 	public abstract void printDebug();
