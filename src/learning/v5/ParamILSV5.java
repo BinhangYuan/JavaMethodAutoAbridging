@@ -29,9 +29,9 @@ public class ParamILSV5 extends AbstractOptimizerV5{
 	private int iterations = 0;
 	private int maxIterations = 100000;
 	private int paraLength;
-	private int paraR = 10;
+	private int paraR = 20;
 	private int paraS = 3;
-	private double restartProb = 0.0003;
+	private double restartProb = 0.0001;
 	private String bestStateHash = null;
 	
 	private Logger trainlogger = Logger.getLogger("learning.v5.ParamILSV5");

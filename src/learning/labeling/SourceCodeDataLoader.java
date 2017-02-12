@@ -79,7 +79,7 @@ public class SourceCodeDataLoader {
 	}
 	
 	public static void main(String[] args) throws Exception{
-		showProgram(0);
+		showProgram(40);
 		//showLastProgram();
 		//showDataSet();
 	}
