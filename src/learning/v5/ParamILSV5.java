@@ -31,7 +31,7 @@ public class ParamILSV5 extends AbstractOptimizerV5{
 	private int paraLength;
 	private int paraR = 20;
 	private int paraS = 3;
-	private double restartProb = 0.0001;
+	private double restartProb = 0.001;
 	private String bestStateHash = null;
 	
 	private Logger trainlogger = Logger.getLogger("learning.v5.ParamILSV5");
@@ -72,6 +72,7 @@ public class ParamILSV5 extends AbstractOptimizerV5{
 	private boolean visit(double[] state){
 		String stateHash = LearningHelper.hashKeyDoubleArray2String(state);
 		if(this.visitedCandidates.containsKey(stateHash)){
+			this.trainlogger.info("State has been visited!");
 			return false;
 		}
 		else{
@@ -129,6 +130,9 @@ public class ParamILSV5 extends AbstractOptimizerV5{
 					newState[j] = neighbourList.get(j);
 				}
 			}
+			else{
+				this.trainlogger.info("Neighbours are not correctly computed! (Not supposed to happen!)");
+			}
 		}
 		return newState;
 	}
@@ -143,6 +147,7 @@ public class ParamILSV5 extends AbstractOptimizerV5{
 						double[] tempNeighbour = new double[currentState.length];
 						System.arraycopy(currentState, 0, tempNeighbour, 0, currentState.length);
 						tempNeighbour[i] = binaryCandidates[j];
+						/*
 						if(!this.visitedCandidates.containsKey(LearningHelper.hashKeyDoubleArray2String(tempNeighbour))){
 							LinkedList<Double> tempNeighbourList = new LinkedList<Double>();
 							for(double value:tempNeighbour){
@@ -150,6 +155,12 @@ public class ParamILSV5 extends AbstractOptimizerV5{
 							}
 							neighbours.add(tempNeighbourList);
 						}
+						*/
+						LinkedList<Double> tempNeighbourList = new LinkedList<Double>();
+						for(double value:tempNeighbour){
+							tempNeighbourList.add(value);
+						}
+						neighbours.add(tempNeighbourList);
 					}
 				}
 			}
@@ -159,6 +170,7 @@ public class ParamILSV5 extends AbstractOptimizerV5{
 						double[] tempNeighbour = new double[currentState.length];
 						System.arraycopy(currentState, 0, tempNeighbour, 0, currentState.length);
 						tempNeighbour[i] = integerCandidates[j];
+						/*
 						if(!this.visitedCandidates.containsKey(LearningHelper.hashKeyDoubleArray2String(tempNeighbour))){
 							LinkedList<Double> tempNeighbourList = new LinkedList<Double>();
 							for(double value:tempNeighbour){
@@ -166,6 +178,12 @@ public class ParamILSV5 extends AbstractOptimizerV5{
 							}
 							neighbours.add(tempNeighbourList);
 						}
+						*/
+						LinkedList<Double> tempNeighbourList = new LinkedList<Double>();
+						for(double value:tempNeighbour){
+							tempNeighbourList.add(value);
+						}
+						neighbours.add(tempNeighbourList);
 					}
 				}
 			}
@@ -202,7 +220,11 @@ public class ParamILSV5 extends AbstractOptimizerV5{
 			this.visit(currentState);
 			currentState = this.iterativeFirstImprovement(currentState);
 			//Restart
-			if(Math.abs(this.restartProb) > 1e-6 && this.randGenerate.nextInt((int)(1.0/this.restartProb))==0){
+			if(this.isBetter(currentState, ilsState)){
+				ilsState = currentState;
+			}
+			if(Math.abs(this.restartProb) > 1e-20 && this.randGenerate.nextInt((int)(1.0/this.restartProb))==0){
+				this.trainlogger.info("Random restart!");
 				ilsState = this.randomState();
 			}
 		}
@@ -234,6 +256,14 @@ public class ParamILSV5 extends AbstractOptimizerV5{
 				}
 			}
 		}
+		/*
+		for(int i=0; i<startState.length;i++){
+			if(startState[i]!=currentState[i]){
+				return currentState;
+			}
+		}
+		return null;
+		*/
 		return currentState;
 	}
 

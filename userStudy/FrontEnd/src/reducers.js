@@ -19,12 +19,12 @@ export function shared(state = {location:'', errorMsg:'', successMsg:''}, action
 	}
 }	
 
-export function questions(state = {questions:{},index:1,answer: "Not done!"},action){
+export function questions(state = {questions:{},index:1,answer: "Not done!",reduction:"r10"},action){
 	switch(action.type){
 		case Action.UPDATEQUESTION:
-			return { ...state, questions:action.questions,index:1,answer: "Not done!"};
+			return { ...state, questions:action.questions,index:1,answer: "Not done!",reduction:"r10"};
 		case Action.ADDANSWER:
-			return { ...state, questions:action.questions,index:action.index+1,answer: "Not done!"};
+			return { ...state, questions:action.questions,index:action.index+1,reduction:action.reduction,answer: "Not done!"};
 		default:
 			return state;
 	}

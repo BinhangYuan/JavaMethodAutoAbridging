@@ -12,12 +12,13 @@ export function getQuestion(){
 	}
 }
 
-export function checkOneQuestion(index, answer, time){
+export function checkOneQuestion(index, answer, time, reduction){
 	return (dispatch, getState) => {
 		let questions = getState().questions.questions;
 		questions[index].answer = answer;
 		questions[index].time = time;
-		return dispatch({type:Action.ADDANSWER, questions,index});
+		questions[index].reduction = reduction;
+		return dispatch({type:Action.ADDANSWER, questions,index,reduction});
 	}
 }
 

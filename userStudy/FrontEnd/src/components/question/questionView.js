@@ -94,7 +94,8 @@ export class QuestionView extends Component{
        						this.props.dispatch(displayErrorMsg("Please finish this question first!"));
        					}
        					else if(this.props.questions.index <= this.questionCount){
-								  this.props.dispatch(checkOneQuestion(this.props.questions.index, this.props.questions.answer, this.state.clock));
+
+								  this.props.dispatch(checkOneQuestion(this.props.questions.index, this.props.questions.answer, this.state.clock, this.props.questions.reduction));
 								  this.props.questions.index += 1;
        						this.state.clock = 0;
        						this.props.questions.answer = "Not done!";
@@ -106,7 +107,10 @@ export class QuestionView extends Component{
        					}}>Next <span aria-hidden="true">&rarr;</span></a></li>
     				</ul>
 				</div>
-    		</div>
+        <div>
+          <p className="text-center"> &copy; Computer Science Department, Rice University</p>
+        </div>
+    	</div>
 		)
 	}
 }

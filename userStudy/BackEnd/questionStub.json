@@ -3,72 +3,87 @@
 		"1":{
 			"type":"T1",
 			"description":"This is a stub description",
-			"codes":["Code fragment1","Code fragment2","Code fragment3","Code fragment4"]
+			"codes":
+			[
+				{
+					"r10":"Code fragment1 //r10",
+					"r20":"Code fragment1 //r20",
+					"r50%":"Code fragment1 //r50%"
+				},
+				{
+					"r10":"Code fragment2 //r10",
+					"r20":"Code fragment2 //r20",
+					"r50%":"Code fragment2 //r50%"
+				},
+				{
+					"r10":"Code fragment3 //r10",
+					"r20":"Code fragment3 //r20",
+					"r50%":"Code fragment3 //r50%"
+				}
+			]
 		},
 		"2":{
 			"type":"T2",
-			"code":"String stub1=null",
+			"codeA":{
+						"r10":"String stub1A =null //r10",
+						"r20":"String stub1A =null //r20",
+						"r50%":"String stub1A =null //r50%"
+					},
+			"codeB":{
+						"r10":"String stub1B =null //r10",
+						"r20":"String stub1B =null //r20",
+						"r50%":"String stub1B =null //r50%"
+					},
+			"docA":"Description A says so.",
+			"docB":"Description B says so.",
 			"Alternatives":[
-				"Stub A Q1",
-				"Stub B",
-				"Stub C",
-				"Impossible to decide"
+				"Method A mactches Description A, Mehtod B mactches Description B.",
+				"Method A mactches Description B, Mehtod A mactches Description B.",
+				"Impossible to decide."
 			]
 		},
 		"3":{
 			"type":"T2",
-			"code":"String stub2=null",
+			"codeA":{
+						"r10":"String stub2A =null //r10",
+						"r20":"String stub2A =null //r20",
+						"r50%":"String stub2A =null //r50%"
+					},
+			"codeB":{
+						"r10":"String stub2B =null //r10",
+						"r20":"String stub2B =null //r20",
+						"r50%":"String stub2B =null //r50%"
+					},
+			"docA":"Description A says so.",
+			"docB":"Description B says so.",
 			"Alternatives":[
-				"Stub A Q2",
-				"Stub B",
-				"Stub C",
-				"Impossible to decide"
+				"Method A mactches Description A, Mehtod B mactches Description B.",
+				"Method A mactches Description B, Mehtod A mactches Description B.",
+				"Impossible to decide."
 			]
 		},
 		"4":{
-			"type":"T2",
-			"code":"String stub3=null",
-			"Alternatives":[
-				"Stub A Q3",
-				"Stub B",
-				"Stub C",
-				"Impossible to decide"
-			]
-		},
-		"5":{
-			"type":"T2",
-			"code":"String stub4=null",
-			"Alternatives":[
-				"Stub A Q3",
-				"Stub B",
-				"Stub C",
-				"Impossible to decide"
-			]
-		},
-		"6":{
-			"type":"T2",
-			"code":"String stub5=null",
-			"Alternatives":[
-				"Stub A Q4",
-				"Stub B",
-				"Stub C",
-				"Impossible to decide"
-			]
-		},
-		"7":{
 			"type":"T3",
 			"method":"non-reduced code",
 			"code":"String T3stub1 = null"
 		},
-		"8":{
+		"5":{
 			"type":"T3",
 			"method":"Reduced code by Method A",
-			"code":"String T3stub1 = null"
+			"code":{
+						"r10":"String T3stub2 = null //r10",
+						"r20":"String T3stub2 = null //r20",
+						"r50%":"String T3stub2 = null //r50%"
+					}
 		},
-		"9":{
+		"6":{
 			"type":"T3",
 			"method":"Reduced code by Method B",
-			"code":"String T3stub2 = null"
+			"code":{
+						"r10":"String T3stub3 = null //r10",
+						"r20":"String T3stub3 = null //r20",
+						"r50%":"String T3stub3 = null //r50%"
+					}
 		}		
 	}
 }
