@@ -30,7 +30,6 @@ export class End extends Component{
 						</div>
 						)
 					}
-
 				</div>
 				<div className="footer">
           			<p className="text-center"> &copy; Computer Science Department, Rice University</p>
