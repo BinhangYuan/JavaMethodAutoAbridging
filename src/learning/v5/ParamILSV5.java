@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
@@ -19,6 +20,7 @@ import org.json.JSONObject;
 
 import ilpSolver.LearningBinaryIPSolverV5;
 import learning.LearningHelper;
+import statementGraph.ASTParserUtils;
 
 public class ParamILSV5 extends AbstractOptimizerV5{
 	static double[] binaryCandidates = {-9.0,-8.0,-7.0,-6.0,-5.0,-4.0,-3.0,-2.0,-1.0,0.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0};
@@ -27,7 +29,7 @@ public class ParamILSV5 extends AbstractOptimizerV5{
 	
 	private HashMap<String,Double> visitedCandidates = new HashMap<String,Double>();
 	private int iterations = 0;
-	private int maxIterations = 100000;
+	private int maxIterations = 400000;
 	private int paraLength;
 	private int paraR = 20;
 	private int paraS = 3;
@@ -39,6 +41,7 @@ public class ParamILSV5 extends AbstractOptimizerV5{
 	private LinkedList<Double> trainingCostRecordMin;
 	private NaiveBayesTextClassifierV5 textClassifier;
 	
+	private LinkedList<List<Double>> initValues = new LinkedList<List<Double>>();
 	
 	public String getBestStateHash(){
 		return this.bestStateHash;
@@ -80,7 +83,7 @@ public class ParamILSV5 extends AbstractOptimizerV5{
 			this.visitedCandidates.put(stateHash, cost);
 			
 			this.trainingCostRecordIterations.add(cost);
-			this.trainlogger.info("Training process: Iteration "+this.iterations +" with cost value: "+ cost);
+			this.trainlogger.info("Training process: Iteration "+this.iterations +" with cost value: "+ cost+ " best so far:"+this.visitedCandidates.get(this.bestStateHash));
 			this.trainlogger.info("Para:"+LearningHelper.outputDoubleArray2String(state));
 			
 			this.iterations++;
@@ -106,12 +109,21 @@ public class ParamILSV5 extends AbstractOptimizerV5{
 	
 	private double[] randomState(){
 		double[] state = new double [this.paraLength];
-		int i = 0;
-		for(;i<LearningBinaryIPSolverV5.BINARYPARALENGTH;i++){
-			state[i] = binaryCandidates[this.randGenerate.nextInt(binaryCandidates.length)];
+		//Start from the educated guess results:
+		if(!this.initValues.isEmpty()){
+			List<Double> guessState = this.initValues.remove();
+			for(int i=0;i<this.paraLength;i++){
+				state[i] = guessState.get(i);
+			}
 		}
-		for(;i<this.paraLength;i++){
-			state[i] = integerCandidates[this.randGenerate.nextInt(integerCandidates.length)];
+		else{
+			int i = 0;
+			for(;i<LearningBinaryIPSolverV5.BINARYPARALENGTH;i++){
+				state[i] = binaryCandidates[this.randGenerate.nextInt(binaryCandidates.length)];
+			}
+			for(;i<this.paraLength;i++){
+				state[i] = integerCandidates[this.randGenerate.nextInt(integerCandidates.length)];
+			}
 		}
 		return state;
 	}
@@ -273,6 +285,7 @@ public class ParamILSV5 extends AbstractOptimizerV5{
 		double [] initState = this.randomState();
 		this.iteratedLocalSearch(initState);
 		this.trainlogger.info("Lowest loss function value:" + this.getLowestObjectiveFunctionValue());
+		this.trainlogger.info("Para:"+this.bestStateHash);
 		String LowestParaLog = "";
 		LowestParaLog += LearningHelper.typeWeightMap2String(this.typeMap, this.parameters);
 		LowestParaLog += LearningHelper.parentTypeWeightMap2String(this.parentTypeMap, this.parameters);
@@ -285,8 +298,33 @@ public class ParamILSV5 extends AbstractOptimizerV5{
 	}
 	
 	
+	/*
+	 * Load my guess to the model;
+	 */
+	private void loadEducatedGuess() throws IOException{
+		String  labelString = ASTParserUtils.readFileToString("src/learning/v5/init.json");
+		JSONObject obj = new JSONObject(labelString);
+		JSONArray jsonArray = obj.getJSONArray("states");
+		for(int i=0;i<jsonArray.length();i++){
+			JSONArray state = jsonArray.getJSONArray(i);
+			if(state.toList().size()==this.paraLength){
+				List<Double> validState = new LinkedList<Double>();
+				for(Object o:state.toList()){
+					Double value = (Double)o;
+					validState.add(value);
+					System.out.print(value+" ");
+				}
+				System.out.println();
+				this.initValues.add(validState);
+			}
+		}
+	}
+	
+	
 	@Override
 	public void initTraining(String labelPath) throws Exception{
+		//Load initial guess:
+		this.loadEducatedGuess();
 		//Create record for training cost;
 		this.trainingCostRecordIterations = new LinkedList<Double>();
 		this.trainingCostRecordMin = new LinkedList<Double>();
@@ -348,7 +386,6 @@ public class ParamILSV5 extends AbstractOptimizerV5{
 		obj.write(file);
 		file.close();
 	}
-	
 	
 	
 	public static void main(String[] args) throws Exception {
