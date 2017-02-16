@@ -106,10 +106,15 @@ export class QuestionView extends Component{
 							  }
        					}}>Next <span aria-hidden="true">&rarr;</span></a></li>
     				</ul>
+            <br/>
+            <br/>
+            <br/>
 				</div>
         <nav className="navbar navbar-default navbar-fixed-bottom">
           <div className="container">
+            <br/>
             <p className="text-center"> &copy; Computer Science Department, Rice University</p>
+            <br/>
           </div>
         </nav>
     	</div>

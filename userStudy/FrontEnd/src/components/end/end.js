@@ -32,9 +32,11 @@ export class End extends Component{
 					}
 				</div>
 				<nav className="navbar navbar-default navbar-fixed-bottom">
-					<div className="container">
-          				<p className="text-center"> &copy; Computer Science Department, Rice University</p>
-        			</div>
+         			<div className="container">
+            			<br/>
+            			<p className="text-center"> &copy; Computer Science Department, Rice University</p>
+            			<br/>
+          			</div>
         		</nav>
 			</div>
 		)
