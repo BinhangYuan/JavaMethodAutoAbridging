@@ -24,7 +24,6 @@ import statementGraph.constraintAndFeatureEncoder.ConstraintAndFeatureEncoderV5;
 import statementGraph.graphNode.StatementWrapper;
 
 public class ASTParserUtils {
-	
 	//use ASTParse to parse string
 	public static void parse(String filePath, String fileName) throws Exception {
 		ASTParser parser = ASTParser.newParser(AST.JLS8);

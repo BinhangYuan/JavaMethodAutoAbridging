@@ -1,0 +1,15 @@
+{
+	"query":[
+		{
+			"category":"HTML Parser",
+			"keywords":[],
+			"directories":[
+				"dataset/org/jsoup",
+				"dataset/net/sourceforge/nekohtml",
+				"dataset/org/cowan/tagsoup",
+				"dataset/net/sf/jtidy",
+				"dataset/org/htmlparser"
+			]
+		}
+	]
+}
