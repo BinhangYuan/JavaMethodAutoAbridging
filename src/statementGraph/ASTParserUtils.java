@@ -430,7 +430,7 @@ public class ASTParserUtils {
 				System.out.println("========>");
 			}
 						
-			if(manualLabel.length == statements.size()){
+			if(manualLabel!=null && manualLabel.length == statements.size()){
 				System.out.println("Manual labeled result:");
 				System.out.println(sAST.computeOutput(manualLabel));
 				System.out.println("Reduced line count: "+sAST.computeBodyLines(manualLabel));

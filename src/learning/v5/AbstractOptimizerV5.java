@@ -22,8 +22,8 @@ import statementGraph.graphNode.StatementWrapper;
 public abstract class AbstractOptimizerV5 {
 	static private boolean shuffleFlag = false;
 	protected double [] parameters;
-	protected Map<Integer,Integer> typeMap;
-	protected Map<Integer,Integer> parentTypeMap;
+	final protected Map<Integer,Integer> typeMap;
+	final protected Map<Integer,Integer> parentTypeMap;
 	protected JaccardDistance computeDistance = new JaccardDistance();
 	protected Map<LearningBinaryIPSolverV5,ManualLabel> trainingSet = new HashMap<LearningBinaryIPSolverV5,ManualLabel>();
 	protected LinkedList<LearningBinaryIPSolverV5> solverArray = new LinkedList<LearningBinaryIPSolverV5>();
@@ -43,16 +43,8 @@ public abstract class AbstractOptimizerV5 {
 	
 	
 	protected AbstractOptimizerV5(){
-		this.typeMap = new HashMap<Integer,Integer>();
-		int i = 0;
-		for(Integer label: StatementWrapper.statementsLabelSet){
-			this.typeMap.put(label, i++);
-		}
-		this.parentTypeMap = new HashMap<Integer,Integer>();
-		i = 0;
-		for(Integer label: StatementWrapper.parentStatementsLabelSet){
-			this.parentTypeMap.put(label, i++);
-		}
+		this.typeMap = StatementWrapper.typeMap;
+		this.parentTypeMap = StatementWrapper.parentTypeMap;
 	}
 	
 	

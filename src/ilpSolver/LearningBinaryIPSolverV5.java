@@ -143,6 +143,7 @@ public class LearningBinaryIPSolverV5 {
 	}
 	
 	public boolean[] solve(){
+		Assert.isTrue(this.targetLineCount!=-1);
 		//Object function: 
 		double [] objectFunc = new double[this.statementCount];
 		for(int i = 0; i < this.statementCount; i++){
@@ -215,7 +216,6 @@ public class LearningBinaryIPSolverV5 {
 	
 	public String originalProgram2String(){
 		return this.encoder.originProgram2String();
-		
 	}
 	
 	public List<StatementWrapper> getStatementWrapperList(){
@@ -224,6 +224,12 @@ public class LearningBinaryIPSolverV5 {
 	
 	public int programLineCount(String program){
 		int total = program.split(System.getProperty("line.separator")).length;
+		Assert.isTrue(total>=2);
+		return total-2;
+	}
+	
+	public int originalProgramLineCount(){
+		int total = this.originalProgram2String().split(System.getProperty("line.separator")).length;
 		Assert.isTrue(total>=2);
 		return total-2;
 	}

@@ -1,9 +1,11 @@
 package statementGraph.graphNode;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.Assert;
@@ -89,12 +91,8 @@ public abstract class StatementWrapper {
 	public static final int ANNOTATION_TYPE_MEMBER_DECLARATION = ASTNode.ANNOTATION_TYPE_DECLARATION;
 
 	
-	public static Set<Integer> statementsLabelSet = new HashSet<Integer>(Arrays.asList(new Integer[]{
-		ASSERT_STATEMENT,BREAK_STATEMENT,CONSTRUCTOR_INVOCATION,CONTINUE_STATEMENT,DO_STATEMENT,EMPTY_STATEMENT,
-		ENHANCED_FOR_STATEMENT,EXPRESSION_STATEMENT,FOR_STATEMENT,IF_STATEMENT,LABELED_STATEMENT,RETURN_STATEMENT,
-		SUPER_CONSTRUCTOR_INVOCATION,SWITCH_CASE,SWITCH_STATEMENT,SYNCHRONIZED_STATEMENT,THROW_STATEMENT,TRY_STATEMENT,
-		TYPE_DECLARATION_STATEMENT,VARIABLE_DECLARATION_STATEMENT,WHILE_STATEMENT	
-	}));
+	public static Set<Integer> statementsLabelSet;
+	public static Map<Integer,Integer> typeMap;
 	
 	
 	//Encode parent node information, defined by myself;
@@ -116,13 +114,34 @@ public abstract class StatementWrapper {
 	public static final int PARENT_WHILESTATEMENT = 1090;
 	
 	
-	public static Set<Integer> parentStatementsLabelSet = new HashSet<Integer>(Arrays.asList(new Integer[]{
-			PARENT_METHODDECLARATION, PARENT_DOSTATEMENT, PARENT_ENHANCEDFORSTATEMENT,PARENT_FORSTATEMENT, PARENT_IFSTATEMENT_THEN,
-			PARENT_IFSTATEMENT_ELSE, PARENT_LABELEDSTATEMENT,PARENT_SWITCHSTATEMENT_FIRSTCASE,PARENT_SWITCHSTATEMENT_OTHERCASE,
-			PARENT_SWITCHSTATEMENT_DEFAULTCASE,PARENT_SYNCHRONIZEDSTATEMENT, PARENT_TRYSTATEMENT_BODY, PARENT_TRYSTATEMENT_CATCH,
-			PARENT_TRYSTATEMENT_FINAL,PARENT_WHILESTATEMENT
-	}));
+	public static Set<Integer> parentStatementsLabelSet;
+	public static Map<Integer,Integer> parentTypeMap;
 	
+	static{
+		statementsLabelSet = new HashSet<Integer>(Arrays.asList(new Integer[]{
+			ASSERT_STATEMENT,BREAK_STATEMENT,CONSTRUCTOR_INVOCATION,CONTINUE_STATEMENT,DO_STATEMENT,EMPTY_STATEMENT,
+			ENHANCED_FOR_STATEMENT,EXPRESSION_STATEMENT,FOR_STATEMENT,IF_STATEMENT,LABELED_STATEMENT,RETURN_STATEMENT,
+			SUPER_CONSTRUCTOR_INVOCATION,SWITCH_CASE,SWITCH_STATEMENT,SYNCHRONIZED_STATEMENT,THROW_STATEMENT,TRY_STATEMENT,
+			TYPE_DECLARATION_STATEMENT,VARIABLE_DECLARATION_STATEMENT,WHILE_STATEMENT	
+		}));
+		typeMap = new HashMap<Integer,Integer>();
+		int i = 0;
+		for(Integer label: StatementWrapper.statementsLabelSet){
+			typeMap.put(label, i++);
+		}
+		
+		parentStatementsLabelSet = new HashSet<Integer>(Arrays.asList(new Integer[]{
+				PARENT_METHODDECLARATION, PARENT_DOSTATEMENT, PARENT_ENHANCEDFORSTATEMENT,PARENT_FORSTATEMENT, PARENT_IFSTATEMENT_THEN,
+				PARENT_IFSTATEMENT_ELSE, PARENT_LABELEDSTATEMENT,PARENT_SWITCHSTATEMENT_FIRSTCASE,PARENT_SWITCHSTATEMENT_OTHERCASE,
+				PARENT_SWITCHSTATEMENT_DEFAULTCASE,PARENT_SYNCHRONIZEDSTATEMENT, PARENT_TRYSTATEMENT_BODY, PARENT_TRYSTATEMENT_CATCH,
+				PARENT_TRYSTATEMENT_FINAL,PARENT_WHILESTATEMENT
+		}));
+		parentTypeMap = new HashMap<Integer,Integer>();
+		i = 0;
+		for(Integer label: StatementWrapper.parentStatementsLabelSet){
+			parentTypeMap.put(label, i++);
+		}
+	}
 	
 	public static boolean isAstStatement(ASTNode node){
 		int nodeType = node.getNodeType();
