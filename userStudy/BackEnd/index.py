@@ -35,7 +35,7 @@ def submit():
 
 @app.route("/questions")
 def questions():
-	with open('questionStub.json') as file:
+	with open('questionAll.json') as file:
 		questions = json.load(file)
     	return jsonify(questions)
 

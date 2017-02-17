@@ -1,10 +1,12 @@
 package learning.generateUserStudy;
 
+import org.eclipse.core.runtime.Assert;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import ilpSolver.LearningBinaryIPSolverV5;
 import ilpSolver.NaiveBinaryIPSolver;
+import learning.v5.NaiveBayesTextClassifierV5;
 
 
 public class Type2Question extends Question {
@@ -17,20 +19,27 @@ public class Type2Question extends Question {
 	private String docA;
 	private String docB;
 	
+	
 	public Type2Question(JSONObject input) throws Exception{
 		JSONObject codeA = input.getJSONObject("codeA");
 		this.solverA = this.buildSolver(codeA);
 		this.naiveSolverA = this.buildNaiveSolver(codeA);
-		this.docA = codeA.getString("docA");
+		this.docA = input.getString("docA");
 		JSONObject codeB = input.getJSONObject("codeB");
 		this.solverB = this.buildSolver(codeB);
 		this.naiveSolverB = this.buildNaiveSolver(codeB);
-		this.docB = codeB.getString("docB");
+		this.docB = input.getString("docB");
 	}
+	
 	
 	public void setParas(double[] para){
 		this.solverA.setParameters(para);
 		this.solverB.setParameters(para);
+	}
+	
+	public void setTextClassifierPrediction(NaiveBayesTextClassifierV5 textClassifier) throws Exception{
+		this.solverA.setTextClassifierResults(textClassifier.predictForATestProgram(this.solverA));
+		this.solverB.setTextClassifierResults(textClassifier.predictForATestProgram(this.solverB));
 	}
 	
 	public void setCodeATargetLineCount(int lines){
@@ -38,10 +47,27 @@ public class Type2Question extends Question {
 		this.naiveSolverA.setTargetLineCount(lines);
 	}
 	
+	
 	public void setCodeBTargetLineCount(int lines){
 		this.solverB.setTargetLineCount(lines);
 		this.naiveSolverB.setTargetLineCount(lines);
 	}
+	
+	
+	public void setTargetLineCounts(double rate){
+		Assert.isTrue(rate>0 && rate<1);
+		int originalLines = this.solverA.originalProgramLineCount();
+		int targetLine = (int)(originalLines * rate);
+		Assert.isTrue(targetLine>=1);
+		this.solverA.setTargetLineCount(targetLine);
+		this.naiveSolverA.setTargetLineCount(targetLine);
+		originalLines = this.solverB.originalProgramLineCount();
+		targetLine = (int)(originalLines * rate);
+		Assert.isTrue(targetLine>=1);
+		this.solverB.setTargetLineCount(targetLine);
+		this.naiveSolverB.setTargetLineCount(targetLine);
+	}
+	
 	
 	public JSONObject computeOutput(int method){
 		JSONObject result = new JSONObject();

@@ -8,19 +8,20 @@ import org.json.JSONObject;
 
 import ilpSolver.LearningBinaryIPSolverV5;
 import ilpSolver.NaiveBinaryIPSolver;
+import learning.v5.NaiveBayesTextClassifierV5;
 
 public class Type1Question extends Question{
 	private ArrayList<LearningBinaryIPSolverV5> solvers = new ArrayList<LearningBinaryIPSolverV5>();
-	private ArrayList<NaiveBinaryIPSolver> navieSolvers = new ArrayList<NaiveBinaryIPSolver>();
+	private ArrayList<NaiveBinaryIPSolver> naiveSolvers = new ArrayList<NaiveBinaryIPSolver>();
 	
 	private String doc;
 	
 	public Type1Question(JSONObject input) throws Exception{
-		JSONArray codes = input.getJSONArray("codeA");
+		JSONArray codes = input.getJSONArray("codes");
 		for(int i=0;i<codes.length();i++){
 			JSONObject code = codes.getJSONObject(i);
 			this.solvers.add(this.buildSolver(code));
-			this.navieSolvers.add(this.buildNaiveSolver(code));
+			this.naiveSolvers.add(this.buildNaiveSolver(code));
 		}
 		this.doc = input.getString("doc");
 	}
@@ -31,11 +32,17 @@ public class Type1Question extends Question{
 		}
 	}
 	
+	public void setTextClassifierPrediction(NaiveBayesTextClassifierV5 textClassifier) throws Exception{
+		for(LearningBinaryIPSolverV5 solver:this.solvers){
+			solver.setTextClassifierResults(textClassifier.predictForATestProgram(solver));;
+		}
+	}
+	
 	public void setTargetLineCounts(int line){
 		for(LearningBinaryIPSolverV5 solver:this.solvers){
 			solver.setTargetLineCount(line);
 		}
-		for(NaiveBinaryIPSolver solver:this.navieSolvers){
+		for(NaiveBinaryIPSolver solver:this.naiveSolvers){
 			solver.setTargetLineCount(line);
 		}
 	}
@@ -47,7 +54,7 @@ public class Type1Question extends Question{
 			int targetLine = (int)(originalLines * rate);
 			Assert.isTrue(targetLine>=1);
 			this.solvers.get(i).setTargetLineCount(targetLine);
-			this.navieSolvers.get(i).setTargetLineCount(targetLine);
+			this.naiveSolvers.get(i).setTargetLineCount(targetLine);
 		}
 	}
 	
@@ -60,7 +67,7 @@ public class Type1Question extends Question{
 			}
 		}
 		else if(method==EncoderUtils.NAIVEMETHOD){
-			for(NaiveBinaryIPSolver solver:this.navieSolvers){
+			for(NaiveBinaryIPSolver solver:this.naiveSolvers){
 				codes.put(solver.outputSolveResult());
 			}
 		}

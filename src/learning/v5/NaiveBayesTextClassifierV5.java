@@ -1,5 +1,6 @@
 package learning.v5;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ import org.json.JSONObject;
 
 import ilpSolver.LearningBinaryIPSolverV5;
 import learning.ManualLabel;
+import statementGraph.ASTParserUtils;
 import statementGraph.graphNode.StatementWrapper;
 import textExtractor.TextUtils;
 
@@ -45,6 +47,38 @@ public class NaiveBayesTextClassifierV5 {
 	}
 	
 	
+	public NaiveBayesTextClassifierV5(final File log) throws Exception{
+		String inputString = ASTParserUtils.readFileToString(log.getAbsolutePath());
+		JSONObject obj = new JSONObject(inputString);
+		
+		this.vocabulary = new HashSet<String>();
+		this.positiveWordCounts = new HashMap<String,Integer>();
+		this.negativeWordCounts = new HashMap<String,Integer>();
+		
+		JSONArray positive = obj.getJSONArray("positive");
+		for(int i=0;i<positive.length();i++){
+			JSONObject currentPair = positive.getJSONObject(i);
+			String word = currentPair.getString("word");
+			int count = currentPair.getInt("count");
+			this.positiveWordCounts.put(word,count);
+			if(!this.vocabulary.contains(word)){
+				this.vocabulary.add(word);
+			}
+		}
+		
+		JSONArray negative = obj.getJSONArray("negative");
+		for(int i=0;i<negative.length();i++){
+			JSONObject currentPair = negative.getJSONObject(i);
+			String word = currentPair.getString("word");
+			int count = currentPair.getInt("count");
+			this.negativeWordCounts.put(word,count);
+			if(!this.vocabulary.contains(word)){
+				this.vocabulary.add(word);
+			}
+		}
+	}
+
+
 	public void LearnNaiveBayesText() throws Exception{
 		this.trainlogger.info("Start training text naive bayes");
 		for(LearningBinaryIPSolverV5 solver: this.trainingSet.keySet()){
@@ -129,7 +163,19 @@ public class NaiveBayesTextClassifierV5 {
 	}
 	
 	
-	public void predictNaiveBayesText() throws Exception{
+	public List<Boolean> predictForATestProgram(LearningBinaryIPSolverV5 solver) throws Exception{
+		List<StatementWrapper> statements = solver.getStatementWrapperList();
+		List<Boolean> predicts = new LinkedList<Boolean>();
+		for(int i = 0; i<statements.size();i++){
+			StatementWrapper item = statements.get(i);
+			boolean predict = this.predictNaiveBayesStatementFlag(item);
+			predicts.add(predict);
+		}
+		return predicts;
+	}
+	
+	
+	public void predictNaiveBayesTextOnTrainingSet() throws Exception{
 		this.trainlogger.info("Start predicting");
 		int truePositive = 0;
 		int trueNegative = 0;

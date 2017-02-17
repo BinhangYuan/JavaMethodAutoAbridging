@@ -23,13 +23,13 @@ import learning.LearningHelper;
 import statementGraph.ASTParserUtils;
 
 public class ParamILSV5 extends AbstractOptimizerV5{
-	static double[] binaryCandidates = {-9.0,-8.0,-7.0,-6.0,-5.0,-4.0,-3.0,-2.0,-1.0,0.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0};
-	static double[] integerCandidates = {-5.0,-3.0,-2.0,-1.0,-0.5,-0.2,0.0,0.2,0.5,1.0,3.0,5.0};
+	static double[] binaryCandidates = {1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10,11,12,13,14,15,16};
+	static double[] integerCandidates = {-5.0,-3.0,-2.0,-1.0,-0.5,-0.2,-0.1,0.0,0.1,0.2,0.5,1.0,2.0,3.0,5.0};
 	private Random randGenerate = new Random();
 	
 	private HashMap<String,Double> visitedCandidates = new HashMap<String,Double>();
 	private int iterations = 0;
-	private int maxIterations = 400000;
+	private int maxIterations = 100000;
 	private int paraLength;
 	private int paraR = 20;
 	private int paraS = 3;
@@ -339,7 +339,7 @@ public class ParamILSV5 extends AbstractOptimizerV5{
 		this.trainlogger.info("Train naive Bayes text classifier");
 		this.textClassifier = new NaiveBayesTextClassifierV5(this.trainingSet,this.trainlogger);
 		this.textClassifier.LearnNaiveBayesText();
-		this.textClassifier.predictNaiveBayesText();
+		this.textClassifier.predictNaiveBayesTextOnTrainingSet();
 		this.trainlogger.info("Train naive Bayes text classifier done.");
 	}
 	

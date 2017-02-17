@@ -21,19 +21,36 @@ class QuestionT1 extends Component{
     this.forceUpdate();
   }
 
+  handleOptionReduction(e){
+    console.log(e)
+    this.props.questions.reduction = e.target.value;
+    this.forceUpdate();
+  }
+
  	render(){
  		return(
  			<div>
         <div className="row">
-          <div className="col-md-1"></div>
-          <div className="col-md-10">
+          <div className="col-md-9">
             <h4 className="text-center">Please choose the code based on this description:</h4>
+          </div>
+          <div className="col-md-2 text-center">
+            <div className="form-group">
+              <label className="control-label">Choose Reduction Option:</label>
+              <div className="selectContainer">
+                <select name="language" className="form-control" onChange={(e)=>{this.handleOptionReduction(e)}}>
+                  <option value="r10" key="r10">Reduce to 10 lines</option>
+                  <option value="r20" key="r20">Reduce to 20 lines</option>
+                  <option value="r50%" key="r50%">Reduce by 50%</option>
+                </select>
+              </div>
+            </div>
           </div>
           <div className="col-md-1"></div>
         </div>
         <div className="row">
    			  <div className="col-md-7 text-center">
-        	 <div id="editor"><AceEditor mode="java" theme="chrome" name="editor" editorProps={{$blockScrolling:true}} value={this.props.questions.questions[this.props.questions.index.toString()].codes[this.codeId]}/></div>
+        	 <div id="editor"><AceEditor mode="java" theme="chrome" name="editor" editorProps={{$blockScrolling:true}} value={this.props.questions.questions[this.props.questions.index.toString()].codes[this.codeId][this.props.questions.reduction]}/></div>
     		  </div>
 
     		  <div className="col-md-5">
