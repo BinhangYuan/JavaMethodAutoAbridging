@@ -33,7 +33,7 @@ class QuestionT1 extends Component{
         </div>
         <div className="row">
    			  <div className="col-md-7 text-center">
-        	 <div id="editor"><AceEditor mode="java" theme="chrome" name="editor" editorProps={{$blockScrolling:true}} value={this.props.questions.questions[this.props.questions.index.toString()].codes[this.codeId]}/></div>
+        	 <div id="editor"><AceEditor mode="java" theme="chrome" name="editor" width="100%" height="600px" editorProps={{$blockScrolling:true}} value={this.props.questions.questions[this.props.questions.index.toString()].codes[this.codeId]}/></div>
     		  </div>
 
     		  <div className="col-md-5">

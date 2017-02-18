@@ -129,7 +129,7 @@ public class LearningBinaryIPSolverV5 {
 		int parentType = this.parentStatementType.get(index);
 		result += this.parameters[this.typeMap.size()+this.parentTypeMap.get(parentType)];
 		//Weight of text classifier;		
-		result += this.textClassifierResults.get(index)?this.parameters[this.typeMap.size()+this.parentTypeMap.size()]:0;
+		result += this.textClassifierResults.get(index)?this.parameters[this.typeMap.size()+this.parentTypeMap.size()]:(-1*this.parameters[this.typeMap.size()+this.parentTypeMap.size()]);
 		//Weight for nested level;
 		result += this.nestedLevels.get(index)*this.parameters[this.typeMap.size()+this.parentTypeMap.get(parentType)+2];
 		//Weight for referenced variable count;

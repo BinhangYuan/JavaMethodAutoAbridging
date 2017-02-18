@@ -32,14 +32,16 @@ class QuestionT2 extends Component{
         <div className="row">
    				<div className="col-md-6 text-center">
             <h5>Method A:</h5>
-        		<div id="editor"><AceEditor mode="java" theme="chrome" name="editor" editorProps={{$blockScrolling:true}} value={this.props.questions.questions[this.props.questions.index.toString()].codeA}/></div>
+        		<div><AceEditor mode="java" theme="chrome" name="editor" width="100%" height="600px" editorProps={{$blockScrolling:true}} value={this.props.questions.questions[this.props.questions.index.toString()].codeA}/></div>
     			</div>
           <div className="col-md-6 text-center">  
             <h5>Method B:</h5>  
-            <div id="editor"><AceEditor mode="java" theme="chrome" name="editor" editorProps={{$blockScrolling:false}} value={this.props.questions.questions[this.props.questions.index.toString()].codeB}/></div>
+            <div><AceEditor mode="java" theme="chrome" name="editor" width="100%" height="600px" editorProps={{$blockScrolling:true}} value={this.props.questions.questions[this.props.questions.index.toString()].codeB}/></div>
           </div>
         </div>
         <div className="row">
+          <br/>
+          <br/>
           <div className="col-md-2"></div>
     			<div className="col-md-8">
         		<div className="alert alert-success" id="alternatives">

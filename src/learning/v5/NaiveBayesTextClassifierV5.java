@@ -55,12 +55,18 @@ public class NaiveBayesTextClassifierV5 {
 		this.positiveWordCounts = new HashMap<String,Integer>();
 		this.negativeWordCounts = new HashMap<String,Integer>();
 		
+		this.positiveItemTotal = 1;
+		this.negativeItemTotal = 1;
+		this.positiveWordTotal = 0;
+		this.negativeWordTotal = 0;
+		
 		JSONArray positive = obj.getJSONArray("positive");
 		for(int i=0;i<positive.length();i++){
 			JSONObject currentPair = positive.getJSONObject(i);
 			String word = currentPair.getString("word");
 			int count = currentPair.getInt("count");
 			this.positiveWordCounts.put(word,count);
+			this.positiveItemTotal += count;
 			if(!this.vocabulary.contains(word)){
 				this.vocabulary.add(word);
 			}
@@ -72,6 +78,7 @@ public class NaiveBayesTextClassifierV5 {
 			String word = currentPair.getString("word");
 			int count = currentPair.getInt("count");
 			this.negativeWordCounts.put(word,count);
+			this.negativeItemTotal += count;
 			if(!this.vocabulary.contains(word)){
 				this.vocabulary.add(word);
 			}

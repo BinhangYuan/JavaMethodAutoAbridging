@@ -53,7 +53,7 @@ class QuestionT3 extends Component{
         <div className="row">
    			  <div className="col-md-7 text-center">
        		  <h4 className="text-center">{this.props.questions.questions[this.props.questions.index.toString()].method}</h4>
-        	  <div id="editor"><AceEditor mode="java" theme="chrome" name="editor" editorProps={{$blockScrolling:true}} 
+        	  <div id="editor"><AceEditor mode="java" theme="chrome" name="editor" width="100%" height="600px" editorProps={{$blockScrolling:true}} 
               value={
                 this.props.questions.questions[this.props.questions.index.toString()].method==="non-reduced code"?
                 this.props.questions.questions[this.props.questions.index.toString()].code:
