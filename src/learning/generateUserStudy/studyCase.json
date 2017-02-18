@@ -1,5 +1,5 @@
 {
-	"para":[2.0,3.0,8.0,-4.0,-9.0,5.0,6.0,-9.0,-7.0,2.0,4.0,-9.0,-4.0,-9.0,-3.0,-9.0,-8.0,-9.0,-4.0,5.0,-8.0,0.0,9.0,2.0,2.0,3.0,0.0,2.0,3.0,0.0,1.0,1.0,1.0,2.0,2.0,-9.0,9.0,1.0,5.0,5.0],
+	"para":[10.0,15.0,16.0,1.0,1.0,2.0,15.0,2.0,4.0,12.0,11.0,7.0,7.0,1.0,12.0,1.0,15.0,4.0,6.0,14.0,10.0,12.0,11.0,3.0,4.0,4.0,2.0,1.0,14.0,2.0,2.0,3.0,6.0,2.0,13.0,2.0,12.0,2.0,-0.5,1.0],
 	"questions":[
 		{
 			"type":"T1",
@@ -36,9 +36,7 @@
 				},
 			],
 			"doc":"The main processing loop. Pull suspect URLs off the queue one at a time, fetch and parse it, request images and enqueue further links."
-		}
-
-
+		},
 		{
 			"type":"T2",
 			"codeA":{
@@ -76,7 +74,8 @@
 		{
 			"type":"T3",
 			"code":{
-				"file_path":"dataset/net/sourceforge/nekohtml/nekohtml/1.9.15/org/cyberneko/html/HTMLScanner.java",
+				"file_path":"dataset/net/sourceforge/nekohtml/nekohtml/1.9.15/org/cyberneko/html/",
+				"file_name":"HTMLScanner.java",
 				"method":"expandSystemId",
 				"pos":942
 			}
@@ -84,7 +83,8 @@
 		{
 			"type":"T3",
 			"code":{
-				"file_path":"dataset/net/sourceforge/nekohtml/nekohtml/1.9.15/org/cyberneko/html/ObjectFactory.java",
+				"file_path":"dataset/net/sourceforge/nekohtml/nekohtml/1.9.15/org/cyberneko/html/",
+				"file_name":"ObjectFactory.java",
 				"method":"createObject",
 				"pos":99
 			}
@@ -92,7 +92,8 @@
 		{
 			"type":"T3",
 			"code":{
-				"file_path":"dataset/org/htmlparser/sitecapturer/2.1/org/htmlparser/parserapplications/SiteCapturer.java",
+				"file_path":"dataset/org/htmlparser/sitecapturer/2.1/org/htmlparser/parserapplications/",
+				"file_name":"SiteCapturer.java",
 				"method":"copy",
 				"pos":394
 			}
@@ -100,7 +101,8 @@
 		{
 			"type":"T3",
 			"code":{
-				"file_path":"dataset/org/htmlparser/sitecapturer/2.1/org/htmlparser/parserapplications/SiteCapturer.java",
+				"file_path":"dataset/org/htmlparser/sitecapturer/2.1/org/htmlparser/parserapplications/",
+				"file_name":"SiteCapturer.java",
 				"method":"process",
 				"pos":470
 			}

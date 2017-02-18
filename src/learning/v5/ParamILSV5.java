@@ -24,7 +24,7 @@ import statementGraph.ASTParserUtils;
 
 public class ParamILSV5 extends AbstractOptimizerV5{
 	static double[] binaryCandidates = {1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10,11,12,13,14,15,16};
-	static double[] integerCandidates = {-5.0,-3.0,-2.0,-1.0,-0.5,-0.2,-0.1,0.0,0.1,0.2,0.5,1.0,2.0,3.0,5.0};
+	static double[] integerCandidates = {-1.0,-0.7,-0.5,-0.4,-0.3,-0.2,-0.1,-0.05,0.0,0.05,0.1,0.2,0.3,0.5,1.0,2.0,3.0,5.0};
 	private Random randGenerate = new Random();
 	
 	private HashMap<String,Double> visitedCandidates = new HashMap<String,Double>();

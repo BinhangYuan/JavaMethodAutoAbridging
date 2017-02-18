@@ -13,6 +13,7 @@ import statementGraph.CFG;
 import statementGraph.DDG;
 import statementGraph.SimplifiedAST;
 import statementGraph.graphNode.StatementWrapper;
+import statementGraph.graphNode.SwitchStatementWrapper;
 
 
 
@@ -80,6 +81,23 @@ public class ConstraintAndFeatureEncoderV5 {
 	
 	
 	private void encodeCFG(){
+		//In our implementation, we only consider the control flow constraints about switch statement.
+		for(StatementWrapper item: this.statementItems){
+			if(item.getType()==StatementWrapper.SWITCH_STATEMENT){
+				SwitchStatementWrapper swithItem = (SwitchStatementWrapper) (item);
+				Assert.isTrue(swithItem.getBranchEntries().size() == swithItem.getBranchStatementsWrappers().size());
+				for(int i=0;i<swithItem.getBranchEntries().size();i++){
+					StatementWrapper source = swithItem.getBranchEntries().get(i);
+					for(int j=0; j<swithItem.getBranchStatementsWrappers().get(i).size();j++){
+						StatementWrapper dest = swithItem.getBranchStatementsWrappers().get(i).get(j);
+						Assert.isNotNull(source);
+						Assert.isNotNull(dest);
+						DependencePair newEdge = new DependencePair(this.index.get(source), this.index.get(dest), DependencePair.TYPE_CFG);
+						this.cfgConstraintsSerializer.add(newEdge);
+					}
+				}
+			}
+		}
 		
 	}
 	

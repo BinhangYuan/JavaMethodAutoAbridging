@@ -587,7 +587,7 @@ public class SimplifiedAST {
 			ASTNode body = ((WhileStatement)node).getBody();
 			if(body.getNodeType() != StatementWrapper.BLOCK){
 				StatementWrapper currentWrapper = nodes.get(astMap.get(body));
-				currentWrapper.setParentType(Statement.WHILE_STATEMENT);
+				currentWrapper.setParentType(StatementWrapper.PARENT_WHILESTATEMENT);
 				item.addBodyWrapper(currentWrapper);
 				buildHierachy(body);
 			}

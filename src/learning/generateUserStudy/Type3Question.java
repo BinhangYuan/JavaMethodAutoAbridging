@@ -47,10 +47,26 @@ public class Type3Question extends Question {
 			result.put("code", this.solver.originalProgram2String());
 		}
 		else if(method==EncoderUtils.NAIVEMETHOD){
-			result.put("code", this.naiveSolver.outputSolveResult());
+			JSONObject code = new JSONObject();
+			this.naiveSolver.setTargetLineCount(10);
+			code.put("r10", this.naiveSolver.outputSolveResult());
+			this.naiveSolver.setTargetLineCount(20);
+			code.put("r20", this.naiveSolver.outputSolveResult());
+			int originalLines = this.solver.originalProgramLineCount();
+			this.naiveSolver.setTargetLineCount(originalLines/2);
+			code.put("r50%", this.naiveSolver.outputSolveResult());
+			result.put("code", code);
 		}
 		else if(method==EncoderUtils.MYMETHOD){
-			result.put("code", this.solver.outputSolveResult());
+			JSONObject code = new JSONObject();
+			this.solver.setTargetLineCount(10);
+			code.put("r10", this.solver.outputSolveResult());
+			this.solver.setTargetLineCount(20);
+			code.put("r20", this.solver.outputSolveResult());
+			int originalLines = this.solver.originalProgramLineCount();
+			this.solver.setTargetLineCount(originalLines/2);
+			code.put("r50%", this.solver.outputSolveResult());
+			result.put("code", code);
 		}
 		result.put("type", "T3");
 		result.put("method", method);

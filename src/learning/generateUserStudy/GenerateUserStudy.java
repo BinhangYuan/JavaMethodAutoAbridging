@@ -57,7 +57,7 @@ public class GenerateUserStudy {
 				throw new Exception("Unexpected type "+currentQuestion.getString("type"));
 			}
 		}
-		this.setTargetLineCounts(0.8);
+		this.setTargetLineCounts(0.5);
 	}
 	
 	private void setTargetLineCounts(double rate){

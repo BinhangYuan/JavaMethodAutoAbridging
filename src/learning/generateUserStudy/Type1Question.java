@@ -76,6 +76,7 @@ public class Type1Question extends Question{
 				codes.put(solver.outputSolveResult());
 			}
 		}
+		result.put("codes", codes);
 		result.put("doc", this.doc);
 		result.put("type", "T1");
 		result.put("method", method);

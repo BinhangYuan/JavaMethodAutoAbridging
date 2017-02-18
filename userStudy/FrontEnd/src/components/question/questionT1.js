@@ -41,12 +41,12 @@ class QuestionT1 extends Component{
               <p className="text-justify">{T1description}</p>
               <br/>
               <p><b>Method Description:</b></p>
-              <p>{this.props.questions.questions[this.props.questions.index.toString()].description}</p>
+              <p>{this.props.questions.questions[this.props.questions.index.toString()].doc}</p>
               <br/>
               <div className="form-group">
                 <label className="col-md-6 control-label">Choose Method:</label>
                 <div className="col-md-6 selectContainer">
-                  <select name="language" className="form-control" defaultValue={"Not done!"} onChange={(e)=>{this.handleOptionAnswer(e)}}>
+                  <select name="language" className="form-control" value={this.props.questions.answer} onChange={(e)=>{this.handleOptionAnswer(e)}}>
         			    {
                     [<option value="Not done!" key="dropdownCodeDefault" disabled="true">- choose a method -</option>].concat(
         				    this.props.questions.questions[this.props.questions.index.toString()].codes.map((code,id)=>{

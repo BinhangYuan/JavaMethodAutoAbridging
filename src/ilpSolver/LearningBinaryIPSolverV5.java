@@ -134,7 +134,7 @@ public class LearningBinaryIPSolverV5 {
 		result += this.nestedLevels.get(index)*this.parameters[this.typeMap.size()+this.parentTypeMap.get(parentType)+2];
 		//Weight for referenced variable count;
 		result += this.referencedVariableCounts.get(index)*this.parameters[this.typeMap.size()+this.parentTypeMap.get(parentType)+3];
-		return result;
+		return result>0?result:0.1;
 	}
 	
 	//For now, just a simple soft constraint weight;
@@ -178,6 +178,22 @@ public class LearningBinaryIPSolverV5 {
 			}
 			this.lp.addConstraint( new LinearBiggerThanEqualsConstraint(implyConstraint, 0, "c"+i));
 		}
+		//hard constraint on CFG dependence constraints:
+		for(int i=0; i<this.cfgDependenceConstraints.size();i++){
+			DependencePair pair = this.cfgDependenceConstraints.get(i);
+			double[] implyConstraint = new double[this.statementCount];
+			Arrays.fill(implyConstraint, 0);
+			implyConstraint[pair.sourceIndex] = 1.0;
+			implyConstraint[pair.destIndex] = -1.0;
+			if(debug){
+				System.out.println("<"+pair.sourceIndex+","+pair.destIndex+">");
+				for(int j=0;j<implyConstraint.length;j++){
+					System.out.print(implyConstraint[j]+" ");
+				}
+				System.out.println();
+			}
+			this.lp.addConstraint( new LinearBiggerThanEqualsConstraint(implyConstraint, 0, "c"+i));
+		}
 		//Some setup
 		lp.setMinProblem(false);
 		for(int i=0;i<this.statementCount;i++){
@@ -191,7 +207,7 @@ public class LearningBinaryIPSolverV5 {
 		}
 		if(debug){
 			for(int i=0;i<binarySolution.length;i++){
-				System.out.println(binarySolution[i]);
+				System.out.println(this.getStatementWrapperList().get(i).toString()+":"+binarySolution[i]);
 			}
 		}
 		return binarySolution;

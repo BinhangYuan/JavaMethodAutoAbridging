@@ -31,7 +31,7 @@ public class SwitchStatementWrapper extends StatementWrapper{
 	
 	private List<List<StatementWrapper>> branchStatementsWrappers = new LinkedList<List<StatementWrapper>>();
 	
-	public List<List<StatementWrapper>> getStatementsWrappers(){
+	public List<List<StatementWrapper>> getBranchStatementsWrappers(){
 		return this.branchStatementsWrappers;
 	}
 	

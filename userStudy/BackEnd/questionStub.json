@@ -2,7 +2,7 @@
 	"questions":{
 		"1":{
 			"type":"T1",
-			"description":"This is a stub description",
+			"doc":"This is a stub description",
 			"codes":
 			[
 				{
