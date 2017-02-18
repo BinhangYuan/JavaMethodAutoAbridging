@@ -1,1 +1,0 @@
-{"filter":1,"results":[{"file_path":"/home/yuan/Desktop/PL research/eclipseWorkSpace/javaSrcCompress/dataset/org/htmlparser/htmllexer/2.1/org/htmlparser/http/ConnectionManager.java","method":"parseCookies","pos":1082,"doc":"/** \n * Check for cookie and parse into cookie jar.\n * @param connection The connection to extract cookie information from.\n */\n"}]}

@@ -2,13 +2,24 @@
 	"query":[
 		{
 			"category":"HTML Parser",
-			"keywords":[],
 			"directories":[
 				"dataset/org/jsoup",
 				"dataset/net/sourceforge/nekohtml",
 				"dataset/org/cowan/tagsoup",
 				"dataset/net/sf/jtidy",
 				"dataset/org/htmlparser"
+			]
+		},
+		{
+			"category":"Diff and Patch Libraries",
+			"directories":[
+				"dataset/com/bmsi/gnudiff",
+				"dataset/com/cloudbees/diff4j",
+				"dataset/com/googlecode/java-diff-utils/diffutils",
+				"dataset/com/madgag/util-diff",
+				"dataset/org/bitbucket/deepdiff",
+				"dataset/org/incava/java-diff",
+				"dataset/org/jmeld"
 			]
 		}
 	]

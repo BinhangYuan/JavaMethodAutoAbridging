@@ -159,7 +159,7 @@ public class StubQuery {
 		}
 		obj.put("results", results);
 		obj.put("filter", filterVersion);
-		FileWriter resultFile = new FileWriter("src/stubQuery/result"+System.currentTimeMillis()+".json");
+		FileWriter resultFile = new FileWriter("src/stubQuery/result/result"+System.currentTimeMillis()+".json");
 		obj.write(resultFile);
 		resultFile.close();
 	}
@@ -168,7 +168,7 @@ public class StubQuery {
 		String  labelString = ASTParserUtils.readFileToString("src/stubQuery/category.json");
 		JSONObject obj = new JSONObject(labelString);
 		JSONArray jarray = obj.getJSONArray("query");
-		JSONObject query = (JSONObject) jarray.get(jarray.length()-1);
+		JSONObject query = jarray.getJSONObject(jarray.length()-1);
 		JSONArray jdirs = query.getJSONArray("directories");
 		ArrayList<File> dirs = new ArrayList<File>();
 		for(int i = 0; i < jdirs.length(); i ++){
@@ -183,10 +183,12 @@ public class StubQuery {
 		//keywords.add("url");
 		//keywords.add("connection");
 		//keywords.add("style");
-		keywords.add("process");
+		//keywords.add("process");
+		//keywords.add("dir");
+		keywords.add("file");
 		stub.setKeywords(keywords);
 		stub.setTargetDirectories(dirs);
-		stub.setLineLimits(30);
+		stub.setLineLimits(40);
 		stub.visit();
 		stub.outputResult();
 	}

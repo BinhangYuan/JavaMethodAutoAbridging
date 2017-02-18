@@ -5,6 +5,42 @@
 			"type":"T1",
 			"codes":[
 				{
+					"file_path":"dataset/org/jmeld/jmeld/2.1/org/apache/jmeld/tools/ant/",
+					"file_name":"DirectoryScanner.java",
+					"method":"scandir",
+					"pos":950
+				},
+				{
+					"file_path":"dataset/org/bitbucket/deepdiff/deepdiff-engine/1.0.0/deepdiff/unitprocessor/",
+					"file_name":"DelegatingDiffUnitProcessor.java",
+					"method":"processDiffUnit",
+					"pos":90
+				},
+				{
+					"file_path":"dataset/org/jmeld/jmeld/2.1/org/apache/jmeld/tools/ant/",
+					"file_name":"DirectoryScanner.java",
+					"method":"slowScan",
+					"pos":882
+				},
+				{
+					"file_path":"dataset/org/jmeld/jmeld/2.1/org/apache/jmeld/tools/ant/",
+					"file_name":"DirectoryScanner.java",
+					"method":"checkIncludePatterns",
+					"pos":748
+				},
+				{
+					"file_path":"dataset/org/jmeld/jmeld/2.1/org/apache/jmeld/tools/ant/",
+					"file_name":"DirectoryScanner.java",
+					"method":"scan",
+					"pos":648
+				},
+			],
+			"doc":"Scan the given directory for files and directories. Found files and directories are placed in their respective collections, based on the matching of includes, excludes, and the selectors.  When a directory is found, it is scanned recursively."
+		},
+		{
+			"type":"T1",
+			"codes":[
+				{
 					"file_path":"dataset/org/htmlparser/thumbelina/2.1/org/htmlparser/lexerapplications/thumbelina/",
 					"file_name":"Thumbelina.java",
 					"method":"run",
@@ -36,6 +72,23 @@
 				},
 			],
 			"doc":"The main processing loop. Pull suspect URLs off the queue one at a time, fetch and parse it, request images and enqueue further links."
+		},
+		{
+			"type":"T2",
+			"codeA":{
+				"file_path":"dataset/org/bitbucket/deepdiff/deepdiff-engine/1.0.0/deepdiff/unitprocessor/",
+				"file_name":"PropertiesCompareDiffUnitProcessor.java",
+				"method":"processDiffUnit",
+				"pos":39
+			},
+			"codeB":{
+				"file_path":"dataset/org/bitbucket/deepdiff/deepdiff-engine/1.0.0/deepdiff/unitprocessor/",
+				"file_name":"XMLCompareDiffUnitProcessor.java",
+				"method":"processDiffUnit",
+				"pos":45
+			},
+			"docA":"Performs a Properties comparison on <code>diffUnit</code>, and passes any {@link DiffPoint}s found to <code>processor</code>. The properties are iterated through and their values compared.",
+			"docB":"Performs a deep XML comparison on <code>diffUnit</code>. If <code>diffUnit</code> represents part of a DOM, compares the unit and passes any {@link DiffPoint}s found to <code>processor</code>. Otherwise, returns a new {@link DiffScope} to process the XML document."
 		},
 		{
 			"type":"T2",
