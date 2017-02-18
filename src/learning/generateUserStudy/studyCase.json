@@ -2,6 +2,44 @@
 	"para":[2.0,3.0,8.0,-4.0,-9.0,5.0,6.0,-9.0,-7.0,2.0,4.0,-9.0,-4.0,-9.0,-3.0,-9.0,-8.0,-9.0,-4.0,5.0,-8.0,0.0,9.0,2.0,2.0,3.0,0.0,2.0,3.0,0.0,1.0,1.0,1.0,2.0,2.0,-9.0,9.0,1.0,5.0,5.0],
 	"questions":[
 		{
+			"type":"T1",
+			"codes":[
+				{
+					"file_path":"dataset/org/htmlparser/thumbelina/2.1/org/htmlparser/lexerapplications/thumbelina/",
+					"file_name":"Thumbelina.java",
+					"method":"run",
+					"pos":1061
+				},
+				{
+					"file_path":"dataset/org/cowan/tagsoup/tagsoup/1.2.1/org/ccil/cowan/tagsoup/",
+					"file_name":"CommandLine.java",
+					"method":"main",
+					"pos":60
+				},
+				{
+					"file_path":"dataset/org/htmlparser/sitecapturer/2.1/org/htmlparser/parserapplications/",
+					"file_name":"SiteCapturer.java",
+					"method":"process",
+					"pos":470
+				},
+				{
+					"file_path":"dataset/org/htmlparser/htmllexer/2.1/org/htmlparser/lexer/",
+					"file_name":"Lexer.java",
+					"method":"parsePI",
+					"pos":1568
+				},
+				{
+					"file_path":"dataset/org/htmlparser/htmlparser/2.1/org/htmlparser/sax/",
+					"file_name":"XMLReader.java",
+					"method":"doSAX",
+					"pos":616
+				},
+			],
+			"doc":"The main processing loop. Pull suspect URLs off the queue one at a time, fetch and parse it, request images and enqueue further links."
+		}
+
+
+		{
 			"type":"T2",
 			"codeA":{
 				"file_path":"dataset/org/htmlparser/htmlparser/2.1/org/htmlparser/scanners/",
@@ -17,6 +55,55 @@
 			},
 			"docA":"Scan for style definitions. Accumulates text from the page, until &lt;/[a-zA-Z] is encountered.",
 			"docB":"Scan for script. Accumulates text from the page, until &lt;/[a-zA-Z] is encountered."
+		},
+		{
+			"type":"T2",
+			"codeA":{
+				"file_path":"dataset/org/htmlparser/htmlparser/2.1/org/htmlparser/tags/",
+				"file_name":"ImageTag.java",
+				"method":"extractImageLocn",
+				"pos":71
+			},
+			"codeB":{
+				"file_path":"dataset/org/htmlparser/thumbelina/2.1/org/htmlparser/lexerapplications/thumbelina/",
+				"file_name":"Thumbelina.java",
+				"method":"extractImageLinks",
+				"pos":754
+			},
+			"docA":"Extract the location of the image Given the tag (with attributes), and the url of the html page in which this tag exists, perform best effort to extract the 'intended' URL. Attempts to handle such attributes as: <pre> &lt;IMG SRC=http://www.redgreen.com&gt; - normal &lt;IMG SRC =http://www.redgreen.com&gt; - space between attribute name and equals sign &lt;IMG SRC= http://www.redgreen.com&gt; - space between equals sign and attribute value &lt;IMG SRC = http://www.redgreen.com&gt; - space both sides of equals sign <\/pre>\n",
+			"docB":"Get the links of an element of a document. Only gets the links on IMG elements that reference another image. The latter is based on suffix (.jpg, .gif and .png)."
+		},
+		{
+			"type":"T3",
+			"code":{
+				"file_path":"dataset/net/sourceforge/nekohtml/nekohtml/1.9.15/org/cyberneko/html/HTMLScanner.java",
+				"method":"expandSystemId",
+				"pos":942
+			}
+		},
+		{
+			"type":"T3",
+			"code":{
+				"file_path":"dataset/net/sourceforge/nekohtml/nekohtml/1.9.15/org/cyberneko/html/ObjectFactory.java",
+				"method":"createObject",
+				"pos":99
+			}
+		},
+		{
+			"type":"T3",
+			"code":{
+				"file_path":"dataset/org/htmlparser/sitecapturer/2.1/org/htmlparser/parserapplications/SiteCapturer.java",
+				"method":"copy",
+				"pos":394
+			}
+		},
+		{
+			"type":"T3",
+			"code":{
+				"file_path":"dataset/org/htmlparser/sitecapturer/2.1/org/htmlparser/parserapplications/SiteCapturer.java",
+				"method":"process",
+				"pos":470
+			}
 		}
 	]
 }

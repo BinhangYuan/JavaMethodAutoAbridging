@@ -23,6 +23,7 @@ import statementGraph.ASTParserUtils;
  */
 
 public class StubQuery {
+	private static boolean view = false;
 	private static int filterVersion = 1;
 	
 	private ArrayList<File> targetDirectories;
@@ -127,13 +128,16 @@ public class StubQuery {
 			}
 			else if(filterVersion==1){
 				if(this.filter1(method)){
+					if(view){
+						char c = (char) System.in.read();
+					}
 					System.out.println(filePath+": "+method.getName().toString());
 					System.out.println(method.toString());
 					JSONObject info= new JSONObject();
 					info.put("file_path", filePath.substring(filePath.indexOf("dataset")));
 					info.put("pos", cu.getLineNumber(method.getStartPosition()));
 					info.put("method", method.getName().toString());
-					info.put("doc", method.getJavadoc().toString());
+					//info.put("doc", method.getJavadoc().toString());
 					results.put(method,info);
 				}
 			}
@@ -172,11 +176,17 @@ public class StubQuery {
 		}
 		StubQuery stub = new StubQuery();
 		HashSet<String> keywords = new HashSet<String>();
-		keywords.add("parse");
-		keywords.add("tag");
+		//keywords.add("image");
+		//keywords.add("tag");
+		//keywords.add("cursor");
+		//keywords.add("start");
+		//keywords.add("url");
+		//keywords.add("connection");
+		//keywords.add("style");
+		keywords.add("process");
 		stub.setKeywords(keywords);
 		stub.setTargetDirectories(dirs);
-		stub.setLineLimits(20);
+		stub.setLineLimits(30);
 		stub.visit();
 		stub.outputResult();
 	}
