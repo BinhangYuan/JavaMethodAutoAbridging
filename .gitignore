@@ -6,6 +6,8 @@ log
 
 src/learning/labeling/result
 
+src/stubQuery/result
+
 webDemo/ace-builds
 
 userStudy/FrontEnd/node_modules
