@@ -23,13 +23,15 @@ import learning.LearningHelper;
 import statementGraph.ASTParserUtils;
 
 public class ParamILSV6 extends AbstractOptimizerV6{
-	static double[] binaryCandidates = {1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10,11,12,13,14,15,16};
-	static double[] integerCandidates = {-3.0,-2.0,-1.0,-0.5,-0.4,-0.3,-0.2,-0.1,-0.05,0.0,0.05,0.1,0.2,0.3,0.5,1.0,2.0,3.0};
+	private static double[] binaryCandidates = {-10.0,-9.0,-8.0,-7.0,-6.0,-5.0,-4.0,-3.0,-2.0,-1,0.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10};
+	private static double[] integerCandidates = {-3.0,-2.0,-1.0,-0.5,-0.4,-0.3,-0.2,-0.1,-0.05,0.0,0.05,0.1,0.2,0.3,0.5,1.0,2.0,3.0};
+	private static double lambda = 0.0001; 
+	
 	private Random randGenerate = new Random();
 	
 	private HashMap<String,Double> visitedCandidates = new HashMap<String,Double>();
 	private int iterations = 0;
-	private int maxIterations = 5000;
+	private int maxIterations = 1000;
 	private int paraLength;
 	private int paraR = 20;
 	private int paraS = 3;
@@ -73,7 +75,7 @@ public class ParamILSV6 extends AbstractOptimizerV6{
 	}
 	
 	protected double objectiveFunction(double dist, double norm){
-		return dist+norm;
+		return dist+lambda*norm;
 	}
 	
 	
@@ -315,7 +317,7 @@ public class ParamILSV6 extends AbstractOptimizerV6{
 	 * Load my guess to the model;
 	 */
 	private void loadEducatedGuess() throws IOException{
-		String  labelString = ASTParserUtils.readFileToString("src/learning/v5/init.json");
+		String  labelString = ASTParserUtils.readFileToString("src/learning/v6/init.json");
 		JSONObject obj = new JSONObject(labelString);
 		JSONArray jsonArray = obj.getJSONArray("states");
 		for(int i=0;i<jsonArray.length();i++){
