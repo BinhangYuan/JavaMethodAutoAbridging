@@ -21,6 +21,7 @@ import statementGraph.constraintAndFeatureEncoder.ConstraintAndFeatureEncoderV2;
 import statementGraph.constraintAndFeatureEncoder.ConstraintAndFeatureEncoderV3;
 import statementGraph.constraintAndFeatureEncoder.ConstraintAndFeatureEncoderV4;
 import statementGraph.constraintAndFeatureEncoder.ConstraintAndFeatureEncoderV5;
+import statementGraph.constraintAndFeatureEncoder.ConstraintAndFeatureEncoderV6;
 import statementGraph.graphNode.StatementWrapper;
 
 public class ASTParserUtils {
@@ -438,6 +439,64 @@ public class ASTParserUtils {
 			//encoder.printConstraints();
 		}
 						
+		return encoder;
+	}
+	
+	//use ASTParse to parse string
+	public static ConstraintAndFeatureEncoderV6 parseMethodV6(boolean print, String filePath, String fileName, String methodName, int pos, boolean [] manualLabel) throws Exception {
+		ASTParser parser = ASTParser.newParser(AST.JLS8);
+		String str = readFileToString(filePath+fileName);
+		parser.setSource(str.toCharArray());
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		parser.setEnvironment(new String[]{filePath}, null, null, true);
+		parser.setUnitName("Anything");
+		parser.setResolveBindings(true);
+								
+		final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
+		ArrayList<MethodDeclaration> methods = new ArrayList<MethodDeclaration>();
+								
+		cu.accept(new ASTVisitor() {
+			public boolean visit(MethodDeclaration node){
+				SimpleName name = node.getName();
+				if(name.getIdentifier().equals(methodName) && pos == cu.getLineNumber(node.getStartPosition())){
+					methods.add(node);
+				}
+				return true;
+			}
+		});
+								
+		Assert.isTrue(methods.size()==1);
+		MethodDeclaration method = methods.get(0);
+		System.out.println("Method Declaration of: '"+method.getName()+ "' at line " +cu.getLineNumber(method.getStartPosition()));
+		if(print){
+			//System.out.println("Method Declaration of: '"+method.getName()+ "' at line" +cu.getLineNumber(method.getStartPosition()));
+			System.out.println(method.toString());
+		}
+		SimplifiedAST sAST = new SimplifiedAST(method);
+		CFG cfg = new CFG(sAST);
+		DDG ddg = new DDG(sAST);
+		ddg.printDDG();
+		ConstraintAndFeatureEncoderV6 encoder = new ConstraintAndFeatureEncoderV6(sAST,cfg,ddg);
+									
+		if(print){
+			List<StatementWrapper> statements = sAST.getAllWrapperList();
+			System.out.println("Statements:");
+			for(int i=0 ; i < statements.size(); i++){
+				StatementWrapper item = statements.get(i);
+				System.out.println("Node "+i+": <========");
+				System.out.println(item.toString());
+				System.out.println("Variable Count: "+item.getReferencedVariables());
+				System.out.println("========>");
+			}
+							
+			if(manualLabel!=null && manualLabel.length == statements.size()){
+				System.out.println("Manual labeled result:");
+				System.out.println(sAST.computeOutput(manualLabel));
+				System.out.println("Reduced line count: "+sAST.computeBodyLines(manualLabel));
+			}
+			//encoder.printConstraints();
+		}
+							
 		return encoder;
 	}
 }

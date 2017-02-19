@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import learning.v5.NaiveBayesTextClassifierV5;
+import learning.v6.NaiveBayesTextClassifierV6;
 import statementGraph.ASTParserUtils;
 
 public class GenerateUserStudy {
 	private double [] paras;
 	private JSONArray questions;
-	private NaiveBayesTextClassifierV5 textClassifier;
+	private NaiveBayesTextClassifierV6 textClassifier;
 	
 	
 	private ArrayList<Type1Question> type1questions = new ArrayList<Type1Question>();
@@ -23,7 +23,7 @@ public class GenerateUserStudy {
 	
 	public GenerateUserStudy(final File input) throws Exception{
 		final File textClassifierLoader = new File("webDemo/result/NaiveBayesTextWordDistribution.json");
-		this.textClassifier = new NaiveBayesTextClassifierV5(textClassifierLoader);
+		this.textClassifier = new NaiveBayesTextClassifierV6(textClassifierLoader);
 		
 		String iputString = ASTParserUtils.readFileToString(input.getAbsolutePath());
 		JSONObject obj = new JSONObject(iputString);

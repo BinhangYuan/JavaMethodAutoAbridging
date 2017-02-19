@@ -3,12 +3,12 @@ package learning.generateUserStudy;
 import org.eclipse.core.runtime.Assert;
 import org.json.JSONObject;
 
-import ilpSolver.LearningBinaryIPSolverV5;
+import ilpSolver.LearningBinaryIPSolverV6;
 import ilpSolver.NaiveBinaryIPSolver;
-import learning.v5.NaiveBayesTextClassifierV5;
+import learning.v6.NaiveBayesTextClassifierV6;
 
 public class Type3Question extends Question {
-	private LearningBinaryIPSolverV5 solver;
+	private LearningBinaryIPSolverV6 solver;
 	
 	private NaiveBinaryIPSolver naiveSolver;
 	
@@ -37,7 +37,7 @@ public class Type3Question extends Question {
 		this.naiveSolver.setTargetLineCount(targetLine);
 	}
 	
-	public void setTextClassifierPrediction(NaiveBayesTextClassifierV5 textClassifier) throws Exception{
+	public void setTextClassifierPrediction(NaiveBayesTextClassifierV6 textClassifier) throws Exception{
 		this.solver.setTextClassifierResults(textClassifier.predictForATestProgram(this.solver));;
 	}
 	

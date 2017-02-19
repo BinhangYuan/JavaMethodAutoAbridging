@@ -1,0 +1,253 @@
+/*
+ * Binary solver is from http://scpsolver.org/
+ */
+
+package ilpSolver;
+
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import org.eclipse.core.runtime.Assert;
+
+import learning.JaccardDistance;
+import scpsolver.constraints.LinearBiggerThanEqualsConstraint;
+import scpsolver.constraints.LinearSmallerThanEqualsConstraint;
+import scpsolver.lpsolver.LinearProgramSolver;
+import scpsolver.lpsolver.SolverFactory;
+import scpsolver.problems.LinearProgram;
+import statementGraph.constraintAndFeatureEncoder.ConstraintAndFeatureEncoderV6;
+import statementGraph.constraintAndFeatureEncoder.DependencePair;
+import statementGraph.graphNode.StatementWrapper;
+
+public class LearningBinaryIPSolverV6 {
+	public static int PARALENGTH = StatementWrapper.statementsLabelSet.size()+ StatementWrapper.parentStatementsLabelSet.size() +4;
+	public static int BINARYPARALENGTH = StatementWrapper.statementsLabelSet.size()+ StatementWrapper.parentStatementsLabelSet.size() + 2;
+	public static int NUMERICALPARALENGTH = 2;
+	private static int LINEVARIANCETOLERANCE = 3;
+	
+	private ConstraintAndFeatureEncoderV6 encoder;
+	private LinearProgram lp;
+	private List<DependencePair> astDependenceConstraints;
+	private List<DependencePair> cfgDependenceConstraints;
+	private List<DependencePair> ddgDependenceConstraints;
+	private List<Integer> lineCostConstraints;
+	private List<Integer> statementType;
+	private List<Integer> parentStatementType;
+	private List<Boolean> textClassifierResults;
+	private List<Integer> nestedLevels;
+	private List<Integer> referencedVariableCounts;
+	private Map<Integer,Integer> typeMap;
+	private Map<Integer,Integer> parentTypeMap;
+	
+	/*
+	 * The most important thing in this class
+	 * [0,statementTypeLength-1], weight of each type;
+	 * [statementTypeLength, statmentTypeLength+StatementParentTypeLegnth-1], weight of each parent type
+	 * statementTypeLength+StatementParentTypeLegnth: weight for text classifier result;
+	 * statementTypeLength+StatementParentTypeLegnth+1: penalty weight for ddg constraints.
+	 * statementTypeLength+StatementParentTypeLegnth+2: weight for nested level.
+	 * statementTypeLength+StatementParentTypeLegnth+3: referenced variable count.
+	 */
+	double[] parameters;
+	int targetLineCount = -1;
+	int statementCount = 0;
+	boolean debug = false;
+	
+	public LearningBinaryIPSolverV6(ConstraintAndFeatureEncoderV6 encoder){
+		this.encoder = encoder;
+		this.astDependenceConstraints = new LinkedList<DependencePair>();
+		this.cfgDependenceConstraints = new LinkedList<DependencePair>();
+		this.ddgDependenceConstraints = new LinkedList<DependencePair>();
+	}
+	
+	public void setDependenceConstraints(List<DependencePair> astConstraints, List<DependencePair> cfgConstraints, List<DependencePair> ddgConstraints){
+		this.astDependenceConstraints.clear();
+		this.astDependenceConstraints.addAll(astConstraints);
+		this.cfgDependenceConstraints.clear();
+		this.cfgDependenceConstraints.addAll(cfgConstraints);
+		this.ddgDependenceConstraints.clear();
+		this.ddgDependenceConstraints.addAll(ddgConstraints);
+	}
+	
+	public void setLineCostConstraints(List<Integer> lineCostConstraints){
+		this.lineCostConstraints = lineCostConstraints;
+		this.statementCount = this.lineCostConstraints.size();
+		if(debug){
+			System.out.println("Line cost Constraints List:");
+			for(Integer i: this.lineCostConstraints){
+				System.out.println(i);
+			}
+			System.out.println("Statement counts:"+ this.statementCount);
+		}
+	}
+	
+	public void setTargetLineCount(int count){
+		this.targetLineCount = count;
+	}
+	
+	public void setParameters(double [] para){
+		Assert.isTrue(para.length == PARALENGTH);
+		this.parameters = para;
+	}
+	
+	public void setTypeMap(Map<Integer,Integer> map){
+		this.typeMap = map;
+	}
+	
+	public void setParentTypeMap(Map<Integer,Integer> map){
+		this.parentTypeMap = map;
+	}
+	
+	public void setStatementType(List<Integer> types){
+		this.statementType = types;
+	}
+	
+	public void setParentStatementType(List<Integer> parentTypes){
+		this.parentStatementType = parentTypes;
+	}
+	
+	public void setTextClassifierResults(List<Boolean> predicts){
+		this.textClassifierResults = predicts;
+	}
+	
+	public void setNestedLevels(List<Integer> levels){
+		this.nestedLevels = levels;
+	}
+	
+	public void setReferencedVariableCounts(List<Integer> counts){
+		this.referencedVariableCounts = counts;
+	}
+	
+	//For this version, we encode the type, parent type and text feature, and nested level.
+	private double computeStatementWeight(int index){
+		//Weight of statementType;
+		int type = this.statementType.get(index);
+		double result = this.parameters[this.typeMap.get(type)];
+		//Weight of parent statement type;
+		int parentType = this.parentStatementType.get(index);
+		result += this.parameters[this.typeMap.size()+this.parentTypeMap.get(parentType)];
+		//Weight of text classifier;		
+		result += this.textClassifierResults.get(index)?this.parameters[this.typeMap.size()+this.parentTypeMap.size()]:(-1*this.parameters[this.typeMap.size()+this.parentTypeMap.size()]);
+		//Weight for nested level;
+		result += this.nestedLevels.get(index)*this.parameters[this.typeMap.size()+this.parentTypeMap.get(parentType)+2];
+		//Weight for referenced variable count;
+		result += this.referencedVariableCounts.get(index)*this.parameters[this.typeMap.size()+this.parentTypeMap.get(parentType)+3];
+		return result>0?result:0.1;
+	}
+	
+	//For now, just a simple soft constraint weight;
+	private double computeDDGConstraintsPenalty(DependencePair pair){
+		return this.parameters[this.typeMap.size()+this.parentTypeMap.size()+1];
+	}
+	
+	public boolean[] solve(){
+		Assert.isTrue(this.targetLineCount!=-1);
+		//Object function: 
+		double [] objectFunc = new double[this.statementCount];
+		for(int i = 0; i < this.statementCount; i++){
+			objectFunc[i] = computeStatementWeight(i);
+		}
+		//soft constraint on DDG dependence constraints:
+		for(DependencePair pair : this.ddgDependenceConstraints){
+			double cost = computeDDGConstraintsPenalty(pair);
+			objectFunc[pair.sourceIndex] += cost;
+			objectFunc[pair.destIndex] -= cost;
+		}
+		this.lp = new LinearProgram(objectFunc);
+		//Line count constraints:
+		double [] constraint0 = new double[this.statementCount];
+		for(int i=0; i<constraint0.length; i++){
+			constraint0[i] = this.lineCostConstraints.get(i);
+		}
+		this.lp.addConstraint(new LinearSmallerThanEqualsConstraint(constraint0, this.targetLineCount+LINEVARIANCETOLERANCE, "c_upper"));
+		this.lp.addConstraint(new LinearBiggerThanEqualsConstraint(constraint0, this.targetLineCount-LINEVARIANCETOLERANCE, "c_lower"));
+		//hard constraint on AST dependence constraints:
+		for(int i=0; i<this.astDependenceConstraints.size();i++){
+			DependencePair pair = this.astDependenceConstraints.get(i);
+			double[] implyConstraint = new double[this.statementCount];
+			Arrays.fill(implyConstraint, 0);
+			implyConstraint[pair.sourceIndex] = 1.0;
+			implyConstraint[pair.destIndex] = -1.0;
+			if(debug){
+				System.out.println("<"+pair.sourceIndex+","+pair.destIndex+">");
+				for(int j=0;j<implyConstraint.length;j++){
+					System.out.print(implyConstraint[j]+" ");
+				}
+				System.out.println();
+			}
+			this.lp.addConstraint( new LinearBiggerThanEqualsConstraint(implyConstraint, 0, "c"+i));
+		}
+		//hard constraint on CFG dependence constraints:
+		for(int i=0; i<this.cfgDependenceConstraints.size();i++){
+			DependencePair pair = this.cfgDependenceConstraints.get(i);
+			double[] implyConstraint = new double[this.statementCount];
+			Arrays.fill(implyConstraint, 0);
+			implyConstraint[pair.sourceIndex] = 1.0;
+			implyConstraint[pair.destIndex] = -1.0;
+			if(debug){
+				System.out.println("<"+pair.sourceIndex+","+pair.destIndex+">");
+				for(int j=0;j<implyConstraint.length;j++){
+					System.out.print(implyConstraint[j]+" ");
+				}
+				System.out.println();
+			}
+			this.lp.addConstraint( new LinearBiggerThanEqualsConstraint(implyConstraint, 0, "c"+i));
+		}
+		//Some setup
+		lp.setMinProblem(false);
+		for(int i=0;i<this.statementCount;i++){
+			this.lp.setBinary(i);
+		}
+		LinearProgramSolver solver  = SolverFactory.newDefault(); 
+		double[] solution = solver.solve(lp);
+		boolean [] binarySolution = new boolean[this.statementCount];
+		for(int i=0; i<this.statementCount; i++){
+			binarySolution[i] = Math.abs(solution[i]-1.0)<0.00001;
+		}
+		if(debug){
+			for(int i=0;i<binarySolution.length;i++){
+				System.out.println(this.getStatementWrapperList().get(i).toString()+":"+binarySolution[i]);
+			}
+		}
+		return binarySolution;
+	}
+	
+	
+	public String outputSolveResult(){
+		return this.encoder.compressedProgram2String(this.solve());
+	}
+	
+	public double JaccordDistance2SolvedResult(boolean [] labels){
+		Assert.isTrue(labels.length == this.statementCount);
+		JaccardDistance dist = new JaccardDistance();
+		return dist.distanceBetweenSets(labels, this.solve());
+	}
+	
+	
+	public String outputLabeledResult(boolean [] labels){
+		return this.encoder.compressedProgram2String(labels);
+	}
+	
+	
+	public String originalProgram2String(){
+		return this.encoder.originProgram2String();
+	}
+	
+	public List<StatementWrapper> getStatementWrapperList(){
+		return this.encoder.getStatementWrapperList();
+	}
+	
+	public int programLineCount(String program){
+		int total = program.split(System.getProperty("line.separator")).length;
+		Assert.isTrue(total>=2);
+		return total-2;
+	}
+	
+	public int originalProgramLineCount(){
+		int total = this.originalProgram2String().split(System.getProperty("line.separator")).length;
+		Assert.isTrue(total>=2);
+		return total-2;
+	}
+}

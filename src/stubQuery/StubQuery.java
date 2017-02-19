@@ -12,7 +12,6 @@ import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.SimpleName;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -23,7 +22,6 @@ import statementGraph.ASTParserUtils;
  */
 
 public class StubQuery {
-	private static boolean view = false;
 	private static int filterVersion = 1;
 	
 	private ArrayList<File> targetDirectories;
@@ -106,7 +104,7 @@ public class StubQuery {
 							
 		cu.accept(new ASTVisitor() {	
 			public boolean visit(MethodDeclaration node){
-				SimpleName name = node.getName();
+				//SimpleName name = node.getName();
 				//System.out.println("Vistor:: Method Declaration of: '"+name+ "' at line" +cu.getLineNumber(node.getStartPosition()));
 				methods.add(node);
 				return true;
@@ -128,9 +126,6 @@ public class StubQuery {
 			}
 			else if(filterVersion==1){
 				if(this.filter1(method)){
-					if(view){
-						char c = (char) System.in.read();
-					}
 					System.out.println(filePath+": "+method.getName().toString());
 					System.out.println(method.toString());
 					JSONObject info= new JSONObject();
@@ -185,7 +180,8 @@ public class StubQuery {
 		//keywords.add("style");
 		//keywords.add("process");
 		//keywords.add("dir");
-		keywords.add("file");
+		//keywords.add("file");
+		keywords.add("compar");
 		stub.setKeywords(keywords);
 		stub.setTargetDirectories(dirs);
 		stub.setLineLimits(40);

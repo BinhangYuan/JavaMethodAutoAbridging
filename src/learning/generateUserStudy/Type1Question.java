@@ -6,12 +6,12 @@ import org.eclipse.core.runtime.Assert;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import ilpSolver.LearningBinaryIPSolverV5;
+import ilpSolver.LearningBinaryIPSolverV6;
 import ilpSolver.NaiveBinaryIPSolver;
-import learning.v5.NaiveBayesTextClassifierV5;
+import learning.v6.NaiveBayesTextClassifierV6;
 
 public class Type1Question extends Question{
-	private ArrayList<LearningBinaryIPSolverV5> solvers = new ArrayList<LearningBinaryIPSolverV5>();
+	private ArrayList<LearningBinaryIPSolverV6> solvers = new ArrayList<LearningBinaryIPSolverV6>();
 	private ArrayList<NaiveBinaryIPSolver> naiveSolvers = new ArrayList<NaiveBinaryIPSolver>();
 	
 	private String doc;
@@ -27,19 +27,19 @@ public class Type1Question extends Question{
 	}
 	
 	public void setParas(double[] para){
-		for(LearningBinaryIPSolverV5 solver:this.solvers){
+		for(LearningBinaryIPSolverV6 solver:this.solvers){
 			solver.setParameters(para);
 		}
 	}
 	
-	public void setTextClassifierPrediction(NaiveBayesTextClassifierV5 textClassifier) throws Exception{
-		for(LearningBinaryIPSolverV5 solver:this.solvers){
+	public void setTextClassifierPrediction(NaiveBayesTextClassifierV6 textClassifier) throws Exception{
+		for(LearningBinaryIPSolverV6 solver:this.solvers){
 			solver.setTextClassifierResults(textClassifier.predictForATestProgram(solver));;
 		}
 	}
 	
 	public void setTargetLineCounts(int line){
-		for(LearningBinaryIPSolverV5 solver:this.solvers){
+		for(LearningBinaryIPSolverV6 solver:this.solvers){
 			solver.setTargetLineCount(line);
 		}
 		for(NaiveBinaryIPSolver solver:this.naiveSolvers){
@@ -62,7 +62,7 @@ public class Type1Question extends Question{
 		JSONObject result = new JSONObject();
 		JSONArray codes = new JSONArray();
 		if(method==EncoderUtils.ORIGINAL){
-			for(LearningBinaryIPSolverV5 solver:this.solvers){
+			for(LearningBinaryIPSolverV6 solver:this.solvers){
 				codes.put(solver.originalProgram2String());
 			}
 		}
@@ -72,7 +72,7 @@ public class Type1Question extends Question{
 			}
 		}
 		else if(method==EncoderUtils.MYMETHOD){
-			for(LearningBinaryIPSolverV5 solver:this.solvers){
+			for(LearningBinaryIPSolverV6 solver:this.solvers){
 				codes.put(solver.outputSolveResult());
 			}
 		}

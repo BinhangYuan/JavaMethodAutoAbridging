@@ -4,14 +4,14 @@ import org.eclipse.core.runtime.Assert;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import ilpSolver.LearningBinaryIPSolverV5;
+import ilpSolver.LearningBinaryIPSolverV6;
 import ilpSolver.NaiveBinaryIPSolver;
-import learning.v5.NaiveBayesTextClassifierV5;
+import learning.v6.NaiveBayesTextClassifierV6;
 
 
 public class Type2Question extends Question {
-	private LearningBinaryIPSolverV5 solverA;
-	private LearningBinaryIPSolverV5 solverB;
+	private LearningBinaryIPSolverV6 solverA;
+	private LearningBinaryIPSolverV6 solverB;
 	
 	private NaiveBinaryIPSolver naiveSolverA;
 	private NaiveBinaryIPSolver naiveSolverB;
@@ -37,7 +37,7 @@ public class Type2Question extends Question {
 		this.solverB.setParameters(para);
 	}
 	
-	public void setTextClassifierPrediction(NaiveBayesTextClassifierV5 textClassifier) throws Exception{
+	public void setTextClassifierPrediction(NaiveBayesTextClassifierV6 textClassifier) throws Exception{
 		this.solverA.setTextClassifierResults(textClassifier.predictForATestProgram(this.solverA));
 		this.solverB.setTextClassifierResults(textClassifier.predictForATestProgram(this.solverB));
 	}
