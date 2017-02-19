@@ -93,6 +93,23 @@
 		{
 			"type":"T2",
 			"codeA":{
+				"file_path":"dataset/com/madgag/util-diff/1.33/name/fraser/neil/plaintext",
+				"file_name":"diff_match_patch.java",
+				"method":"diff_path1",
+				"pos":532
+			},
+			"codeB":{
+				"file_path":"dataset/com/madgag/util-diff/1.33/name/fraser/neil/plaintext",
+				"file_name":"diff_match_patch.java",
+				"method":"diff_path2",
+				"pos":585
+			},
+			"docA":"Work from the middle back to the start to determine the path.",
+			"docB":"Work from the middle back to the end to determine the path."
+		},
+		{
+			"type":"T2",
+			"codeA":{
 				"file_path":"dataset/org/htmlparser/htmlparser/2.1/org/htmlparser/scanners/",
 				"file_name":"StyleScanner.java",
 				"method":"scan",

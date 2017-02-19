@@ -181,10 +181,12 @@ public class StubQuery {
 		//keywords.add("process");
 		//keywords.add("dir");
 		//keywords.add("file");
-		keywords.add("compar");
+		//keywords.add("throw");
+		//keywords.add("subsequence");
+		keywords.add("middle");
 		stub.setKeywords(keywords);
 		stub.setTargetDirectories(dirs);
-		stub.setLineLimits(40);
+		stub.setLineLimits(20);
 		stub.visit();
 		stub.outputResult();
 	}
