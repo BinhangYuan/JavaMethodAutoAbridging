@@ -183,10 +183,18 @@ public class StubQuery {
 		//keywords.add("file");
 		//keywords.add("throw");
 		//keywords.add("subsequence");
-		keywords.add("middle");
+		//keywords.add("middle");
+		//keywords.add("compute");
+		//keywords.add("signature");
+		//keywords.add("quote");
+		//keywords.add("retrieve");
+		//keywords.add("token");
+		//keywords.add("request");
+		//keywords.add("map");
+		keywords.add("escape");
 		stub.setKeywords(keywords);
 		stub.setTargetDirectories(dirs);
-		stub.setLineLimits(20);
+		stub.setLineLimits(30);
 		stub.visit();
 		stub.outputResult();
 	}

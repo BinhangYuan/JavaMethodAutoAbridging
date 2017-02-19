@@ -21,6 +21,18 @@
 				"dataset/org/incava/java-diff",
 				"dataset/org/jmeld"
 			]
+		},
+		{
+			"category":"OAuth Libraries",
+			"directories":[
+				"dataset/com/google/oauth-client/google-oauth-client/1.8.0-beta",
+				"dataset/com/sun/jersey/contribs/jersey-oauth/oauth-client/1.9.1",
+				"dataset/net/oauth/core",
+				"dataset/net/smartam/leeloo/oauth2-client",
+				"dataset/oauth/signpost/signpost-core/1.2.1.1",
+				"dataset/org/codehaus/spring-security-oauth/spring-security-oauth/3.9.SS3",
+				"dataset/org/scribe"
+			]
 		}
 	]
 }

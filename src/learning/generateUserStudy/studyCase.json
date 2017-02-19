@@ -73,6 +73,57 @@
 			],
 			"doc":"The main processing loop. Pull suspect URLs off the queue one at a time, fetch and parse it, request images and enqueue further links."
 		},
+		{	
+			"type":"T2",
+			"codeA":{
+				"file_path":"dataset/oauth/signpost/signpost-core/1.2.1.1/com/google/gdata/util/common/base/",
+				"file_name":"UnicodeEscaper.java",
+				"method":"escapeSlow",
+				"pos":148
+			},
+			"codeB":{
+				"file_path":"dataset/oauth/signpost/signpost-core/1.2.1.1/com/google/gdata/util/common/base/",
+				"file_name":"PercentEscaper.java",
+				"method":"escape",
+				"pos":195
+			},
+			"docA":"Returns the escaped form of a given literal string, starting at the given index. It is protected to allow subclasses to override the fastpath escaping function to inline their escaping test.",
+			"docB":"Escapes the given Unicode code point in UTF-8."
+		},
+		{
+			"type":"T2",
+			"codeA":{
+				"file_path":"dataset/org/codehaus/spring-security-oauth/spring-security-oauth/3.9.SS3/org/springframework/security/oauth/provider/",
+				"file_name":"CoreOAuthProviderSupport.java",
+				"method":"loadSignificantParametersForSignatureBaseString",
+				"pos":169
+			},
+			"codeB":{
+				"file_path":"dataset/com/sun/jersey/contribs/jersey-oauth/oauth-client/1.9.1/com/sun/jersey/oauth/client/",
+				"file_name":"RequestUtil.java",
+				"method":"getEntityParameters",
+				"pos":108
+			},
+			"docB":"Gets the parameters (name-to-value map) that are to be used to calculate the signature base string. The parameters will be encoded by oauthEncode method.",
+			"docA":"Gets the parameters from a request as a map. If the request does not have a POST method, or the media type is not x-www-form-urlencoded, then null is returned."
+		}
+		{
+			"type":"T2",
+			"codeA":{
+				"file_path":"dataset/org/codehaus/spring-security-oauth/spring-security-oauth/3.9.SS3/org/springframework/security/oauth/consumer/",
+				"file_name":"CoreOAuthConsumerSupport.java",
+				"method":"getTokenFromProvider",
+				"pos":338
+			},
+			"codeB":{
+				"file_path":"dataset/oauth/signpost/signpost-core/1.2.1.2/oauth/signpost/",
+				"file_name":"AbstractOAuthProvider.java",
+				"method":"retrieveToken",
+				"pos":111
+			},
+			"docA":"Get the consumer token with the given parameters and URL. The determination of whether the retrieved token is an access token depends on whether a request token is provided.",
+			"docB":"<p> Implemented by subclasses. The responsibility of this method is to contact the service provider at the given endpoint URL and fetch a request or access token. What kind of token is retrieved solely depends on the URL being used. </p> <p> Correct implementations of this method must guarantee the following post-conditions: <ul> <li>the  {@link OAuthConsumer} passed to this method must have a valid{@link OAuth#OAUTH_TOKEN} and {@link OAuth#OAUTH_TOKEN_SECRET} set bycalling  {@link OAuthConsumer#setTokenWithSecret(String,String)}</li> <li> {@link #getResponseParameters()} must return the set of queryparameters served by the service provider in the token response, with all OAuth specific parameters being removed</li> </ul> </p>"
+		}
 		{
 			"type":"T2",
 			"codeA":{
