@@ -134,7 +134,8 @@ public class LearningBinaryIPSolverV6 {
 		result += this.nestedLevels.get(index)*this.parameters[this.typeMap.size()+this.parentTypeMap.get(parentType)+2];
 		//Weight for referenced variable count;
 		result += this.referencedVariableCounts.get(index)*this.parameters[this.typeMap.size()+this.parentTypeMap.get(parentType)+3];
-		return result>0?result:0.1;
+		return result;
+		//return result>0?result:0.1;
 	}
 	
 	//For now, just a simple soft constraint weight;
