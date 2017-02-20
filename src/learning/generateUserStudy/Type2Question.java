@@ -58,6 +58,9 @@ public class Type2Question extends Question {
 		Assert.isTrue(rate>0 && rate<1);
 		int originalLines = this.solverA.originalProgramLineCount();
 		int targetLine = (int)(originalLines * rate);
+		if(targetLine<1){
+			System.out.println(this.solverA.getStatementWrapperList().size());
+		}
 		Assert.isTrue(targetLine>=1);
 		this.solverA.setTargetLineCount(targetLine);
 		this.naiveSolverA.setTargetLineCount(targetLine);
