@@ -191,7 +191,10 @@ public class StubQuery {
 		//keywords.add("token");
 		//keywords.add("request");
 		//keywords.add("map");
-		keywords.add("escape");
+		//keywords.add("escape");
+		//keywords.add("resource");
+		//keywords.add("send");
+		keywords.add("auth");
 		stub.setKeywords(keywords);
 		stub.setTargetDirectories(dirs);
 		stub.setLineLimits(30);

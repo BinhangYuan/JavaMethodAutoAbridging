@@ -5,6 +5,114 @@
 			"type":"T1",
 			"codes":[
 				{
+					"file_path":"dataset/javax/mail/mail/1.4.5-rc1/com/sun/mail/smtp/",
+					"file_name":"SMTPTransport.java",
+					"method":"authenticate",
+					"pos":692
+				},
+				{
+					"file_path":"dataset/commons-net/commons-net/3.1/org/apache/commons/net/imap/",
+					"file_name":"AuthenticatingIMAPClient.java",
+					"method":"auth",
+					"pos":124
+				},
+				{
+					"file_path":"dataset/javax/mail/mail/1.4.5-rc1/com/sun/mail/imap/protocol/",
+					"file_name":"IMAPProtocol.java",
+					"method":"authlogin",
+					"pos":374
+				},
+				{
+					"file_path":"dataset/javax/mail/mail/1.4.5-rc1/com/sun/mail/imap/protocol/",
+					"file_name":"IMAPProtocol.java",
+					"method":"authntlm",
+					"pos":594
+				},
+				{
+					"file_path":"dataset/javax/mail/mail/1.4.5-rc1/com/sun/mail/imap/protocol/",
+					"file_name":"IMAPProtocol.java",
+					"method":"authplain",
+					"pos":483
+				}
+			],
+			"doc":"Performs the actual protocol-specific connection attempt. Will attempt to connect to \"localhost\" if the host was null. Unless mail.smtp.ehlo is set to false, we'll try to identify ourselves using the ESMTP command EHLO. If mail.smtp.auth is set to true, we insist on having a username and password, and will try to authenticate ourselves if the server supports the AUTH extension (RFC 2554)."
+		},
+		{
+			"type":"T1",
+			"codes":[
+				{
+					"file_path":"dataset/org/seleniumhq/seleniumselenium-server/2.8.0/org/openqa/jetty/http/",
+					"file_name":"HttpServer.java",
+					"method":"service",
+					"pos":859
+				},
+				{
+					"file_path":"dataset/org/seleniumhq/seenium/selenium-server/2.8.0/org/openqa/jetty/http/",
+					"file_name":"HttpContext.java",
+					"method":"handle",
+					"pos":1397
+				},
+				{
+					"file_path":"dataset/og/seleniumhq/selenium/selenium-server/2.8.0/org/openqa/jetty/jetty/servlet/",
+					"file_name":"ServletHandler.java",
+					"method":"handle",
+					"pos":503
+				},
+				{
+					"file_path":"dataset/ne/sourceforge/htmlunit/htmlunit/2.9/com/gargoylesoftware/htmlunit/html/xpath/",
+					"file_name":"XPathAdapter.java",
+					"method":"execute",
+					"pos":141
+				},
+				{
+					"file_path":"dataset/org/seleniumhq/selenium/slenium-server/2.8.0/org/openqa/jetty/http/",
+					"file_name":"SecurityConstraint.java",
+					"method":"check",
+					"pos":276
+				}
+			],
+			"doc":"Process a request. Handle the request by passing it to the HttpHandler contained in the mapped HttpContexts. The requests host and path are used to select a list of HttpContexts. Each HttpHandler in these context is offered the request in turn, until the request is handled. If no handler handles the request, 404 Not Found is returned."
+		},
+		{
+			"type":"T1",
+			"codes":[
+				{
+					"file_path":"dataset/org/seleniumhq/selenium/selenium-server/2.8.0/org/openqa/jetty/http/",
+					"file_name":"ResourceCache.java",
+					"method":"getResource",
+					"pos":210
+				},
+				{
+					"file_path":"dataset/org/seleniumhq/selenium/selenium-server/2.8.0/org/openqa/grid/common/",
+					"file_name":"JSONConfigurationUtils.java",
+					"method":"loadJSON",
+					"pos":16
+				},
+				{
+					"file_path":"dataset/org/seleniumhq/selenium/selenium-server/2.8.0/org/openqa/grid/internal/utils/",
+					"file_name":"GridHubConfiguration.java",
+					"method":"loadFromGridYml",
+					"pos":195
+				},
+				{
+					"file_path":"dataset/org/seleniumhq/selenium/selenium-server/2.8.0/org/openqa/jetty/util/",
+					"file_name":"Resource.java",
+					"method":"newResource",
+					"pos":84
+				},
+				{
+					"file_path":"dataset/org/seleniumhq/selenium/selenium-server/2.8.0/org/openqa/jetty/util/",
+					"file_name":"Resource.java",
+					"method":"getListHTML",
+					"pos":341
+				}
+			],
+			"doc":"Get a resource from the context. Cached Resources are returned if the resource fits within the LRU cache.  Directories may have CachedResources returned, but the caller must use the CachedResource.setCachedData method to set the formatted directory content."
+		},
+		{
+			"type":"T1",
+			"codes":[
+				{
 					"file_path":"dataset/org/jmeld/jmeld/2.1/org/apache/jmeld/tools/ant/",
 					"file_name":"DirectoryScanner.java",
 					"method":"scandir",
@@ -73,6 +181,23 @@
 			],
 			"doc":"The main processing loop. Pull suspect URLs off the queue one at a time, fetch and parse it, request images and enqueue further links."
 		},
+		{
+			"type":"T2",
+			"codeA":{
+				"file_path":"dataset/commons-net/commons-net/3.1/org/apache/commons/net/ftp/",
+				"file_name":"FTPClient.java",
+				"method":"_openDataConnection_",
+				"pos":660
+			},
+			"codeB":{
+				"file_path":"dataset/commons-net/commons-net/3.1/org/apache/commons/net/ftp/",
+				"file_name":"FTPSClient.java",
+				"method":"_openDataConnection_",
+				"pos":554
+			},
+			"docA":"Establishes a data connection with the FTP server, returning a Socket for the connection if successful.  If a restart offset has been set with setRestartOffset(long), a REST command is issued to the server with the offset as an argument before establishing the data connection.  Active mode connections also cause a local PORT command to be issued.",
+			"docB":"Returns a socket of the data connection. Wrapped as an SSLSocket, which carries out handshake processing."
+		},
 		{	
 			"type":"T2",
 			"codeA":{
@@ -89,6 +214,23 @@
 			},
 			"docA":"Returns the escaped form of a given literal string, starting at the given index. It is protected to allow subclasses to override the fastpath escaping function to inline their escaping test.",
 			"docB":"Escapes the given Unicode code point in UTF-8."
+		},
+		{
+			"type":"T2",
+			"codeA":{
+				"file_path":"dataset/org/jvnet/hudson/htmlunit/2.6-hudson-2/com/gargoylesoftware/htmlunit/html/",
+				"file_name":"HtmlForm.java",
+				"method":"submit",
+				"pos":95
+			},
+			"codeB":{
+				"file_path":"dataset/net/sourceforge/jwebunit/jwebunit-htmlunit-plugin/3.0/net/sourceforge/jwebunit/htmlunit/",
+				"file_name":"HtmlUnitTestingEngineImpl.java",
+				"method":"submit",
+				"pos":1595
+			},
+			"docA":"Submit this form to the server. If parameter is null, then the submission is treated as if it was triggered by JavaScript, and the onsubmit handler will not be executed.",
+			"docB":"Submit the current form with the specifed submit button."
 		},
 		{
 			"type":"T2",
@@ -226,6 +368,15 @@
 				"file_name":"SiteCapturer.java",
 				"method":"process",
 				"pos":470
+			}
+		},
+		{
+			"type":"T3",
+			"code":{
+				"file_path":"dataset/commons-net/commons-net/3.1/org/apache/commons/net/tftp/",
+				"file_name":"TFTPClient.java",
+				"method":"receiveFile",
+				"pos":109
 			}
 		}
 	]

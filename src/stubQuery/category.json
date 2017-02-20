@@ -33,6 +33,33 @@
 				"dataset/org/codehaus/spring-security-oauth/spring-security-oauth/3.9.SS3",
 				"dataset/org/scribe"
 			]
-		}
+		},
+		{
+			"category":"Web Testing",
+			"directories":[
+				"dataset/net/sourceforge/htmlunit/htmlunit/2.9",
+				"dataset/net/sourceforge/jwebunit/jwebunit-htmlunit-plugin/3.0",
+				"dataset/org/fluentlenium/fluentlenium-core/0.6-RC1",
+				"dataset/org/jvnet/hudson/htmlunit/2.6-hudson-2",
+				"dataset/org/seleniumhq/selenium/selenium-java/2.8.0",
+				"dataset/org/seleniumhq/selenium/selenium-server/2.8.0",
+			]
+		},
+		{
+			"category":"XPath Libraries",
+			"directories":[
+				"dataset/jaxen",
+				"dataset/commons-jxpath",
+				"dataset/org/tbag/xpather"
+			]
+		},
+		{
+			"category":"Mail Clients",
+			"directories":[
+				"dataset/javax/mail/javax.mail-api/1.4.5-rc1",
+				"dataset/javax/mail/mail/1.4.5-rc1",
+				"dataset/commons-net/commons-net/3.1"
+			]
+		},
 	]
 }
