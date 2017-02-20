@@ -46,14 +46,6 @@
 			]
 		},
 		{
-			"category":"XPath Libraries",
-			"directories":[
-				"dataset/jaxen",
-				"dataset/commons-jxpath",
-				"dataset/org/tbag/xpather"
-			]
-		},
-		{
 			"category":"Mail Clients",
 			"directories":[
 				"dataset/javax/mail/javax.mail-api/1.4.5-rc1",
@@ -61,5 +53,13 @@
 				"dataset/commons-net/commons-net/3.1"
 			]
 		},
+		{
+			"category":"XPath Libraries",
+			"directories":[
+				"dataset/jaxen",
+				"dataset/commons-jxpath",
+				"dataset/org/tbag/xpather"
+			]
+		}
 	]
 }

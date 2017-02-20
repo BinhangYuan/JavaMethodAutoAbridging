@@ -5,6 +5,42 @@
 			"type":"T1",
 			"codes":[
 				{
+					"file_path":"dataset/commons-jxpath/commons-jxpath/1.3/org/apache/commons/jxpath/ri/axes/",
+					"file_name":"SimplePathInterpreter.java",
+					"method":"doStepPredicatesStandard",
+					"pos":359
+				},
+				{
+					"file_path":"dataset/commons-jxpath/commons-jxpath/1.3/org/apache/commons/jxpath/ri/axes/",
+					"file_name":"SimplePathInterpreter.java",
+					"method":"doPredicateName",
+					"pos":480
+				},
+				{
+					"file_path":"dataset/commons-jxpath/commons-jxpath/1.3/org/apache/commons/jxpath/ri/axes/",
+					"file_name":"SimplePathInterpreter.java",
+					"method":"doPredicatesStandard",
+					"pos":591
+				},
+				{
+					"file_path":"dataset/commons-jxpath/commons-jxpath/1.3/org/apache/commons/jxpath/ri/axes/SimplePathInterpreter.java",
+					"file_name":"SimplePathInterpreter.java",
+					"method":"doStepNoPredicatesPropertyOwner",
+					"pos":180
+				},
+				{
+					"file_path":"dataset/commons-jxpath/commons-jxpath/1.3/org/apache/commons/jxpath/ri/axes/SimplePathInterpreter.java",
+					"file_name":"SimplePathInterpreter.java",
+					"method":"doPredicate",
+					"pos":441
+				}	
+			],
+			"doc":"A path that starts with a standard InfoSet node, e.g. a DOM Node. The method evaluates the first predicate in a special way and then forwards to a general predicate processing method."
+		},
+		{
+			"type":"T1",
+			"codes":[
+				{
 					"file_path":"dataset/javax/mail/mail/1.4.5-rc1/com/sun/mail/smtp/",
 					"file_name":"SMTPTransport.java",
 					"method":"authenticate",
