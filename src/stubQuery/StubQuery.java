@@ -194,7 +194,7 @@ public class StubQuery {
 		//keywords.add("escape");
 		//keywords.add("resource");
 		//keywords.add("send");
-		//keywords.add("predicate");
+		keywords.add("style");
 		stub.setKeywords(keywords);
 		stub.setTargetDirectories(dirs);
 		stub.setLineLimits(30);

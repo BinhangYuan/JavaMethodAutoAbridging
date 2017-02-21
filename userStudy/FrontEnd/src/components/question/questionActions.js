@@ -2,9 +2,15 @@ import Action, {resource, displayErrorMsg} from '../../actions'
 import {surveyConfig} from './descriptionConst'
 
 
+//let field = "questionAll";
+let field = "questionSample";
+//let field = "questionStub";
+
 export function getQuestion(){
-	return (dispatch) => {
-		return resource('GET', 'questions')
+	return (dispatch, getState) => {
+		let email = getState().visit.email;
+		console.log(email)
+		return resource('GET', field, email)
 		.then((response)=>{
 			const questions = response.questions;
 			dispatch({type:Action.UPDATEQUESTION, questions});

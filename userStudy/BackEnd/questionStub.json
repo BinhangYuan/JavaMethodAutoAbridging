@@ -1,89 +1,34 @@
 {
 	"questions":{
 		"1":{
-			"type":"T1",
-			"doc":"This is a stub description",
-			"codes":
-			[
-				{
-					"r10":"Code fragment1 //r10",
-					"r20":"Code fragment1 //r20",
-					"r50%":"Code fragment1 //r50%"
-				},
-				{
-					"r10":"Code fragment2 //r10",
-					"r20":"Code fragment2 //r20",
-					"r50%":"Code fragment2 //r50%"
-				},
-				{
-					"r10":"Code fragment3 //r10",
-					"r20":"Code fragment3 //r20",
-					"r50%":"Code fragment3 //r50%"
-				}
-			]
+			"type":"T3",
+			"code_original":"String T3stub = null //Original",
+			"method":0,
+			"code_native":{
+						"r10":"String T3stubNaive = null //r10",
+						"r20":"String T3stubNaive = null //r20",
+						"r50%":"String T3stubNaive = null //r50%"
+			},
+			"code_mymethod":{
+						"r10":"String T3stubMy = null //r10",
+						"r20":"String T3stubMy = null //r20",
+						"r50%":"String T3stubMy = null //r50%"
+			}
 		},
 		"2":{
-			"type":"T2",
-			"codeA":{
-						"r10":"String stub1A =null //r10",
-						"r20":"String stub1A =null //r20",
-						"r50%":"String stub1A =null //r50%"
-					},
-			"codeB":{
-						"r10":"String stub1B =null //r10",
-						"r20":"String stub1B =null //r20",
-						"r50%":"String stub1B =null //r50%"
-					},
-			"docA":"Description A says so.",
-			"docB":"Description B says so.",
-			"Alternatives":[
-				"Method A mactches Description A, Mehtod B mactches Description B.",
-				"Method A mactches Description B, Mehtod A mactches Description B.",
-				"Impossible to decide."
-			]
-		},
-		"3":{
-			"type":"T2",
-			"codeA":{
-						"r10":"String stub2A =null //r10",
-						"r20":"String stub2A =null //r20",
-						"r50%":"String stub2A =null //r50%"
-					},
-			"codeB":{
-						"r10":"String stub2B =null //r10",
-						"r20":"String stub2B =null //r20",
-						"r50%":"String stub2B =null //r50%"
-					},
-			"docA":"Description A says so.",
-			"docB":"Description B says so.",
-			"Alternatives":[
-				"Method A mactches Description A, Mehtod B mactches Description B.",
-				"Method A mactches Description B, Mehtod A mactches Description B.",
-				"Impossible to decide."
-			]
-		},
-		"4":{
 			"type":"T3",
-			"method":"non-reduced code",
-			"code":"String T3stub1 = null"
-		},
-		"5":{
-			"type":"T3",
-			"method":"Reduced code by Method A",
-			"code":{
-						"r10":"String T3stub2 = null //r10",
-						"r20":"String T3stub2 = null //r20",
-						"r50%":"String T3stub2 = null //r50%"
-					}
-		},
-		"6":{
-			"type":"T3",
-			"method":"Reduced code by Method B",
-			"code":{
-						"r10":"String T3stub3 = null //r10",
-						"r20":"String T3stub3 = null //r20",
-						"r50%":"String T3stub3 = null //r50%"
-					}
-		}		
+			"code_original":"String T2stub2 = null //Original",
+			"method":0,
+			"code_native":{
+						"r10":"String T3stub2Naive = null //r10",
+						"r20":"String T3stub2Naive = null //r20",
+						"r50%":"String T3stub2Naive = null //r50%"
+			},
+			"code_mymethod":{
+						"r10":"String T3stub2My = null //r10",
+						"r20":"String T3stub2My = null //r20",
+						"r50%":"String T3stub2My = null //r50%"
+			}
+		}
 	}
 }

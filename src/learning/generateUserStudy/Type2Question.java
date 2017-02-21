@@ -19,6 +19,8 @@ public class Type2Question extends Question {
 	private String docA;
 	private String docB;
 	
+	private boolean randExchange = EncoderUtils.randGenerate.nextBoolean();
+	
 	
 	public Type2Question(JSONObject input) throws Exception{
 		JSONObject codeA = input.getJSONObject("codeA");
@@ -58,9 +60,6 @@ public class Type2Question extends Question {
 		Assert.isTrue(rate>0 && rate<1);
 		int originalLines = this.solverA.originalProgramLineCount();
 		int targetLine = (int)(originalLines * rate);
-		if(targetLine<1){
-			System.out.println(this.solverA.getStatementWrapperList().size());
-		}
 		Assert.isTrue(targetLine>=1);
 		this.solverA.setTargetLineCount(targetLine);
 		this.naiveSolverA.setTargetLineCount(targetLine);
@@ -86,8 +85,14 @@ public class Type2Question extends Question {
 			result.put("codeA", this.solverA.outputSolveResult());
 			result.put("codeB", this.solverB.outputSolveResult());
 		}
-		result.put("docA", this.docA);
-		result.put("docB", this.docB);
+		if(randExchange){
+			result.put("docA", this.docB);
+			result.put("docB", this.docA);
+		}
+		else{
+			result.put("docA", this.docA);
+			result.put("docB", this.docB);
+		}
 		result.put("type", "T2");
 		result.put("method", method);
 		JSONArray alternatives = new JSONArray();
@@ -95,6 +100,7 @@ public class Type2Question extends Question {
 		alternatives.put("Method A mactches Description B, Mehtod A mactches Description B.");
 		alternatives.put("Impossible to decide.");
 		result.put("Alternatives", alternatives);
+		result.put("correctSolution",randExchange?1:0);
 		return result;
 	}
 }

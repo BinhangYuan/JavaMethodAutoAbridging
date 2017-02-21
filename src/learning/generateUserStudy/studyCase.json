@@ -1,5 +1,5 @@
 {
-	"para":[10.0,15.0,16.0,1.0,1.0,2.0,15.0,2.0,4.0,12.0,11.0,7.0,7.0,1.0,12.0,1.0,15.0,4.0,6.0,14.0,10.0,12.0,11.0,3.0,4.0,4.0,2.0,1.0,14.0,2.0,2.0,3.0,6.0,2.0,13.0,2.0,12.0,2.0,-0.5,1.0],
+	"para":[0.0,0.0,4.0,-6.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-1.0,2.0,-1.0,0.0,-7.0,-1.0,-2.0,0.0,0.0,1.0,1.0,2.0,1.0,0.0,-1.0,2.0,0.0,0.0,1.0,1.0,1.0,1.0,-7.0,4.0,1.0,3.0,0.0],
 	"questions":[
 		{
 			"type":"T1",
@@ -322,23 +322,6 @@
 		{
 			"type":"T2",
 			"codeA":{
-				"file_path":"dataset/com/madgag/util-diff/1.33/name/fraser/neil/plaintext/",
-				"file_name":"diff_match_patch.java",
-				"method":"diff_path1",
-				"pos":532
-			},
-			"codeB":{
-				"file_path":"dataset/com/madgag/util-diff/1.33/name/fraser/neil/plaintext/",
-				"file_name":"diff_match_patch.java",
-				"method":"diff_path2",
-				"pos":585
-			},
-			"docA":"Work from the middle back to the start to determine the path.",
-			"docB":"Work from the middle back to the end to determine the path."
-		},
-		{
-			"type":"T2",
-			"codeA":{
 				"file_path":"dataset/org/htmlparser/htmlparser/2.1/org/htmlparser/scanners/",
 				"file_name":"StyleScanner.java",
 				"method":"scan",
@@ -369,6 +352,23 @@
 			},
 			"docA":"Extract the location of the image Given the tag (with attributes), and the url of the html page in which this tag exists, perform best effort to extract the 'intended' URL. Attempts to handle such attributes as: <pre> &lt;IMG SRC=http://www.redgreen.com&gt; - normal &lt;IMG SRC =http://www.redgreen.com&gt; - space between attribute name and equals sign &lt;IMG SRC= http://www.redgreen.com&gt; - space between equals sign and attribute value &lt;IMG SRC = http://www.redgreen.com&gt; - space both sides of equals sign <\/pre>\n",
 			"docB":"Get the links of an element of a document. Only gets the links on IMG elements that reference another image. The latter is based on suffix (.jpg, .gif and .png)."
+		},
+		{
+			"type":"T2",
+			"codeA":{
+				"file_path":"dataset/net/sf/jtidy/jtidy/r938/org/w3c/tidy/",
+				"file_name":"Clean.java",
+				"method":"createStyleElement",
+				"pos":513
+			},
+			"codeB":{
+				"file_path":"dataset/net/sf/jtidy/jtidy/r938/org/w3c/tidy/",
+				"file_name":"Clean.java",
+				"method":"createProps",
+				"pos":168
+			},
+			"docA":"Create style element using rules from dictionary.",
+			"docB":"Create sorted linked list of properties from style string."
 		},
 		{
 			"type":"T3",

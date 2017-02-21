@@ -1,16 +1,6 @@
 {
 	"query":[
 		{
-			"category":"HTML Parser",
-			"directories":[
-				"dataset/org/jsoup",
-				"dataset/net/sourceforge/nekohtml",
-				"dataset/org/cowan/tagsoup",
-				"dataset/net/sf/jtidy",
-				"dataset/org/htmlparser"
-			]
-		},
-		{
 			"category":"Diff and Patch Libraries",
 			"directories":[
 				"dataset/com/bmsi/gnudiff",
@@ -59,6 +49,16 @@
 				"dataset/jaxen",
 				"dataset/commons-jxpath",
 				"dataset/org/tbag/xpather"
+			]
+		},
+		{
+			"category":"HTML Parser",
+			"directories":[
+				"dataset/org/jsoup",
+				"dataset/net/sourceforge/nekohtml",
+				"dataset/org/cowan/tagsoup",
+				"dataset/net/sf/jtidy",
+				"dataset/org/htmlparser"
 			]
 		}
 	]

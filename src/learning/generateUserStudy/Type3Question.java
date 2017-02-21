@@ -41,35 +41,31 @@ public class Type3Question extends Question {
 		this.solver.setTextClassifierResults(textClassifier.predictForATestProgram(this.solver));;
 	}
 	
-	public JSONObject computeOutput(int method){
+	public JSONObject computeOutput(){
 		JSONObject result = new JSONObject();
-		if(method==EncoderUtils.ORIGINAL){
-			result.put("code", this.solver.originalProgram2String());
-		}
-		else if(method==EncoderUtils.NAIVEMETHOD){
-			JSONObject code = new JSONObject();
-			this.naiveSolver.setTargetLineCount(10);
-			code.put("r10", this.naiveSolver.outputSolveResult());
-			this.naiveSolver.setTargetLineCount(20);
-			code.put("r20", this.naiveSolver.outputSolveResult());
-			int originalLines = this.solver.originalProgramLineCount();
-			this.naiveSolver.setTargetLineCount(originalLines/2);
-			code.put("r50%", this.naiveSolver.outputSolveResult());
-			result.put("code", code);
-		}
-		else if(method==EncoderUtils.MYMETHOD){
-			JSONObject code = new JSONObject();
-			this.solver.setTargetLineCount(10);
-			code.put("r10", this.solver.outputSolveResult());
-			this.solver.setTargetLineCount(20);
-			code.put("r20", this.solver.outputSolveResult());
-			int originalLines = this.solver.originalProgramLineCount();
-			this.solver.setTargetLineCount(originalLines/2);
-			code.put("r50%", this.solver.outputSolveResult());
-			result.put("code", code);
-		}
+		
+		result.put("code_original", this.solver.originalProgram2String());
+		
+		int originalLines = this.solver.originalProgramLineCount();
+		JSONObject naiveCode = new JSONObject();
+		this.naiveSolver.setTargetLineCount(10);
+		naiveCode.put("r10", this.naiveSolver.outputSolveResult());
+		this.naiveSolver.setTargetLineCount(20);
+		naiveCode.put("r20", this.naiveSolver.outputSolveResult());
+		this.naiveSolver.setTargetLineCount(originalLines/2);
+		naiveCode.put("r50%", this.naiveSolver.outputSolveResult());
+		result.put("code_native", naiveCode);
+		
+		JSONObject myMethodCode = new JSONObject();
+		this.solver.setTargetLineCount(10);
+		myMethodCode.put("r10", this.solver.outputSolveResult());
+		this.solver.setTargetLineCount(20);
+		myMethodCode.put("r20", this.solver.outputSolveResult());
+		this.solver.setTargetLineCount(originalLines/2);
+		myMethodCode.put("r50%", this.solver.outputSolveResult());
+		result.put("code_mymethod", myMethodCode);
 		result.put("type", "T3");
-		result.put("method", method);
+		result.put("method", 0);
 		return result;
 	}
 }

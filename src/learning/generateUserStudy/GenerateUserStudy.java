@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
 
+import org.eclipse.core.runtime.Assert;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -96,11 +97,7 @@ public class GenerateUserStudy {
 			i++;
 		}
 		for(Type3Question q3:this.type3questions){
-			questions.put(""+i, q3.computeOutput(EncoderUtils.ORIGINAL));
-			i++;
-			questions.put(""+i, q3.computeOutput(EncoderUtils.NAIVEMETHOD));
-			i++;
-			questions.put(""+i, q3.computeOutput(EncoderUtils.MYMETHOD));
+			questions.put(""+i, q3.computeOutput());
 			i++;
 		}
 		JSONObject result = new JSONObject();
@@ -111,8 +108,82 @@ public class GenerateUserStudy {
 	}
 	
 	
-	public void generateAllCasesForStudy(){
+	public void generateAllCasesForStudy() throws Exception{
+		JSONObject sample0 = new JSONObject();
+		JSONObject sample1 = new JSONObject();
+		JSONObject sample2 = new JSONObject();
 		
+		int i = 0;
+		Assert.isTrue(this.type1questions.size()==6);
+		for(; i < this.type1questions.size(); i++){
+			Type1Question q1 = this.type1questions.get(i);
+			if(i%3==0){
+				sample0.put(""+(i+1), q1.computeOutput(EncoderUtils.ORIGINAL));
+				sample1.put(""+(i+1), q1.computeOutput(EncoderUtils.NAIVEMETHOD));
+				sample2.put(""+(i+1), q1.computeOutput(EncoderUtils.MYMETHOD));
+			}
+			else if(i%3==1){
+				sample0.put(""+(i+1), q1.computeOutput(EncoderUtils.NAIVEMETHOD));
+				sample1.put(""+(i+1), q1.computeOutput(EncoderUtils.MYMETHOD));
+				sample2.put(""+(i+1), q1.computeOutput(EncoderUtils.ORIGINAL));
+			}
+			else if(i%3==2){
+				sample0.put(""+(i+1), q1.computeOutput(EncoderUtils.MYMETHOD));
+				sample1.put(""+(i+1), q1.computeOutput(EncoderUtils.ORIGINAL));
+				sample2.put(""+(i+1), q1.computeOutput(EncoderUtils.NAIVEMETHOD));
+			}
+		}
+		
+		Assert.isTrue(this.type2questions.size()==9);
+		for(; i < this.type2questions.size() + this.type1questions.size() ; i++){
+			Type2Question q2 = this.type2questions.get(i-this.type1questions.size());
+			if(i%3==0){
+				sample0.put(""+(i+1), q2.computeOutput(EncoderUtils.ORIGINAL));
+				sample1.put(""+(i+1), q2.computeOutput(EncoderUtils.NAIVEMETHOD));
+				sample2.put(""+(i+1), q2.computeOutput(EncoderUtils.MYMETHOD));
+			}
+			else if(i%3==1){
+				sample0.put(""+(i+1), q2.computeOutput(EncoderUtils.NAIVEMETHOD));
+				sample1.put(""+(i+1), q2.computeOutput(EncoderUtils.MYMETHOD));
+				sample2.put(""+(i+1), q2.computeOutput(EncoderUtils.ORIGINAL));
+			}
+			else if(i%3==2){
+				sample0.put(""+(i+1), q2.computeOutput(EncoderUtils.MYMETHOD));
+				sample1.put(""+(i+1), q2.computeOutput(EncoderUtils.ORIGINAL));
+				sample2.put(""+(i+1), q2.computeOutput(EncoderUtils.NAIVEMETHOD));
+			}
+		}
+		i++;
+		Assert.isTrue(this.type3questions.size()==5);
+		for(Type3Question q3:this.type3questions){
+			sample0.put(""+i, q3.computeOutput());
+			sample1.put(""+i, q3.computeOutput());
+			sample2.put(""+i, q3.computeOutput());
+			i++;
+		}
+		JSONObject result0 = new JSONObject();
+		JSONObject result1 = new JSONObject();
+		JSONObject result2 = new JSONObject();
+		
+		result0.put("questions", sample0);
+		result1.put("questions", sample1);
+		result2.put("questions", sample2);
+		
+		result0.put("sampleIndex", 0);
+		result1.put("sampleIndex", 1);
+		result2.put("sampleIndex", 2);
+		
+		FileWriter file0 = new FileWriter("userStudy/BackEnd/question-sample0.json");
+		FileWriter file1 = new FileWriter("userStudy/BackEnd/question-sample1.json");
+		FileWriter file2 = new FileWriter("userStudy/BackEnd/question-sample2.json");
+		
+		result0.write(file0);
+		result1.write(file1);
+		result2.write(file2);
+		
+		file0.close();
+		file1.close();
+		file2.close();
 	}
 	
 	
@@ -120,5 +191,6 @@ public class GenerateUserStudy {
 		final File input = new File("src/learning/generateUserStudy/studyCase.json");
 		GenerateUserStudy studyCase = new GenerateUserStudy(input);
 		studyCase.generateWholeCaseForVerification();
+		studyCase.generateAllCasesForStudy();
 	}
 }

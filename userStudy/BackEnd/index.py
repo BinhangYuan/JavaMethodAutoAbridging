@@ -3,6 +3,8 @@ from flask_cors import CORS
 import json
 import time
 
+userCount = 0
+sampleDic = {}
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
@@ -21,7 +23,7 @@ def visitor():
 @app.route("/submit", methods=['POST'])
 def submit():
 	#print dict(request.get_json())
-	jsonObject = request.get_json();
+	jsonObject = request.get_json()
 	if 'visitor' in jsonObject:
 		email = jsonObject['visitor']['email']
 		timestamp = int(time.time())
@@ -33,12 +35,31 @@ def submit():
 		return jsonify({"result":"failure"})
 
 
-@app.route("/questions")
-def questions():
+@app.route("/questionStub")
+def questionStub():
+	with open('questionStub.json') as file:
+		questions = json.load(file)
+    	return jsonify(questions)
+
+
+@app.route("/questionAll")
+def questionAll():
 	with open('questionAll.json') as file:
 		questions = json.load(file)
     	return jsonify(questions)
 
+
+@app.route("/questionSample")
+def questionSample():
+	email = request.headers["email"]
+	if email not in sampleDic:
+		global userCount
+		sampleDic[email] = userCount%3
+		userCount += 1
+	index = sampleDic[email]
+	with open('question-sample'+str(index)+'.json') as file:
+		questions = json.load(file)
+    	return jsonify(questions)
 
 
 if __name__ == "__main__":

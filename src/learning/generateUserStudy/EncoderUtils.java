@@ -1,5 +1,7 @@
 package learning.generateUserStudy;
 
+import java.util.Random;
+
 import ilpSolver.LearningBinaryIPSolverV5;
 import ilpSolver.LearningBinaryIPSolverV6;
 import ilpSolver.NaiveBinaryIPSolver;
@@ -13,6 +15,7 @@ public class EncoderUtils {
 	public static int ORIGINAL = 0;
 	public static int NAIVEMETHOD = 1;
 	public static int MYMETHOD = 2;
+	public static Random randGenerate = new Random();
 	
 	public static LearningBinaryIPSolverV5 encodeSolverV5(String filePath, String fileName,String methodName,int pos) throws Exception{
 		ConstraintAndFeatureEncoderV5 encoder = ASTParserUtils.parseMethodV5(true,filePath, fileName,methodName,pos,null);

@@ -1,8 +1,8 @@
 import Promise from 'bluebird'
 import fetch from 'isomorphic-fetch'
 
-const local = true;
-export const url = local? 'http://127.0.0.1:3000' : 'UNKNOWN_YET'
+const local = false;
+export const url = local? 'http://127.0.0.1:3000' : 'http://52.39.195.60'//Backend at AWS
 
 
 const Action = {
@@ -43,15 +43,19 @@ export function nav2Index(){
     return {type: Action.NAV2INDEX};
 }
 
-export function resource(method, endpoint, payload){
+export function resource(method, endpoint, email, payload){
     const options =  {
         method,
         credentials: 'include',
     };
     
-    options.headers = {'Content-Type': 'application/json'};
+    options.headers = {'Content-Type': 'application/json', 'email':email};
 
-    if (payload) options.body = JSON.stringify(payload);
+    if (payload){
+        options.body = JSON.stringify(payload);
+    }
+
+    console.log(options.headers);
 
     return fetch(`${url}/${endpoint}`, options)
     .then(response => {

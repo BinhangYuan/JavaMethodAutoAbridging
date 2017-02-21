@@ -32,12 +32,10 @@ class QuestionT1 extends Component{
           <div className="col-md-1"></div>
         </div>
         <div className="row">
-   			  <div className="col-md-7 text-center">
-        	 <div id="editor"><AceEditor mode="java" theme="chrome" name="editor" width="100%" height="600px" editorProps={{$blockScrolling:true}} value={this.props.questions.questions[this.props.questions.index.toString()].codes[this.codeId]}/></div>
-    		  </div>
-
-    		  <div className="col-md-5">
-        	  <div className="alert alert-success" id="alternatives">
+          <div className="col-md-2"></div>
+          <div className="col-md-8">
+            <div className="alert alert-success" id="alternatives">
+              <br/>
               <p className="text-justify">{T1description}</p>
               <br/>
               <p><b>Method Description:</b></p>
@@ -47,18 +45,28 @@ class QuestionT1 extends Component{
                 <label className="col-md-6 control-label">Choose Method:</label>
                 <div className="col-md-6 selectContainer">
                   <select name="language" className="form-control" value={this.props.questions.answer} onChange={(e)=>{this.handleOptionAnswer(e)}}>
-        			    {
+                  {
                     [<option value="Not done!" key="dropdownCodeDefault" disabled="true">- choose a method -</option>].concat(
-        				    this.props.questions.questions[this.props.questions.index.toString()].codes.map((code,id)=>{
-        					   return(<option value={id} key={"dropdownCode"+id}>{"Method "+(id+1)}</option>);
-        				    }))
-        			   }
+                    this.props.questions.questions[this.props.questions.index.toString()].codes.map((code,id)=>{
+                     return(<option value={id} key={"dropdownCode"+id}>{"Method "+(id+1)}</option>);
+                    }))
+                  }
                   </select>
                 </div>
-    			   </div>
-             <br/>
+              </div>
+              <br/>
             </div>
           </div>
+          <div className="col-md-2"></div>
+        </div>
+        <div className="row">
+          <div className="col-md-1"></div>
+   			  <div className="col-md-10 text-center">
+        	 <div id="editor"><AceEditor mode="java" theme="chrome" name="editor" width="100%" height="800px" editorProps={{$blockScrolling:true}} value={this.props.questions.answer==="Not done!"?"":this.props.questions.questions[this.props.questions.index.toString()].codes[this.codeId]}/></div>
+    		   <br/>
+           <br/>
+          </div>
+          <div className="col-md-1"></div>
         </div>
       </div>
     )

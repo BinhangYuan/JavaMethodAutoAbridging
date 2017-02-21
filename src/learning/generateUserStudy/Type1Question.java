@@ -16,6 +16,8 @@ public class Type1Question extends Question{
 	
 	private String doc;
 	
+	private int randExchange = EncoderUtils.randGenerate.nextInt(5);
+	
 	public Type1Question(JSONObject input) throws Exception{
 		JSONArray codes = input.getJSONArray("codes");
 		for(int i=0;i<codes.length();i++){
@@ -62,24 +64,49 @@ public class Type1Question extends Question{
 		JSONObject result = new JSONObject();
 		JSONArray codes = new JSONArray();
 		if(method==EncoderUtils.ORIGINAL){
-			for(LearningBinaryIPSolverV6 solver:this.solvers){
-				codes.put(solver.originalProgram2String());
+			for(int i=0;i<this.solvers.size();i++){
+				if(i==0){
+					codes.put(this.solvers.get(this.randExchange).originalProgram2String());
+				}
+				else if(i==this.randExchange){
+					codes.put(this.solvers.get(0).originalProgram2String());
+				}
+				else{
+					codes.put(this.solvers.get(i).originalProgram2String());
+				}
 			}
 		}
 		else if(method==EncoderUtils.NAIVEMETHOD){
-			for(NaiveBinaryIPSolver solver:this.naiveSolvers){
-				codes.put(solver.outputSolveResult());
+			for(int i=0;i<this.naiveSolvers.size();i++){
+				if(i==0){
+					codes.put(this.naiveSolvers.get(this.randExchange).outputSolveResult());
+				}
+				else if(i==this.randExchange){
+					codes.put(this.naiveSolvers.get(0).outputSolveResult());
+				}
+				else{
+					codes.put(this.naiveSolvers.get(i).outputSolveResult());
+				}
 			}
 		}
 		else if(method==EncoderUtils.MYMETHOD){
-			for(LearningBinaryIPSolverV6 solver:this.solvers){
-				codes.put(solver.outputSolveResult());
+			for(int i=0;i<this.solvers.size();i++){
+				if(i==0){
+					codes.put(this.solvers.get(this.randExchange).outputSolveResult());
+				}
+				else if(i==this.randExchange){
+					codes.put(this.solvers.get(0).outputSolveResult());
+				}
+				else{
+					codes.put(this.solvers.get(i).outputSolveResult());
+				}
 			}
 		}
 		result.put("codes", codes);
 		result.put("doc", this.doc);
 		result.put("type", "T1");
 		result.put("method", method);
+		result.put("correctSolution",randExchange);
 		return result;
 	}
 }
