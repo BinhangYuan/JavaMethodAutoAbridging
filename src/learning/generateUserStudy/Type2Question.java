@@ -103,8 +103,8 @@ public class Type2Question extends Question {
 		result.put("type", "T2");
 		result.put("method", method);
 		JSONArray alternatives = new JSONArray();
-		alternatives.put("Method A mactches Description A, Mehtod B mactches Description B.");
-		alternatives.put("Method A mactches Description B, Mehtod A mactches Description B.");
+		alternatives.put("Method A mactches Description A, Method B mactches Description B.");
+		alternatives.put("Method A mactches Description B, Method B mactches Description A.");
 		alternatives.put("Impossible to decide.");
 		result.put("Alternatives", alternatives);
 		result.put("correctSolution",randExchange?1:0);

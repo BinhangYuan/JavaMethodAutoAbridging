@@ -18,10 +18,10 @@ export const surveyConfig = [
 	},
 	{
 		title:"Which compressed code misses more necessary information for you to know the high level functionality of this method?",
-		options: ["Code Reduced by method A", "Code reduced by method B"]
+		options: ["Code reduced by method A", "Code reduced by method B"]
 	},
 	{
 		title:"Which compressed code contains more unnecessary statements for you to know the high level functionality of this method?",
-		options: ["Code Reduced by method A", "Code reduced by method B"]
+		options: ["Code reduced by method A", "Code reduced by method B"]
 	}
 ]
