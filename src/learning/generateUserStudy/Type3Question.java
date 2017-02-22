@@ -8,6 +8,13 @@ import ilpSolver.NaiveBinaryIPSolver;
 import learning.v6.NaiveBayesTextClassifierV6;
 
 public class Type3Question extends Question {
+	
+	private boolean isPractice;
+	
+	public boolean getIsPractice(){
+		return this.isPractice;
+	}
+	
 	private LearningBinaryIPSolverV6 solver;
 	
 	private NaiveBinaryIPSolver naiveSolver;
@@ -17,6 +24,7 @@ public class Type3Question extends Question {
 		JSONObject code = input.getJSONObject("code");
 		this.solver = this.buildSolver(code);
 		this.naiveSolver = this.buildNaiveSolver(code);
+		this.isPractice = input.getBoolean("practice");
 	}
 	
 	public void setParas(double[] para){

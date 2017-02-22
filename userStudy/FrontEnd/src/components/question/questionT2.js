@@ -18,9 +18,9 @@ class QuestionT2 extends Component{
 	}
 
 	handleOptionAnswer(e){
-  	console.log(e)
+  	//console.log(e)
   	this.props.questions.answer=e.target.value;
-  	console.log(this.props.questions.answer)
+  	//console.log(this.props.questions.answer)
   	this.forceUpdate();
   }
 
@@ -41,6 +41,9 @@ class QuestionT2 extends Component{
           <div className="col-md-2"></div>
           <div className="col-md-8">
             <div className="alert alert-success" id="alternatives">
+            <h5 style={this.props.questions.questions[this.props.questions.index.toString()].practice?{color:'blue'}:{color:'red'}}>
+              {this.props.questions.questions[this.props.questions.index.toString()].practice?"This is a practice question. Take your time!"
+              :"This is an actual test for our survey. Please stay stay focused and try your best!"}</h5>
             <p className="text-justify">{T2description}</p>
             <br/>
             <p className="text-justify"><b>Description A: </b>{this.props.questions.questions[this.props.questions.index.toString()].docA}</p>

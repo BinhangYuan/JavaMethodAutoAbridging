@@ -163,7 +163,7 @@ public class StubQuery {
 		String  labelString = ASTParserUtils.readFileToString("src/stubQuery/category.json");
 		JSONObject obj = new JSONObject(labelString);
 		JSONArray jarray = obj.getJSONArray("query");
-		JSONObject query = jarray.getJSONObject(jarray.length()-4);
+		JSONObject query = jarray.getJSONObject(jarray.length()-1);
 		JSONArray jdirs = query.getJSONArray("directories");
 		ArrayList<File> dirs = new ArrayList<File>();
 		for(int i = 0; i < jdirs.length(); i ++){
@@ -194,10 +194,10 @@ public class StubQuery {
 		//keywords.add("escape");
 		//keywords.add("resource");
 		//keywords.add("send");
-		//keywords.add("style");
+		//keywords.add("JSONArray");
 		stub.setKeywords(keywords);
 		stub.setTargetDirectories(dirs);
-		stub.setLineLimits(80);
+		stub.setLineLimits(30);
 		stub.visit();
 		stub.outputResult();
 	}

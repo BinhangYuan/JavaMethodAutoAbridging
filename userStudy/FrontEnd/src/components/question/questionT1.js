@@ -19,10 +19,10 @@ class QuestionT1 extends Component{
 	}
 
 	handleOptionAnswer(e){
-    console.log(e)
+    //console.log(e)
     this.codeId = e.target.value;
     this.props.questions.answer=e.target.value;
-    console.log(this.props.questions.answer);
+    //console.log(this.props.questions.answer);
     this.forceUpdate();
   }
 
@@ -32,7 +32,7 @@ class QuestionT1 extends Component{
         <div className="row">
           <div className="col-md-1"></div>
           <div className="col-md-10">
-            <h4 className="text-center">Please choose the code based on this description:</h4>
+            <h4 className="text-center">Please choose the code based on the description:</h4>
           </div>
           <div className="col-md-1"></div>
         </div>
@@ -40,6 +40,9 @@ class QuestionT1 extends Component{
           <div className="col-md-2"></div>
           <div className="col-md-8">
             <div className="alert alert-success" id="alternatives">
+              <h5 style={this.props.questions.questions[this.props.questions.index.toString()].practice?{color:'blue'}:{color:'red'}}>
+              {this.props.questions.questions[this.props.questions.index.toString()].practice?"This is a practice question. Take your time!"
+              :"This is an actual test for our survey. Please stay stay focused and try your best!"}</h5>
               <br/>
               <p className="text-justify">{T1description}</p>
               <br/>
@@ -81,7 +84,7 @@ class QuestionT1 extends Component{
 }
 
 export default connect((state) => {
-	console.log(state);
+	//console.log(state);
 	return {
 		questions:state.questions
 	}

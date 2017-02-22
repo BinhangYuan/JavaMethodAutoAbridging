@@ -9,7 +9,7 @@ let field = "questionSample";
 export function getQuestion(){
 	return (dispatch, getState) => {
 		let email = getState().visit.email;
-		console.log(email)
+		//console.log(email)
 		return resource('GET', field, email)
 		.then((response)=>{
 			const questions = response.questions;

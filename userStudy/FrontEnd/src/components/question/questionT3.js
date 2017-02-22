@@ -21,22 +21,22 @@ class QuestionT3 extends Component{
 
 	handleText(e){
     e.preventDefault();
-  	console.log(e)
+  	//console.log(e)
     this.textInput = e.target.value;
   	this.props.questions.answer=this.textInput;
-  	console.log(this.props.questions.answer);
+  	//console.log(this.props.questions.answer);
   	this.forceUpdate();
   }
 
   handleOptionMethod(e){
-    console.log(e)
+    //console.log(e)
     this.props.questions.questions[this.props.questions.index.toString()].method=parseInt(e.target.value);
     this.props.questions.reduction='r50%';
     this.forceUpdate();
   }
 
   handleOptionReduction(e){
-    console.log(e)
+    //console.log(e)
     this.props.questions.reduction=e.target.value;
     this.forceUpdate();
   }

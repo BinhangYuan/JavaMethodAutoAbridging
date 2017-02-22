@@ -31,10 +31,17 @@ export class End extends Component{
 						)
 					}
 				</div>
+				<br/>
+            	<br/>
+            	<br/>
+            	<br/>
+            	<br/>
+            	<br/>
 				<nav className="navbar navbar-default navbar-fixed-bottom">
          			<div className="container">
             			<br/>
             			<p className="text-center"> &copy; Computer Science Department, Rice University</p>
+            			<p className="text-center"> Any problem? <a href="mailto:by8@rice.edu?Subject=User study problem" target="_top">Contact us!</a></p>
             			<br/>
           			</div>
         		</nav>

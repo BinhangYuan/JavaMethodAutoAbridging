@@ -6,7 +6,7 @@ export function computeTime(secondCount){
     let seconds = secondCount%60;
     let string = "";
     if(mins>=60){
-        throw "Too long for this task! Invalid case!"
+        //throw "Too long for this task! Invalid case!"
     }
     if(mins<10){
         string += '0';

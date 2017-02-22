@@ -1,7 +1,7 @@
 import Promise from 'bluebird'
 import fetch from 'isomorphic-fetch'
 
-const local = true;
+const local = false;
 export const url = local? 'http://127.0.0.1:3000' : 'http://52.39.195.60'//Backend at AWS
 
 
@@ -55,7 +55,7 @@ export function resource(method, endpoint, email, payload){
         options.body = JSON.stringify(payload);
     }
 
-    console.log(options.headers);
+    //console.log(options.headers);
 
     return fetch(`${url}/${endpoint}`, options)
     .then(response => {

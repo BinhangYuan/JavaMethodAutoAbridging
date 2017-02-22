@@ -11,6 +11,12 @@ import ilpSolver.NaiveBinaryIPSolver;
 import learning.v6.NaiveBayesTextClassifierV6;
 
 public class Type1Question extends Question{
+	private boolean isPractice;
+	
+	public boolean getIsPractice(){
+		return this.isPractice;
+	}
+	
 	private ArrayList<LearningBinaryIPSolverV6> solvers = new ArrayList<LearningBinaryIPSolverV6>();
 	private ArrayList<NaiveBinaryIPSolver> naiveSolvers = new ArrayList<NaiveBinaryIPSolver>();
 	
@@ -26,6 +32,7 @@ public class Type1Question extends Question{
 			this.naiveSolvers.add(this.buildNaiveSolver(code));
 		}
 		this.doc = input.getString("doc");
+		this.isPractice = input.getBoolean("practice");
 	}
 	
 	public void setParas(double[] para){
@@ -107,6 +114,7 @@ public class Type1Question extends Question{
 		result.put("type", "T1");
 		result.put("method", method);
 		result.put("correctSolution",randExchange);
+		result.put("practice", this.isPractice);
 		return result;
 	}
 }

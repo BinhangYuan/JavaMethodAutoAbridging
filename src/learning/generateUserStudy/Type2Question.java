@@ -10,6 +10,12 @@ import learning.v6.NaiveBayesTextClassifierV6;
 
 
 public class Type2Question extends Question {
+	private boolean isPractice;
+	
+	public boolean getIsPractice(){
+		return this.isPractice;
+	}
+	
 	private LearningBinaryIPSolverV6 solverA;
 	private LearningBinaryIPSolverV6 solverB;
 	
@@ -31,6 +37,7 @@ public class Type2Question extends Question {
 		this.solverB = this.buildSolver(codeB);
 		this.naiveSolverB = this.buildNaiveSolver(codeB);
 		this.docB = input.getString("docB");
+		this.isPractice = input.getBoolean("practice");
 	}
 	
 	
@@ -101,6 +108,7 @@ public class Type2Question extends Question {
 		alternatives.put("Impossible to decide.");
 		result.put("Alternatives", alternatives);
 		result.put("correctSolution",randExchange?1:0);
+		result.put("practice", this.isPractice);
 		return result;
 	}
 }

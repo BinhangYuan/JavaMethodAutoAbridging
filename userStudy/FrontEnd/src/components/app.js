@@ -26,6 +26,6 @@ const App = ({location}) => {
 }
 
 export default connect((state) => {
-	console.log(state);
+	//console.log(state);
 	return {location:state.shared.location}
 })(App)

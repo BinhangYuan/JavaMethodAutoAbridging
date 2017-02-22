@@ -9,13 +9,15 @@ export function submitStudy(visitor, questions, survey) {
                             method:questions[key].method, 
                             answer:questions[key].answer, 
                             correctSolution:questions[key].correctSolution,
-                            time:questions[key].time
+                            time:questions[key].time,
+                            practice:questions[key].practice
                         };
         }
         else if(questions[key].type==="T3"){
             answers[key] = { type:questions[key].type,
                             answer:questions[key].answer, 
-                            time:questions[key].time
+                            time:questions[key].time,
+                            practice:questions[key].practice
                         };
         }
     }) 

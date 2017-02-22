@@ -111,46 +111,65 @@ public class GenerateUserStudy {
 		JSONObject sample2 = new JSONObject();
 		
 		int i = 0;
-		Assert.isTrue(this.type1questions.size()==6);
+		Assert.isTrue(this.type1questions.size()==7);
 		for(; i < this.type1questions.size(); i++){
 			Type1Question q1 = this.type1questions.get(i);
-			if(i%3==0){
-				sample0.put(""+(i+1), q1.computeOutput(EncoderUtils.ORIGINAL));
-				sample1.put(""+(i+1), q1.computeOutput(EncoderUtils.NAIVEMETHOD));
-				sample2.put(""+(i+1), q1.computeOutput(EncoderUtils.MYMETHOD));
+			if(i==0){
+				Assert.isTrue(q1.getIsPractice());
+				sample0.put("1", q1.computeOutput(EncoderUtils.ORIGINAL));
+				sample0.put("2", q1.computeOutput(EncoderUtils.MYMETHOD));
+				sample1.put("1", q1.computeOutput(EncoderUtils.ORIGINAL));
+				sample1.put("2", q1.computeOutput(EncoderUtils.MYMETHOD));
+				sample2.put("1", q1.computeOutput(EncoderUtils.ORIGINAL));
+				sample2.put("2", q1.computeOutput(EncoderUtils.MYMETHOD));
+				
+			}
+			else if(i%3==0){
+				sample0.put(""+(i+2), q1.computeOutput(EncoderUtils.ORIGINAL));
+				sample1.put(""+(i+2), q1.computeOutput(EncoderUtils.NAIVEMETHOD));
+				sample2.put(""+(i+2), q1.computeOutput(EncoderUtils.MYMETHOD));
 			}
 			else if(i%3==1){
-				sample0.put(""+(i+1), q1.computeOutput(EncoderUtils.NAIVEMETHOD));
-				sample1.put(""+(i+1), q1.computeOutput(EncoderUtils.MYMETHOD));
-				sample2.put(""+(i+1), q1.computeOutput(EncoderUtils.ORIGINAL));
+				sample0.put(""+(i+2), q1.computeOutput(EncoderUtils.NAIVEMETHOD));
+				sample1.put(""+(i+2), q1.computeOutput(EncoderUtils.MYMETHOD));
+				sample2.put(""+(i+2), q1.computeOutput(EncoderUtils.ORIGINAL));
 			}
 			else if(i%3==2){
-				sample0.put(""+(i+1), q1.computeOutput(EncoderUtils.MYMETHOD));
-				sample1.put(""+(i+1), q1.computeOutput(EncoderUtils.ORIGINAL));
-				sample2.put(""+(i+1), q1.computeOutput(EncoderUtils.NAIVEMETHOD));
+				sample0.put(""+(i+2), q1.computeOutput(EncoderUtils.MYMETHOD));
+				sample1.put(""+(i+2), q1.computeOutput(EncoderUtils.ORIGINAL));
+				sample2.put(""+(i+2), q1.computeOutput(EncoderUtils.NAIVEMETHOD));
 			}
 		}
 		
-		Assert.isTrue(this.type2questions.size()==9);
+		Assert.isTrue(this.type2questions.size()==10);
 		for(; i < this.type2questions.size() + this.type1questions.size() ; i++){
 			Type2Question q2 = this.type2questions.get(i-this.type1questions.size());
-			if(i%3==0){
-				sample0.put(""+(i+1), q2.computeOutput(EncoderUtils.ORIGINAL));
-				sample1.put(""+(i+1), q2.computeOutput(EncoderUtils.NAIVEMETHOD));
-				sample2.put(""+(i+1), q2.computeOutput(EncoderUtils.MYMETHOD));
+			if(i==this.type1questions.size()){
+				Assert.isTrue(q2.getIsPractice());
+				sample0.put("9", q2.computeOutput(EncoderUtils.ORIGINAL));
+				sample0.put("10", q2.computeOutput(EncoderUtils.MYMETHOD));
+				sample1.put("9", q2.computeOutput(EncoderUtils.ORIGINAL));
+				sample1.put("10", q2.computeOutput(EncoderUtils.MYMETHOD));
+				sample2.put("9", q2.computeOutput(EncoderUtils.ORIGINAL));
+				sample2.put("10", q2.computeOutput(EncoderUtils.MYMETHOD));
+			}
+			else if(i%3==0){
+				sample0.put(""+(i+3), q2.computeOutput(EncoderUtils.ORIGINAL));
+				sample1.put(""+(i+3), q2.computeOutput(EncoderUtils.NAIVEMETHOD));
+				sample2.put(""+(i+3), q2.computeOutput(EncoderUtils.MYMETHOD));
 			}
 			else if(i%3==1){
-				sample0.put(""+(i+1), q2.computeOutput(EncoderUtils.NAIVEMETHOD));
-				sample1.put(""+(i+1), q2.computeOutput(EncoderUtils.MYMETHOD));
-				sample2.put(""+(i+1), q2.computeOutput(EncoderUtils.ORIGINAL));
+				sample0.put(""+(i+3), q2.computeOutput(EncoderUtils.NAIVEMETHOD));
+				sample1.put(""+(i+3), q2.computeOutput(EncoderUtils.MYMETHOD));
+				sample2.put(""+(i+3), q2.computeOutput(EncoderUtils.ORIGINAL));
 			}
 			else if(i%3==2){
-				sample0.put(""+(i+1), q2.computeOutput(EncoderUtils.MYMETHOD));
-				sample1.put(""+(i+1), q2.computeOutput(EncoderUtils.ORIGINAL));
-				sample2.put(""+(i+1), q2.computeOutput(EncoderUtils.NAIVEMETHOD));
+				sample0.put(""+(i+3), q2.computeOutput(EncoderUtils.MYMETHOD));
+				sample1.put(""+(i+3), q2.computeOutput(EncoderUtils.ORIGINAL));
+				sample2.put(""+(i+3), q2.computeOutput(EncoderUtils.NAIVEMETHOD));
 			}
 		}
-		i++;
+		i+=3;
 		Assert.isTrue(this.type3questions.size()==5);
 		for(Type3Question q3:this.type3questions){
 			sample0.put(""+i, q3.computeOutput());

@@ -9,8 +9,8 @@ class Survey extends Component{
 	}
 
   handleOption(e){
-    console.log(e);
-    console.log(e.target);
+    //console.log(e);
+    //console.log(e.target);
     this.props.survey.answers[e.target.name] = e.target.value;
     this.forceUpdate();
   }
@@ -49,7 +49,7 @@ class Survey extends Component{
 }
 
 export default connect((state) => {
-	console.log(state);
+	//console.log(state);
 	return {
 		survey:state.survey
 	}

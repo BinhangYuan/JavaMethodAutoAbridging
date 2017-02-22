@@ -2,6 +2,44 @@
 	"para":[0.0,0.0,4.0,-6.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-1.0,2.0,-1.0,0.0,-7.0,-1.0,-2.0,0.0,0.0,1.0,1.0,2.0,1.0,0.0,-1.0,2.0,0.0,0.0,1.0,1.0,1.0,1.0,-7.0,4.0,1.0,3.0,0.0],
 	"questions":[
 		{
+			"practice":true,
+			"type":"T1",
+			"codes":[
+				{
+					"file_path":"dataset/org/json/org.json/chargebee-1.0/org/json/",
+					"file_name":"JSONObject.java",
+					"method":"valueToString",
+					"pos":1425
+				},
+				{
+					"file_path":"dataset/org/json/org.json/chargebee-1.0/org/json/",
+					"file_name":"JSONML.java",
+					"method":"toString",
+					"pos":306
+				},
+				{	
+					"file_path":"dataset/org/json/org.json/chargebee-1.0/org/json/",
+					"file_name":"JSONML.java",
+					"method":"toString",
+					"pos":385
+				},
+				{
+					"file_path":"dataset/com/google/code/gson/gson/2.1/com/google/gson/stream/",
+					"file_name":"JsonReader.java",
+					"method":"nextString",
+					"pos":983
+				},
+				{	
+					"file_path":"dataset/org/json/org.json/chargebee-1.0/org/json/",
+					"file_name":"JSONArray.java",
+					"method":"toString",
+					"pos":841
+				}
+			],
+			"doc":" Make a JSON text of an Object value. If the object has an value.toJSONString() method, then that method will be used to produce the JSON text. The method is required to produce a strictly conforming text."
+		},
+		{
+			"practice":false,
 			"type":"T1",
 			"codes":[
 				{
@@ -35,9 +73,10 @@
 					"pos":441
 				}
 			],
-			"doc":"Process a path that starts with a standard InfoSet node, e.g. a DOM Node. The method evaluates the first predicate in a special way and then forwards to a general predicate processing method."
+			"doc":"Process a path that starts with a standard InfoSet node, e.g. a DOM Node. The method evaluates the first predicate in a special way if there is only one predicate in the array, Otherwise it will forward to a general predicate processing method."
 		},
 		{
+			"practice":false,
 			"type":"T1",
 			"codes":[
 				{
@@ -74,6 +113,7 @@
 			"doc":"Performs the actual protocol-specific connection attempt. Will attempt to connect to \"localhost\" if the host was null. Unless mail.smtp.ehlo is set to false, we'll try to identify ourselves using the ESMTP command EHLO. If mail.smtp.auth is set to true, we insist on having a username and password, and will try to authenticate ourselves if the server supports the AUTH extension (RFC 2554)."
 		},
 		{
+			"practice":false,
 			"type":"T1",
 			"codes":[
 				{
@@ -110,6 +150,7 @@
 			"doc":"Process a http request. Handle the request by passing it to the HttpHandler contained in the mapped HttpContexts. The requests host and path are used to select a list of HttpContexts. Each HttpHandler in these context is offered the request in turn, until the request is handled. If no handler handles the request, 404 Not Found is returned."
 		},
 		{
+			"practice":false,
 			"type":"T1",
 			"codes":[
 				{
@@ -146,6 +187,7 @@
 			"doc":"Get a resource from the context. Cached Resources are returned if the resource fits within the LRU cache.  Directories may have CachedResources returned, but the caller must use the CachedResource.setCachedData method to set the formatted directory content."
 		},
 		{
+			"practice":false,
 			"type":"T1",
 			"codes":[
 				{
@@ -179,9 +221,10 @@
 					"pos":648
 				},
 			],
-			"doc":"Scan the given directory for files and directories. Found files and directories are placed in their respective collections, based on the matching of includes, excludes, and the selectors.  When a directory is found, it is scanned recursively."
+			"doc":"Scan the given directory for files and directories. Found files and directories are placed in their respective collections, based on the matching of includes, excludes, and the selectors for each file. When a directory is found, it is scanned recursively."
 		},
 		{
+			"practice":false,
 			"type":"T1",
 			"codes":[
 				{
@@ -217,7 +260,26 @@
 			],
 			"doc":"The main processing loop. Pull suspect URLs off the queue one at a time, fetch and parse it, request images and enqueue further links."
 		},
+		{	
+			"practice":true,
+			"type":"T2",
+			"codeA":{
+				"file_path":"dataset/org/json/org.json/chargebee-1.0/org/json/",
+				"file_name":"JSONArray.java",
+				"method":"JSONArray",
+				"pos":97
+			},
+			"codeB":{
+				"file_path":"dataset/org/json/org.json/chargebee-1.0/org/json/",
+				"file_name":"JSONObject.java",
+				"method":"JSONObject",
+				"pos":171
+			},
+			"docA":"Construct a JSONArray from a JSONTokener.",
+			"docB":"Construct a JSONObject from a JSONTokener."
+		},
 		{
+			"practice":false,
 			"type":"T2",
 			"codeA":{
 				"file_path":"dataset/commons-net/commons-net/3.1/org/apache/commons/net/ftp/",
@@ -235,6 +297,7 @@
 			"docB":"Returns a socket of the data connection. Wrapped as an SSLSocket, which carries out handshake processing."
 		},
 		{
+			"practice":false,
 			"type":"T2",
 			"codeA":{
 				"file_path":"dataset/oauth/signpost/signpost-core/1.2.1.1/com/google/gdata/util/common/base/",
@@ -252,6 +315,7 @@
 			"docB":"Escapes the given Unicode code point in UTF-8."
 		},
 		{
+			"practice":false,
 			"type":"T2",
 			"codeA":{
 				"file_path":"dataset/org/jvnet/hudson/htmlunit/2.6-hudson-2/com/gargoylesoftware/htmlunit/html/",
@@ -269,6 +333,7 @@
 			"docB":"Submit the current form with the specifed submit button."
 		},
 		{
+			"practice":false,
 			"type":"T2",
 			"codeA":{
 				"file_path":"dataset/org/codehaus/spring-security-oauth/spring-security-oauth/3.9.SS3/org/springframework/security/oauth/provider/",
@@ -286,6 +351,7 @@
 			"docB":"Gets the parameters from a request as a map. If the request does not have a POST method, or the media type is not x-www-form-urlencoded, then null is returned."
 		},
 		{
+			"practice":false,
 			"type":"T2",
 			"codeA":{
 				"file_path":"dataset/org/codehaus/spring-security-oauth/spring-security-oauth/3.9.SS3/org/springframework/security/oauth/consumer/",
@@ -303,6 +369,7 @@
 			"docB":"Implemented by subclasses. The responsibility of this method is to contact the service provider at the given endpoint URL and fetch a request or access token. What kind of token is retrieved solely depends on the URL being used. Correct implementations of this method must guarantee the following post-conditions: the OAuthConsumer passed to this method must have a valid OAuth#OAUTH_TOKEN and OAuth#OAUTH_TOKEN_SECRET set bycalling OAuthConsumer#setTokenWithSecret(String,String). #getResponseParameters() must return the set of queryparameters served by the service provider in the token response, with all OAuth specific parameters being removed."
 		},
 		{
+			"practice":false,
 			"type":"T2",
 			"codeA":{
 				"file_path":"dataset/org/bitbucket/deepdiff/deepdiff-engine/1.0.0/deepdiff/unitprocessor/",
@@ -320,6 +387,7 @@
 			"docB":"Performs a deep XML comparison on diffUnit. If diffUnit represents part of a DOM, compares the unit and passes any DiffPoint found to processor. Otherwise, returns a new DiffScope to process the XML document."
 		},
 		{
+			"practice":false,
 			"type":"T2",
 			"codeA":{
 				"file_path":"dataset/org/htmlparser/htmlparser/2.1/org/htmlparser/scanners/",
@@ -337,6 +405,7 @@
 			"docB":"Scan for script. Accumulates text from the page, until &lt;/[a-zA-Z] is encountered."
 		},
 		{
+			"practice":false,
 			"type":"T2",
 			"codeA":{
 				"file_path":"dataset/org/htmlparser/htmlparser/2.1/org/htmlparser/tags/",
@@ -354,6 +423,7 @@
 			"docB":"Get the links of an element of a document. Only gets the links on IMG elements that reference another image. The latter is based on suffix (.jpg, .gif and .png)."
 		},
 		{
+			"practice":false,
 			"type":"T2",
 			"codeA":{
 				"file_path":"dataset/net/sf/jtidy/jtidy/r938/org/w3c/tidy/",
@@ -371,6 +441,7 @@
 			"docB":"Create sorted linked list of properties from style string."
 		},
 		{
+			"practice":false,
 			"type":"T3",
 			"code":{
 				"file_path":"dataset/javax/mail/mail/1.4.5-rc1/javax/mail/",
@@ -380,6 +451,7 @@
 			}
 		},
 		{
+			"practice":false,
 			"type":"T3",
 			"code":{
 				"file_path":"dataset/net/sourceforge/nekohtml/nekohtml/1.9.15/org/cyberneko/html/",
@@ -389,6 +461,7 @@
 			}
 		},
 		{
+			"practice":false,
 			"type":"T3",
 			"code":{
 				"file_path":"dataset/javax/mail/javax.mail-api/1.4.5-rc1/javax/mail/internet/",
@@ -398,6 +471,7 @@
 			}
 		},
 		{
+			"practice":false,
 			"type":"T3",
 			"code":{
 				"file_path":"dataset/org/htmlparser/htmllexer/2.1/org/htmlparser/http/",
@@ -407,6 +481,7 @@
 			}
 		},
 		{
+			"practice":false,
 			"type":"T3",
 			"code":{
 				"file_path":"dataset/commons-net/commons-net/3.1/org/apache/commons/net/tftp/",
