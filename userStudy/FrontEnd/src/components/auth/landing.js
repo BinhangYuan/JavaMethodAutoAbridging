@@ -1,6 +1,7 @@
 import React from 'react'
 
 import Vistor from './visitor'
+import Instructions from './instructions'
 
 
 //The landing page JSX
@@ -12,6 +13,10 @@ const Landing = () => (
 		</div>
 		<div className="container">
 			<Vistor/>
+			<br/>
+			<Instructions/>
+			<br/>
+			<br/>
 		</div>
 		<nav className="navbar navbar-default navbar-fixed-bottom">
          	<div className="container">

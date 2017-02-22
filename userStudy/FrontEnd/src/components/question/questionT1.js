@@ -11,6 +11,11 @@ class QuestionT1 extends Component{
 	constructor(props){
 		super(props);
     this.codeId = 0;
+    this.methodName = {
+      0:"Non-reduced code",
+      1:"Reduced code by Method A",
+      2:"Reduced code by Method B"
+    }
 	}
 
 	handleOptionAnswer(e){
@@ -55,6 +60,8 @@ class QuestionT1 extends Component{
                 </div>
               </div>
               <br/>
+              <br/>
+              <p>All Java methods in this qeustion are <b> {this.methodName[this.props.questions.questions[this.props.questions.index.toString()].method]}. </b></p>
             </div>
           </div>
           <div className="col-md-2"></div>

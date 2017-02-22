@@ -33,9 +33,9 @@
 					"file_name":"SimplePathInterpreter.java",
 					"method":"doPredicate",
 					"pos":441
-				}	
+				}
 			],
-			"doc":"A path that starts with a standard InfoSet node, e.g. a DOM Node. The method evaluates the first predicate in a special way and then forwards to a general predicate processing method."
+			"doc":"Process a path that starts with a standard InfoSet node, e.g. a DOM Node. The method evaluates the first predicate in a special way and then forwards to a general predicate processing method."
 		},
 		{
 			"type":"T1",
@@ -107,7 +107,7 @@
 					"pos":276
 				}
 			],
-			"doc":"Process a request. Handle the request by passing it to the HttpHandler contained in the mapped HttpContexts. The requests host and path are used to select a list of HttpContexts. Each HttpHandler in these context is offered the request in turn, until the request is handled. If no handler handles the request, 404 Not Found is returned."
+			"doc":"Process a http request. Handle the request by passing it to the HttpHandler contained in the mapped HttpContexts. The requests host and path are used to select a list of HttpContexts. Each HttpHandler in these context is offered the request in turn, until the request is handled. If no handler handles the request, 404 Not Found is returned."
 		},
 		{
 			"type":"T1",
@@ -282,8 +282,8 @@
 				"method":"getEntityParameters",
 				"pos":108
 			},
-			"docB":"Gets the parameters (name-to-value map) that are to be used to calculate the signature base string. The parameters will be encoded by oauthEncode method.",
-			"docA":"Gets the parameters from a request as a map. If the request does not have a POST method, or the media type is not x-www-form-urlencoded, then null is returned."
+			"docA":"Gets the parameters (name-to-value map) that are to be used to calculate the signature base string. The parameters will be encoded by oauthEncode method.",
+			"docB":"Gets the parameters from a request as a map. If the request does not have a POST method, or the media type is not x-www-form-urlencoded, then null is returned."
 		},
 		{
 			"type":"T2",
@@ -300,7 +300,7 @@
 				"pos":111
 			},
 			"docA":"Get the consumer token with the given parameters and URL. The determination of whether the retrieved token is an access token depends on whether a request token is provided.",
-			"docB":"<p> Implemented by subclasses. The responsibility of this method is to contact the service provider at the given endpoint URL and fetch a request or access token. What kind of token is retrieved solely depends on the URL being used. </p> <p> Correct implementations of this method must guarantee the following post-conditions: <ul> <li>the  {@link OAuthConsumer} passed to this method must have a valid{@link OAuth#OAUTH_TOKEN} and {@link OAuth#OAUTH_TOKEN_SECRET} set bycalling  {@link OAuthConsumer#setTokenWithSecret(String,String)}</li> <li> {@link #getResponseParameters()} must return the set of queryparameters served by the service provider in the token response, with all OAuth specific parameters being removed</li> </ul> </p>"
+			"docB":"Implemented by subclasses. The responsibility of this method is to contact the service provider at the given endpoint URL and fetch a request or access token. What kind of token is retrieved solely depends on the URL being used. Correct implementations of this method must guarantee the following post-conditions: the OAuthConsumer passed to this method must have a valid OAuth#OAUTH_TOKEN and OAuth#OAUTH_TOKEN_SECRET set bycalling OAuthConsumer#setTokenWithSecret(String,String). #getResponseParameters() must return the set of queryparameters served by the service provider in the token response, with all OAuth specific parameters being removed."
 		},
 		{
 			"type":"T2",
@@ -316,8 +316,8 @@
 				"method":"processDiffUnit",
 				"pos":45
 			},
-			"docA":"Performs a Properties comparison on <code>diffUnit</code>, and passes any {@link DiffPoint}s found to <code>processor</code>. The properties are iterated through and their values compared.",
-			"docB":"Performs a deep XML comparison on <code>diffUnit</code>. If <code>diffUnit</code> represents part of a DOM, compares the unit and passes any {@link DiffPoint}s found to <code>processor</code>. Otherwise, returns a new {@link DiffScope} to process the XML document."
+			"docA":"Performs a Properties comparison on diffUnit, and passes any DiffPoint found to processor. The properties are iterated through and their values compared.",
+			"docB":"Performs a deep XML comparison on diffUnit. If diffUnit represents part of a DOM, compares the unit and passes any DiffPoint found to processor. Otherwise, returns a new DiffScope to process the XML document."
 		},
 		{
 			"type":"T2",
@@ -350,7 +350,7 @@
 				"method":"extractImageLinks",
 				"pos":754
 			},
-			"docA":"Extract the location of the image Given the tag (with attributes), and the url of the html page in which this tag exists, perform best effort to extract the 'intended' URL. Attempts to handle such attributes as: <pre> &lt;IMG SRC=http://www.redgreen.com&gt; - normal &lt;IMG SRC =http://www.redgreen.com&gt; - space between attribute name and equals sign &lt;IMG SRC= http://www.redgreen.com&gt; - space between equals sign and attribute value &lt;IMG SRC = http://www.redgreen.com&gt; - space both sides of equals sign <\/pre>\n",
+			"docA":"Extract the location of the image Given the tag (with attributes), and the url of the html page in which this tag exists, perform best effort to extract the 'intended' URL. Attempts to handle such attributes as: &lt;IMG SRC=http://www.redgreen.com&gt; - normal &lt;IMG SRC =http://www.redgreen.com&gt; - space between attribute name and equals sign &lt;IMG SRC= http://www.redgreen.com&gt; - space between equals sign and attribute value &lt;IMG SRC = http://www.redgreen.com&gt; - space both sides of equals sign.\n",
 			"docB":"Get the links of an element of a document. Only gets the links on IMG elements that reference another image. The latter is based on suffix (.jpg, .gif and .png)."
 		},
 		{
@@ -373,10 +373,10 @@
 		{
 			"type":"T3",
 			"code":{
-				"file_path":"dataset/net/sourceforge/nekohtml/nekohtml/1.9.15/org/cyberneko/html/",
-				"file_name":"HTMLScanner.java",
-				"method":"expandSystemId",
-				"pos":942
+				"file_path":"dataset/javax/mail/mail/1.4.5-rc1/javax/mail/",
+				"file_name":"Service.java",
+				"method":"connect",
+				"pos":199
 			}
 		},
 		{
@@ -391,19 +391,19 @@
 		{
 			"type":"T3",
 			"code":{
-				"file_path":"dataset/org/htmlparser/sitecapturer/2.1/org/htmlparser/parserapplications/",
-				"file_name":"SiteCapturer.java",
-				"method":"copy",
-				"pos":394
+				"file_path":"dataset/javax/mail/javax.mail-api/1.4.5-rc1/javax/mail/internet/",
+				"file_name":"ParameterList.java",
+				"method":"combineMultisegmentNames",
+				"pos":345
 			}
 		},
 		{
 			"type":"T3",
 			"code":{
-				"file_path":"dataset/org/htmlparser/sitecapturer/2.1/org/htmlparser/parserapplications/",
-				"file_name":"SiteCapturer.java",
-				"method":"process",
-				"pos":470
+				"file_path":"dataset/org/htmlparser/htmllexer/2.1/org/htmlparser/http/",
+				"file_name":"ConnectionManager.java",
+				"method":"openConnection",
+				"pos":547
 			}
 		},
 		{

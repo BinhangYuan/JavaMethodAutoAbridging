@@ -62,7 +62,7 @@ public class LabeledStatementWrapper extends StatementWrapper{
 
 	@Override
 	public String computeOutput(int level) {
-		String result = super.computeIndent(level)+this.toString()+" :";
+		String result = super.computeIndent(level)+this.astNode.getLabel().toString()+" :";
 		if(this.bodyIsBlock){
 			result += '{';
 		}
@@ -73,9 +73,8 @@ public class LabeledStatementWrapper extends StatementWrapper{
 			}
 		}
 		if(this.bodyIsBlock){
-			result += '{';
+			result += "}\n";
 		}
-		result += '\n';
 		return result;
 	}
 }

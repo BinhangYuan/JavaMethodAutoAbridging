@@ -10,6 +10,11 @@ import {T2description} from './descriptionConst'
 class QuestionT2 extends Component{
 	constructor(props){
 		super(props);
+    this.methodName = {
+      0:"Non-reduced code",
+      1:"Reduced code by Method A",
+      2:"Reduced code by Method B"
+    }
 	}
 
 	handleOptionAnswer(e){
@@ -40,17 +45,21 @@ class QuestionT2 extends Component{
             <br/>
             <p className="text-justify"><b>Description A: </b>{this.props.questions.questions[this.props.questions.index.toString()].docA}</p>
             <p className="text-justify"><b>Description B: </b>{this.props.questions.questions[this.props.questions.index.toString()].docB}</p>
+            <br/>
             {
               this.props.questions.questions[this.props.questions.index.toString()].Alternatives.map((option,index)=>{
                 return (
-                  <div className="radio" key={"option "+index}>
-                   <label><input type="radio" name="optradio" checked={this.props.questions.answer===("option "+index)} value={"option "+index} onChange={(e)=>{this.handleOptionAnswer(e)}}/>{option}</label>
+                  <div className="radio" key={index}>
+                   <label><input type="radio" name="optradio" checked={this.props.questions.answer===index.toString()} value={index.toString()} onChange={(e)=>{this.handleOptionAnswer(e)}}/>{option}</label>
                   </div>
                 )
               })
             }
+            <br/>
+            <br/>
+            <p>All Java methods in this qeustion are <b> {this.methodName[this.props.questions.questions[this.props.questions.index.toString()].method]}. </b></p>
             </div>
-          </div>
+            </div>
           <div className="col-md-2"></div>
         </div>
 

@@ -48,24 +48,24 @@ public class Type3Question extends Question {
 		
 		int originalLines = this.solver.originalProgramLineCount();
 		JSONObject naiveCode = new JSONObject();
-		this.naiveSolver.setTargetLineCount(10);
-		naiveCode.put("r10", this.naiveSolver.outputSolveResult());
-		this.naiveSolver.setTargetLineCount(20);
-		naiveCode.put("r20", this.naiveSolver.outputSolveResult());
+		this.naiveSolver.setTargetLineCount(15);
+		naiveCode.put("r15", this.naiveSolver.outputSolveResult());
+		this.naiveSolver.setTargetLineCount(30);
+		naiveCode.put("r30", this.naiveSolver.outputSolveResult());
 		this.naiveSolver.setTargetLineCount(originalLines/2);
 		naiveCode.put("r50%", this.naiveSolver.outputSolveResult());
 		result.put("code_native", naiveCode);
 		
 		JSONObject myMethodCode = new JSONObject();
-		this.solver.setTargetLineCount(10);
-		myMethodCode.put("r10", this.solver.outputSolveResult());
-		this.solver.setTargetLineCount(20);
-		myMethodCode.put("r20", this.solver.outputSolveResult());
+		this.solver.setTargetLineCount(15);
+		myMethodCode.put("r15", this.solver.outputSolveResult());
+		this.solver.setTargetLineCount(30);
+		myMethodCode.put("r30", this.solver.outputSolveResult());
 		this.solver.setTargetLineCount(originalLines/2);
 		myMethodCode.put("r50%", this.solver.outputSolveResult());
 		result.put("code_mymethod", myMethodCode);
 		result.put("type", "T3");
-		result.put("method", 0);
+		result.put("method", 1);
 		return result;
 	}
 }

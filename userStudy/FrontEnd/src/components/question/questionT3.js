@@ -31,7 +31,7 @@ class QuestionT3 extends Component{
   handleOptionMethod(e){
     console.log(e)
     this.props.questions.questions[this.props.questions.index.toString()].method=parseInt(e.target.value);
-    this.props.questions.reduction='r10';
+    this.props.questions.reduction='r50%';
     this.forceUpdate();
   }
 
@@ -73,8 +73,8 @@ class QuestionT3 extends Component{
                   value={this.props.questions.reduction}
                   disabled={this.props.questions.questions[this.props.questions.index.toString()].method===0} 
                   onChange={(e)=>{this.handleOptionReduction(e)}}>
-                  <option value="r10" key="r10">Reduce to around 10 lines</option>
-                  <option value="r20" key="r20">Reduce to around 20 lines</option>
+                  <option value="r15" key="r15">Reduce to around 15 lines</option>
+                  <option value="r30" key="r30">Reduce to around 30 lines</option>
                   <option value="r50%" key="r50%">Reduce by 50%</option>
                 </select>
               </div>

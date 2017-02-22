@@ -68,9 +68,6 @@ public class GenerateUserStudy {
 		for(Type2Question t2q:this.type2questions){
 			t2q.setTargetLineCounts(rate);
 		}
-		for(Type3Question t3q:this.type3questions){
-			t3q.setTargetLineCounts(rate);
-		}
 	}
 	
 	

@@ -1,7 +1,7 @@
 import Promise from 'bluebird'
 import fetch from 'isomorphic-fetch'
 
-const local = false;
+const local = true;
 export const url = local? 'http://127.0.0.1:3000' : 'http://52.39.195.60'//Backend at AWS
 
 

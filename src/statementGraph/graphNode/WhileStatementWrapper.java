@@ -93,9 +93,8 @@ public class WhileStatementWrapper extends StatementWrapper{
 			}
 		}
 		if(this.bodyIsBlock){
-			result += (super.computeIndent(level)+'}');
+			result += (super.computeIndent(level)+"}\n");
 		}
-		result+='\n';
 		return result;
 	}
 }
