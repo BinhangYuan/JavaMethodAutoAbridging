@@ -6,7 +6,7 @@ export const T3description = "Try to write a one-sentence description of the met
 export const surveyConfig = [
 	{
 		title:"Which version of the code tended to make it easier to write your description?",
-		options: ["Non-reduced code","Code Reduced by method A","Code reduced by method B"]
+		options: ["Non-reduced code","Code reduced by method A","Code reduced by method B"]
 	},
 	{
 		title:"Which reducation level is easiest to use for reduction method A?",
