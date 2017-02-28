@@ -457,6 +457,7 @@ public class SimpleStatistics {
 	
 	
 	public static void main(String[] args) throws Exception{
+		System.out.println("Hypothesis test:");
 		System.out.println("----------------------------------------------------------------");
 		File directory = new File("userStudyStat/survey");
 		SimpleStatistics stat = new SimpleStatistics(directory);
