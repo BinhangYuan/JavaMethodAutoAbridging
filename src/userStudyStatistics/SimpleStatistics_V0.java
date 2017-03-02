@@ -11,7 +11,7 @@ import org.json.JSONObject;
 
 import statementGraph.ASTParserUtils;
 
-public class SimpleStatistics {
+public class SimpleStatistics_V0 {
 	private static boolean debug = true;
 	
 	private Map<String,Map<String,Integer>> AnswerCount = new HashMap<String,Map<String,Integer>>();
@@ -82,7 +82,7 @@ public class SimpleStatistics {
 		this.surveyResult.put("suveryQ4", question4Stat);
 	}
 	
-	public SimpleStatistics(final File directory) throws IOException{
+	public SimpleStatistics_V0(final File directory) throws IOException{
 		Assert.isTrue(directory.isDirectory());
 		this.initSurveyQuestion();
 		for(final File file: directory.listFiles()){
@@ -457,10 +457,9 @@ public class SimpleStatistics {
 	
 	
 	public static void main(String[] args) throws Exception{
-		System.out.println("Hypothesis test:");
 		System.out.println("----------------------------------------------------------------");
 		File directory = new File("userStudyStat/survey");
-		SimpleStatistics stat = new SimpleStatistics(directory);
+		SimpleStatistics_V0 stat = new SimpleStatistics_V0(directory);
 		System.out.println(stat.expertiseTOString());
 		System.out.println("----------------------------------------------------------------");
 		System.out.println(stat.count2LatexTable());

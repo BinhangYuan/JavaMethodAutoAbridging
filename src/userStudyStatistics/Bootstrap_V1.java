@@ -12,10 +12,10 @@ import org.json.JSONObject;
 
 import statementGraph.ASTParserUtils;
 
-public class Bootstrap {
+public class Bootstrap_V1 {
 static private boolean debug = false;
 	
-	private int iterations = 100000;
+	private int iterations = 1000;
 	private Random randGenerate = new Random();
 	private ArrayList<JSONObject> datasetRaw = new ArrayList<JSONObject>();
 	private Map<String,ArrayList<JSONObject>> datasetByQuestion = new HashMap<String,ArrayList<JSONObject>>();
@@ -130,7 +130,7 @@ static private boolean debug = false;
 	}
 
 	
-	public Bootstrap(final File directory) throws IOException{
+	public Bootstrap_V1(final File directory) throws IOException{
 		this.loadDataset(directory);
 		this.encodeDatasetByUser();
 		this.encodeDatasetByQuestion();
@@ -631,7 +631,7 @@ static private boolean debug = false;
 	
 	public static void main(String[] args) throws Exception{
 		File directory = new File("userStudyStat/survey");
-		Bootstrap stat = new Bootstrap(directory);
+		Bootstrap_V1 stat = new Bootstrap_V1(directory);
 		System.out.println("01: Hypothesis_0: accuracy of method2 (our approach) is lower than or equal to that of method0 (original code).");
 		System.out.println("[First sample questions, then sample in each type category.]");
 		System.out.println("p-value: "+stat.computePvalueHypothesis01());

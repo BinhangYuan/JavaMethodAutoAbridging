@@ -15,7 +15,7 @@ import statementGraph.ASTParserUtils;
 /*
  * Do a bootstrap hypothesis test.
  */
-public class BootstrapSimple {
+public class Bootstrap_V0 {
 	
 	static private boolean debug = false;
 	
@@ -120,7 +120,7 @@ public class BootstrapSimple {
 	}
 
 	
-	public BootstrapSimple(final File directory) throws IOException{
+	public Bootstrap_V0(final File directory) throws IOException{
 		this.loadDataset(directory);
 		this.encodeDatasetByQuestion();
 	}
@@ -501,7 +501,7 @@ public class BootstrapSimple {
 	
 	public static void main(String[] args) throws Exception{
 		File directory = new File("userStudyStat/survey");
-		BootstrapSimple stat = new BootstrapSimple(directory);
+		Bootstrap_V0 stat = new Bootstrap_V0(directory);
 		System.out.println("01: Hypothesis_0: accuracy of method2 (our approach) is lower than or equal to that of method0 (original code).[Sample by participants]");
 		System.out.println("p-value: "+stat.computePvalueHypothesis01());
 		System.out.println("02: Hypothesis_0: accuracy of method2 (our approach) is lower than or equal to that of method1 (naive approach).[Sample by participants]");
