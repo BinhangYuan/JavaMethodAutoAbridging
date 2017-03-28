@@ -13,7 +13,7 @@ import org.json.JSONObject;
 import statementGraph.ASTParserUtils;
 
 public class Bootstrap_V1 {
-static private boolean debug = false;
+	static private boolean debug = false;
 	
 	private int iterations = 1000;
 	private Random randGenerate = new Random();

@@ -34,9 +34,9 @@ public class SimpleStatistics_V1 {
 	private void initSurveyQuestion(){
 		Map<String,String> question0 = new HashMap<String,String>();
 		question0.put("title", "Which version of the code tended to make it easier to write your description?");
-		question0.put("suveryQ0Option0", "Non-reduced code");
+		question0.put("suveryQ0Option0", "Non-truncated code");
 		question0.put("suveryQ0Option1", "Naive Approach");
-		question0.put("suveryQ0Option2", "CodeAbstract");
+		question0.put("suveryQ0Option2", "Final Approach");
 		this.surveyQuestion.put("suveryQ0", question0);
 		Map<String,Integer> question0Stat = new HashMap<String,Integer>();
 		question0Stat.put("suveryQ0Option0", 0);
@@ -45,7 +45,7 @@ public class SimpleStatistics_V1 {
 		this.surveyResult.put("suveryQ0", question0Stat);
 		
 		Map<String,String> question1 = new HashMap<String,String>();
-		question1.put("title", "Which reducation level is easiest to use for naive approach?");
+		question1.put("title", "Which truncated level is easiest to use for naive approach?");
 		question1.put("suveryQ1Option0", "To around 15 lines");
 		question1.put("suveryQ1Option1", "To around 30 lines");
 		question1.put("suveryQ1Option2", "To 50\\% of the original lines");
@@ -57,7 +57,7 @@ public class SimpleStatistics_V1 {
 		this.surveyResult.put("suveryQ1", question1Stat);
 		
 		Map<String,String> question2 = new HashMap<String,String>();
-		question2.put("title", "Which reducation level is easiest to use for CodeAbstract?");
+		question2.put("title", "Which truncated level is easiest to use for CodeAbstract?");
 		question2.put("suveryQ2Option0", "To around 15 lines");
 		question2.put("suveryQ2Option1", "To around 30 lines");
 		question2.put("suveryQ2Option2", "To 50\\% of the original lines");
@@ -69,9 +69,9 @@ public class SimpleStatistics_V1 {
 		this.surveyResult.put("suveryQ2", question2Stat);
 		
 		Map<String,String> question3 = new HashMap<String,String>();
-		question3.put("title", "Which compressed code misses more necessary information for you to know the high level functionality of this method?");
+		question3.put("title", "Which abridged code misses more necessary statements to know the high level functionality of this method?");
 		question3.put("suveryQ3Option0", "Naive Approach");
-		question3.put("suveryQ3Option1", "CodeAbstract");
+		question3.put("suveryQ3Option1", "Final Approach");
 		this.surveyQuestion.put("suveryQ3", question3);
 		Map<String,Integer> question3Stat = new HashMap<String,Integer>();
 		question3Stat.put("suveryQ3Option0", 0);
@@ -79,9 +79,9 @@ public class SimpleStatistics_V1 {
 		this.surveyResult.put("suveryQ3", question3Stat);
 		
 		Map<String,String> question4 = new HashMap<String,String>();
-		question4.put("title", "Which compressed code contains more unnecessary statements for you to know the high level functionality of this method?");
+		question4.put("title", "Which abridged code contains more unnecessary statements to know the high level functionality of this method?");
 		question4.put("suveryQ4Option0", "Naive Approach");
-		question4.put("suveryQ4Option1", "CodeAbstract");
+		question4.put("suveryQ4Option1", "Final Approach");
 		this.surveyQuestion.put("suveryQ4", question4);
 		Map<String,Integer> question4Stat = new HashMap<String,Integer>();
 		question4Stat.put("suveryQ4Option0", 0);
@@ -435,8 +435,8 @@ public class SimpleStatistics_V1 {
 		result +="\\centering";
 		result +="\\begin{tabular}{|*{13}{c|}}\n";
 		result +="\\hline\n";
-		result += "& \\multicolumn{4}{ |c| }{ Original code} & \\multicolumn{4}{ |c| }{ Naive approach}  & \\multicolumn{4}{ |c| }{ CodeAbstract}\\\\ \\hline\n";
-	    result +="No & Correct & Wrong & Total & Rate & Correct & Wrong & Total & Rate & Correct & Wrong & Total & Rate\\\\ \\hline\n";
+		result += "& \\multicolumn{4}{ |c| }{ Original Code} & \\multicolumn{4}{ |c| }{ Naive Approach}  & \\multicolumn{4}{ |c| }{ Final Approach}\\\\ \\hline\n";
+		result +="No & Correct & Wrong & Total & Rate & Correct & Wrong & Total & Rate & Correct & Wrong & Total & Rate\\\\ \\hline\n";
 	    int i = 0;
 	    for(String index:task1){
 	    	int correct0 = this.task1AnswerCount.get(index).get("M0_CORRECT");
@@ -481,7 +481,7 @@ public class SimpleStatistics_V1 {
 		result +="\\centering";
 		result +="\\begin{tabular}{|*{13}{c|}}\n";
 		result +="\\hline\n";
-		result += "& \\multicolumn{4}{ |c| }{ Original code} & \\multicolumn{4}{ |c| }{ Naive approach}  & \\multicolumn{4}{ |c| }{ CodeAbstract}\\\\ \\hline\n";
+		result += "& \\multicolumn{4}{ |c| }{ Original Code} & \\multicolumn{4}{ |c| }{ Naive Approach}  & \\multicolumn{4}{ |c| }{ Final Approach}\\\\ \\hline\n";
 	    result +="No & Correct & Wrong & Total & Rate & Correct & Wrong & Total & Rate & Correct & Wrong & Total & Rate\\\\ \\hline\n";
 	    int i = 0;
 	    for(String index:task2){
@@ -527,7 +527,7 @@ public class SimpleStatistics_V1 {
 		result +="\\centering";
 		result +="\\begin{tabular}{|*{4}{c|}}\n";
 		result +="\\hline\n";
-		result += "No & Original code & Naive approach & CodeAbstract \\\\ \n";
+		result += "No & Original Code & Naive Approach & Final Approach \\\\ \n";
 		result +="\\hline\n";
 		int i = 0;
 		for(String index:task1){
@@ -554,7 +554,7 @@ public class SimpleStatistics_V1 {
 		result +="\\centering";
 		result +="\\begin{tabular}{|*{4}{c|}}\n";
 		result +="\\hline\n";
-		result += "No & Original code & Naive approach & CodeAbstract \\\\ \n";
+		result += "No & Original Code & Naive Approach & Final Approach \\\\ \n";
 		result +="\\hline\n";
 		int i = 0;
 		for(String index:task2){
@@ -600,7 +600,7 @@ public class SimpleStatistics_V1 {
 		String result = new String();
 		result +="\\begin{table*}[t]\n";
 		result +="\\centering\n";
-		result +="\\begin{tabular}{|*{3}{p{3.75cm} | p{1.25cm} |}}\n";
+		result +="\\begin{tabular}{|*{3}{p{3.7cm} | p{1.1cm} |}}\n";
 		result +="\\hline\n";
 		for(int i=0;i<5;i++){
 			String questionKey = "suveryQ"+i;
@@ -631,7 +631,6 @@ public class SimpleStatistics_V1 {
 	    result +="\\end{table*}\n";
 		return result;
 	}
-	
 	
 	
 	public static void main(String[] args) throws Exception{

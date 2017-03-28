@@ -454,7 +454,39 @@ public class SimpleStatistics_V0 {
 		return result;
 	}
 	
+	public void checkTime(){
+		for(JSONObject currentRaw: this.raw){
+			JSONObject answers = currentRaw.getJSONObject("answers");
+			for(String questionId:answers.keySet()){
+				JSONObject answer = answers.getJSONObject(questionId);
+				if((answer.get("type").equals("T1") || answer.get("type").equals("T2"))
+					&& answer.getInt("method")==2
+					&& questionId.equals("18")
+					&& answer.getInt("time")<30){
+					System.out.println("=======================================");
+					System.out.println(currentRaw.getJSONObject("visitor").getString("email"));
+					System.out.println(questionId+":"+answer.getInt("time"));
+				}
+			}
+		}
+	}
 	
+	public void checkSurvey(){
+		for(JSONObject currentRaw: this.raw){
+			JSONObject answers = currentRaw.getJSONObject("answers");
+			for(String questionId:answers.keySet()){
+				JSONObject answer = answers.getJSONObject(questionId);
+				if((answer.get("type").equals("T1") || answer.get("type").equals("T2"))
+					&& answer.getInt("method")==2
+					&& questionId.equals("18")
+					&& answer.getInt("time")<30){
+					System.out.println("=======================================");
+					System.out.println(currentRaw.getJSONObject("visitor").getString("email"));
+					System.out.println(questionId+":"+answer.getInt("time"));
+				}
+			}
+		}
+	}
 	
 	public static void main(String[] args) throws Exception{
 		System.out.println("----------------------------------------------------------------");
@@ -468,5 +500,6 @@ public class SimpleStatistics_V0 {
 		System.out.println();
 		System.out.println(stat.survey2LatexTable());
 		System.out.println("----------------------------------------------------------------");
+		stat.checkSurvey();
 	}
 }

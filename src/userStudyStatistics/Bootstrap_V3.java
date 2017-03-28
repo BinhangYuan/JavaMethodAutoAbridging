@@ -13,7 +13,7 @@ import org.json.JSONObject;
 
 import statementGraph.ASTParserUtils;
 
-public class Bootstrap_V2 {
+public class Bootstrap_V3 {
 	static private boolean debug = false;
 	
 	private int iterations = 10000;
@@ -61,8 +61,12 @@ public class Bootstrap_V2 {
 	private void encodeDatasetByUser(){
 		for(JSONObject questions:this.datasetRaw){
 			HashMap<String,ArrayList<JSONObject>> currentUser = new HashMap<String,ArrayList<JSONObject>>();
-			ArrayList<JSONObject> task1Array = new ArrayList<JSONObject>();
-			ArrayList<JSONObject> task2Array = new ArrayList<JSONObject>();
+			ArrayList<JSONObject> task1_m0_Array = new ArrayList<JSONObject>();
+			ArrayList<JSONObject> task1_m1_Array = new ArrayList<JSONObject>();
+			ArrayList<JSONObject> task1_m2_Array = new ArrayList<JSONObject>();
+			ArrayList<JSONObject> task2_m0_Array = new ArrayList<JSONObject>();
+			ArrayList<JSONObject> task2_m1_Array = new ArrayList<JSONObject>();
+			ArrayList<JSONObject> task2_m2_Array = new ArrayList<JSONObject>();
 			for(int i=1; i<=19; i++){
 				String questionID = ""+i;
 				if(!this.task1Set.contains(questionID) && !this.task2Set.contains(questionID)){
@@ -76,23 +80,44 @@ public class Bootstrap_V2 {
 				currentQuestion.remove("correctSolution");
 				currentQuestion.remove("answer");
 				if(this.task1Set.contains(questionID)){
-					task1Array.add(currentQuestion);
+					if(currentQuestion.getInt("method")==0){
+						task1_m0_Array.add(currentQuestion);
+					}
+					else if(currentQuestion.getInt("method")==1){
+						task1_m1_Array.add(currentQuestion);
+					}
+					else if(currentQuestion.getInt("method")==2){
+						task1_m2_Array.add(currentQuestion);
+					}
 				}
 				else if(this.task2Set.contains(questionID)){
-					task2Array.add(currentQuestion);
+					if(currentQuestion.getInt("method")==0){
+						task2_m0_Array.add(currentQuestion);
+					}
+					else if(currentQuestion.getInt("method")==1){
+						task2_m1_Array.add(currentQuestion);
+					}
+					else if(currentQuestion.getInt("method")==2){
+						task2_m2_Array.add(currentQuestion);
+					}
 				}
 			}
-			currentUser.put("task1", task1Array);
-			currentUser.put("task2", task2Array);
+			currentUser.put("task1_m0", task1_m0_Array);
+			currentUser.put("task1_m1", task1_m1_Array);
+			currentUser.put("task1_m2", task1_m2_Array);
+			currentUser.put("task2_m0", task2_m0_Array);
+			currentUser.put("task2_m1", task2_m1_Array);
+			currentUser.put("task2_m2", task2_m2_Array);
 			if(debug){
 				System.out.println(currentUser.get("task1").size());
+				System.out.println(currentUser.get("task2").size());
 			}
 			this.databyUser.add(currentUser);
 		}
 	}
 	
 	
-	public Bootstrap_V2(final File directory) throws IOException{
+	public Bootstrap_V3(final File directory) throws IOException{
 		if(debug){
 			System.out.println(this.task1Set.size());
 			System.out.println(this.task2Set.size());
@@ -122,36 +147,29 @@ public class Bootstrap_V2 {
 			statistics.put("M2_CORRECT", 0);
 			statistics.put("M2_WRONG", 0);
 			for(int j=0; j<sampleUser.size();j++){
-				ArrayList<JSONObject> task1Set = sampleUser.get(j).get("task1");
+				ArrayList<JSONObject> task1_m0 = sampleUser.get(j).get("task1_m0");
+				ArrayList<JSONObject> task1_m2 = sampleUser.get(j).get("task1_m2");
 				//Then re-sample the question example by sampling question with replacement
-				for(int k=0;k<task1Set.size();k++){
-					int index = this.randGenerate.nextInt(task1Set.size());
-					JSONObject current = task1Set.get(index);
-					if(current.getInt("method")==0){
-						if(current.getBoolean("isCorrect")){
-							statistics.put("M0_CORRECT", statistics.get("M0_CORRECT")+1);
-						}
-						else{
-							statistics.put("M0_WRONG", statistics.get("M0_WRONG")+1);
-						}
+				for(int k=0;k<task1_m0.size();k++){
+					int index = this.randGenerate.nextInt(task1_m0.size());
+					JSONObject current = task1_m0.get(index);
+					if(current.getBoolean("isCorrect")){
+						statistics.put("M0_CORRECT", statistics.get("M0_CORRECT")+1);
 					}
-					else if(current.getInt("method")==2){
-						if(current.getBoolean("isCorrect")){
-							statistics.put("M2_CORRECT", statistics.get("M2_CORRECT")+1);
-						}
-						else{
-							statistics.put("M2_WRONG", statistics.get("M2_WRONG")+1);
-						}
+					else{
+						statistics.put("M0_WRONG", statistics.get("M0_WRONG")+1);
 					}
 				}
-			}
-			//Invalid sample, does not count.
-			if(statistics.get("M0_WRONG")+statistics.get("M0_CORRECT")==0 || statistics.get("M2_WRONG")+statistics.get("M2_CORRECT")==0){
-				if(debug){
-					//System.out.println("Empty");
+				for(int k=0;k<task1_m2.size();k++){
+					int index = this.randGenerate.nextInt(task1_m2.size());
+					JSONObject current = task1_m2.get(index);
+					if(current.getBoolean("isCorrect")){
+						statistics.put("M2_CORRECT", statistics.get("M2_CORRECT")+1);
+					}
+					else{
+						statistics.put("M2_WRONG", statistics.get("M2_WRONG")+1);
+					}
 				}
-				i--;
-				continue;
 			}
 			double accuracy0 = (double)(statistics.get("M0_CORRECT"))/(double)(statistics.get("M0_WRONG")+statistics.get("M0_CORRECT"));
 			double accuracy2 = (double)(statistics.get("M2_CORRECT"))/(double)(statistics.get("M2_WRONG")+statistics.get("M2_CORRECT"));
@@ -182,33 +200,29 @@ public class Bootstrap_V2 {
 			statistics.put("M2_CORRECT", 0);
 			statistics.put("M2_WRONG", 0);
 			for(int j=0; j<sampleUser.size();j++){
-				ArrayList<JSONObject> task2Set = sampleUser.get(j).get("task2");
+				ArrayList<JSONObject> task2_m0 = sampleUser.get(j).get("task2_m0");
+				ArrayList<JSONObject> task2_m2 = sampleUser.get(j).get("task2_m2");
 				//Then re-sample the question example by sampling question with replacement
-				for(int k=0;k<task2Set.size();k++){
-					int index = this.randGenerate.nextInt(task2Set.size());
-					JSONObject current = task2Set.get(index);
-					if(current.getInt("method")==0){
-						if(current.getBoolean("isCorrect")){
-							statistics.put("M0_CORRECT", statistics.get("M0_CORRECT")+1);
-						}
-						else{
-							statistics.put("M0_WRONG", statistics.get("M0_WRONG")+1);
-						}
+				for(int k=0;k<task2_m0.size();k++){
+					int index = this.randGenerate.nextInt(task2_m0.size());
+					JSONObject current = task2_m0.get(index);
+					if(current.getBoolean("isCorrect")){
+						statistics.put("M0_CORRECT", statistics.get("M0_CORRECT")+1);
 					}
-					else if(current.getInt("method")==2){
-						if(current.getBoolean("isCorrect")){
-							statistics.put("M2_CORRECT", statistics.get("M2_CORRECT")+1);
-						}
-						else{
-							statistics.put("M2_WRONG", statistics.get("M2_WRONG")+1);
-						}
+					else{
+						statistics.put("M0_WRONG", statistics.get("M0_WRONG")+1);
 					}
 				}
-			}
-			//Invalid sample, does not count.
-			if(statistics.get("M0_WRONG")+statistics.get("M0_CORRECT")==0 || statistics.get("M2_WRONG")+statistics.get("M2_CORRECT")==0){
-				i--;
-				continue;
+				for(int k=0;k<task2_m2.size();k++){
+					int index = this.randGenerate.nextInt(task2_m2.size());
+					JSONObject current = task2_m2.get(index);
+					if(current.getBoolean("isCorrect")){
+						statistics.put("M2_CORRECT", statistics.get("M2_CORRECT")+1);
+					}
+					else{
+						statistics.put("M2_WRONG", statistics.get("M2_WRONG")+1);
+					}
+				}
 			}
 			double accuracy0 = (double)(statistics.get("M0_CORRECT"))/(double)(statistics.get("M0_WRONG")+statistics.get("M0_CORRECT"));
 			double accuracy2 = (double)(statistics.get("M2_CORRECT"))/(double)(statistics.get("M2_WRONG")+statistics.get("M2_CORRECT"));
@@ -240,33 +254,29 @@ public class Bootstrap_V2 {
 			statistics.put("M2_CORRECT", 0);
 			statistics.put("M2_WRONG", 0);
 			for(int j=0; j<sampleUser.size();j++){
-				ArrayList<JSONObject> task1Set = sampleUser.get(j).get("task1");
+				ArrayList<JSONObject> task1_m1 = sampleUser.get(j).get("task1_m1");
+				ArrayList<JSONObject> task1_m2 = sampleUser.get(j).get("task1_m2");
 				//Then re-sample the question example by sampling question with replacement
-				for(int k=0;k<task1Set.size();k++){
-					int index = this.randGenerate.nextInt(task1Set.size());
-					JSONObject current = task1Set.get(index);
-					if(current.getInt("method")==1){
-						if(current.getBoolean("isCorrect")){
-							statistics.put("M1_CORRECT", statistics.get("M1_CORRECT")+1);
-						}
-						else{
-							statistics.put("M1_WRONG", statistics.get("M1_WRONG")+1);
-						}
+				for(int k=0;k<task1_m1.size();k++){
+					int index = this.randGenerate.nextInt(task1_m1.size());
+					JSONObject current = task1_m1.get(index);
+					if(current.getBoolean("isCorrect")){
+						statistics.put("M1_CORRECT", statistics.get("M1_CORRECT")+1);
 					}
-					else if(current.getInt("method")==2){
-						if(current.getBoolean("isCorrect")){
-							statistics.put("M2_CORRECT", statistics.get("M2_CORRECT")+1);
-						}
-						else{
-							statistics.put("M2_WRONG", statistics.get("M2_WRONG")+1);
-						}
+					else{
+						statistics.put("M1_WRONG", statistics.get("M1_WRONG")+1);
 					}
 				}
-			}
-			//Invalid sample, does not count.
-			if(statistics.get("M1_WRONG")+statistics.get("M1_CORRECT")==0 || statistics.get("M2_WRONG")+statistics.get("M2_CORRECT")==0){
-				i--;
-				continue;
+				for(int k=0;k<task1_m2.size();k++){
+					int index = this.randGenerate.nextInt(task1_m2.size());
+					JSONObject current = task1_m2.get(index);
+					if(current.getBoolean("isCorrect")){
+						statistics.put("M2_CORRECT", statistics.get("M2_CORRECT")+1);
+					}
+					else{
+						statistics.put("M2_WRONG", statistics.get("M2_WRONG")+1);
+					}
+				}
 			}
 			double accuracy0 = (double)(statistics.get("M1_CORRECT"))/(double)(statistics.get("M1_WRONG")+statistics.get("M1_CORRECT"));
 			double accuracy2 = (double)(statistics.get("M2_CORRECT"))/(double)(statistics.get("M2_WRONG")+statistics.get("M2_CORRECT"));
@@ -297,33 +307,29 @@ public class Bootstrap_V2 {
 			statistics.put("M2_CORRECT", 0);
 			statistics.put("M2_WRONG", 0);
 			for(int j=0; j<sampleUser.size();j++){
-				ArrayList<JSONObject> task2Set = sampleUser.get(j).get("task2");
+				ArrayList<JSONObject> task2_m1 = sampleUser.get(j).get("task2_m1");
+				ArrayList<JSONObject> task2_m2 = sampleUser.get(j).get("task2_m2");
 				//Then re-sample the question example by sampling question with replacement
-				for(int k=0;k<task2Set.size();k++){
-					int index = this.randGenerate.nextInt(task2Set.size());
-					JSONObject current = task2Set.get(index);
-					if(current.getInt("method")==1){
-						if(current.getBoolean("isCorrect")){
-							statistics.put("M1_CORRECT", statistics.get("M1_CORRECT")+1);
-						}
-						else{
-							statistics.put("M1_WRONG", statistics.get("M1_WRONG")+1);
-						}
+				for(int k=0;k<task2_m1.size();k++){
+					int index = this.randGenerate.nextInt(task2_m1.size());
+					JSONObject current = task2_m1.get(index);
+					if(current.getBoolean("isCorrect")){
+						statistics.put("M1_CORRECT", statistics.get("M1_CORRECT")+1);
 					}
-					else if(current.getInt("method")==2){
-						if(current.getBoolean("isCorrect")){
-							statistics.put("M2_CORRECT", statistics.get("M2_CORRECT")+1);
-						}
-						else{
-							statistics.put("M2_WRONG", statistics.get("M2_WRONG")+1);
-						}
+					else{
+						statistics.put("M1_WRONG", statistics.get("M1_WRONG")+1);
 					}
 				}
-			}
-			//Invalid sample, does not count.
-			if(statistics.get("M1_WRONG")+statistics.get("M1_CORRECT")==0 || statistics.get("M2_WRONG")+statistics.get("M2_CORRECT")==0){
-				i--;
-				continue;
+				for(int k=0;k<task2_m2.size();k++){
+					int index = this.randGenerate.nextInt(task2_m2.size());
+					JSONObject current = task2_m2.get(index);
+					if(current.getBoolean("isCorrect")){
+						statistics.put("M2_CORRECT", statistics.get("M2_CORRECT")+1);
+					}
+					else{
+						statistics.put("M2_WRONG", statistics.get("M2_WRONG")+1);
+					}
+				}
 			}
 			double accuracy0 = (double)(statistics.get("M1_CORRECT"))/(double)(statistics.get("M1_WRONG")+statistics.get("M1_CORRECT"));
 			double accuracy2 = (double)(statistics.get("M2_CORRECT"))/(double)(statistics.get("M2_WRONG")+statistics.get("M2_CORRECT"));
@@ -355,24 +361,21 @@ public class Bootstrap_V2 {
 			statistics.put("M2_TOTALTIME", 0);
 			statistics.put("M2_COUNT", 0);
 			for(int j=0; j<sampleUser.size();j++){
-				ArrayList<JSONObject> task1Set = sampleUser.get(j).get("task1");
+				ArrayList<JSONObject> task1_m0 = sampleUser.get(j).get("task1_m0");
+				ArrayList<JSONObject> task1_m2 = sampleUser.get(j).get("task1_m2");
 				//Then re-sample the question example by sampling question with replacement
-				for(int k=0;k<task1Set.size();k++){
-					int index = this.randGenerate.nextInt(task1Set.size());
-					JSONObject current = task1Set.get(index);
-					if(current.getInt("method")==0){
-						statistics.put("M0_TOTALTIME", statistics.get("M0_TOTALTIME")+current.getInt("time"));
-						statistics.put("M0_COUNT", statistics.get("M0_COUNT")+1);
-					}
-					else if(current.getInt("method")==2){
-						statistics.put("M2_TOTALTIME", statistics.get("M2_TOTALTIME")+current.getInt("time"));
-						statistics.put("M2_COUNT", statistics.get("M2_COUNT")+1);
-					}
+				for(int k=0;k<task1_m0.size();k++){
+					int index = this.randGenerate.nextInt(task1_m0.size());
+					JSONObject current = task1_m0.get(index);
+					statistics.put("M0_TOTALTIME", statistics.get("M0_TOTALTIME")+current.getInt("time"));
+					statistics.put("M0_COUNT", statistics.get("M0_COUNT")+1);
 				}
-			}
-			if(statistics.get("M0_COUNT")==0 || statistics.get("M2_COUNT")==0){
-				i--;
-				continue;
+				for(int k=0;k<task1_m2.size();k++){
+					int index = this.randGenerate.nextInt(task1_m2.size());
+					JSONObject current = task1_m2.get(index);
+					statistics.put("M2_TOTALTIME", statistics.get("M2_TOTALTIME")+current.getInt("time"));
+					statistics.put("M2_COUNT", statistics.get("M2_COUNT")+1);
+				}
 			}
 			double time0 = (double)(statistics.get("M0_TOTALTIME"))/(double)(statistics.get("M0_COUNT"));
 			double time2 = (double)(statistics.get("M2_TOTALTIME"))/(double)(statistics.get("M2_COUNT"));
@@ -403,24 +406,21 @@ public class Bootstrap_V2 {
 			statistics.put("M2_TOTALTIME", 0);
 			statistics.put("M2_COUNT", 0);
 			for(int j=0; j<sampleUser.size();j++){
-				ArrayList<JSONObject> task2Set = sampleUser.get(j).get("task2");
+				ArrayList<JSONObject> task2_m0 = sampleUser.get(j).get("task2_m0");
+				ArrayList<JSONObject> task2_m2 = sampleUser.get(j).get("task2_m2");
 				//Then re-sample the question example by sampling question with replacement
-				for(int k=0;k<task2Set.size();k++){
-					int index = this.randGenerate.nextInt(task2Set.size());
-					JSONObject current = task2Set.get(index);
-					if(current.getInt("method")==0){
-						statistics.put("M0_TOTALTIME", statistics.get("M0_TOTALTIME")+current.getInt("time"));
-						statistics.put("M0_COUNT", statistics.get("M0_COUNT")+1);
-					}
-					else if(current.getInt("method")==2){
-						statistics.put("M2_TOTALTIME", statistics.get("M2_TOTALTIME")+current.getInt("time"));
-						statistics.put("M2_COUNT", statistics.get("M2_COUNT")+1);
-					}
+				for(int k=0;k<task2_m0.size();k++){
+					int index = this.randGenerate.nextInt(task2_m0.size());
+					JSONObject current = task2_m0.get(index);
+					statistics.put("M0_TOTALTIME", statistics.get("M0_TOTALTIME")+current.getInt("time"));
+					statistics.put("M0_COUNT", statistics.get("M0_COUNT")+1);
 				}
-			}
-			if(statistics.get("M0_COUNT")==0 || statistics.get("M2_COUNT")==0){
-				i--;
-				continue;
+				for(int k=0;k<task2_m2.size();k++){
+					int index = this.randGenerate.nextInt(task2_m2.size());
+					JSONObject current = task2_m2.get(index);
+					statistics.put("M2_TOTALTIME", statistics.get("M2_TOTALTIME")+current.getInt("time"));
+					statistics.put("M2_COUNT", statistics.get("M2_COUNT")+1);
+				}
 			}
 			double time0 = (double)(statistics.get("M0_TOTALTIME"))/(double)(statistics.get("M0_COUNT"));
 			double time2 = (double)(statistics.get("M2_TOTALTIME"))/(double)(statistics.get("M2_COUNT"));
@@ -452,24 +452,21 @@ public class Bootstrap_V2 {
 			statistics.put("M2_TOTALTIME", 0);
 			statistics.put("M2_COUNT", 0);
 			for(int j=0; j<sampleUser.size();j++){
-				ArrayList<JSONObject> task1Set = sampleUser.get(j).get("task1");
+				ArrayList<JSONObject> task1_m1 = sampleUser.get(j).get("task1_m1");
+				ArrayList<JSONObject> task1_m2 = sampleUser.get(j).get("task1_m2");
 				//Then re-sample the question example by sampling question with replacement
-				for(int k=0;k<task1Set.size();k++){
-					int index = this.randGenerate.nextInt(task1Set.size());
-					JSONObject current = task1Set.get(index);
-					if(current.getInt("method")==1){
-						statistics.put("M1_TOTALTIME", statistics.get("M1_TOTALTIME")+current.getInt("time"));
-						statistics.put("M1_COUNT", statistics.get("M1_COUNT")+1);
-					}
-					else if(current.getInt("method")==2){
-						statistics.put("M2_TOTALTIME", statistics.get("M2_TOTALTIME")+current.getInt("time"));
-						statistics.put("M2_COUNT", statistics.get("M2_COUNT")+1);
-					}
+				for(int k=0;k<task1_m1.size();k++){
+					int index = this.randGenerate.nextInt(task1_m1.size());
+					JSONObject current = task1_m1.get(index);
+					statistics.put("M1_TOTALTIME", statistics.get("M1_TOTALTIME")+current.getInt("time"));
+					statistics.put("M1_COUNT", statistics.get("M1_COUNT")+1);
 				}
-			}
-			if(statistics.get("M1_COUNT")==0 || statistics.get("M2_COUNT")==0){
-				i--;
-				continue;
+				for(int k=0;k<task1_m2.size();k++){
+					int index = this.randGenerate.nextInt(task1_m2.size());
+					JSONObject current = task1_m2.get(index);
+					statistics.put("M2_TOTALTIME", statistics.get("M2_TOTALTIME")+current.getInt("time"));
+					statistics.put("M2_COUNT", statistics.get("M2_COUNT")+1);
+				}
 			}
 			double time1 = (double)(statistics.get("M1_TOTALTIME"))/(double)(statistics.get("M1_COUNT"));
 			double time2 = (double)(statistics.get("M2_TOTALTIME"))/(double)(statistics.get("M2_COUNT"));
@@ -500,24 +497,21 @@ public class Bootstrap_V2 {
 			statistics.put("M2_TOTALTIME", 0);
 			statistics.put("M2_COUNT", 0);
 			for(int j=0; j<sampleUser.size();j++){
-				ArrayList<JSONObject> task2Set = sampleUser.get(j).get("task2");
+				ArrayList<JSONObject> task2_m1 = sampleUser.get(j).get("task2_m1");
+				ArrayList<JSONObject> task2_m2 = sampleUser.get(j).get("task2_m2");
 				//Then re-sample the question example by sampling question with replacement
-				for(int k=0;k<task2Set.size();k++){
-					int index = this.randGenerate.nextInt(task2Set.size());
-					JSONObject current = task2Set.get(index);
-					if(current.getInt("method")==1){
-						statistics.put("M1_TOTALTIME", statistics.get("M1_TOTALTIME")+current.getInt("time"));
-						statistics.put("M1_COUNT", statistics.get("M1_COUNT")+1);
-					}
-					else if(current.getInt("method")==2){
-						statistics.put("M2_TOTALTIME", statistics.get("M2_TOTALTIME")+current.getInt("time"));
-						statistics.put("M2_COUNT", statistics.get("M2_COUNT")+1);
-					}
+				for(int k=0;k<task2_m1.size();k++){
+					int index = this.randGenerate.nextInt(task2_m1.size());
+					JSONObject current = task2_m1.get(index);
+					statistics.put("M1_TOTALTIME", statistics.get("M1_TOTALTIME")+current.getInt("time"));
+					statistics.put("M1_COUNT", statistics.get("M1_COUNT")+1);
 				}
-			}
-			if(statistics.get("M1_COUNT")==0 || statistics.get("M2_COUNT")==0){
-				i--;
-				continue;
+				for(int k=0;k<task2_m2.size();k++){
+					int index = this.randGenerate.nextInt(task2_m2.size());
+					JSONObject current = task2_m2.get(index);
+					statistics.put("M2_TOTALTIME", statistics.get("M2_TOTALTIME")+current.getInt("time"));
+					statistics.put("M2_COUNT", statistics.get("M2_COUNT")+1);
+				}
 			}
 			double time1 = (double)(statistics.get("M1_TOTALTIME"))/(double)(statistics.get("M1_COUNT"));
 			double time2 = (double)(statistics.get("M2_TOTALTIME"))/(double)(statistics.get("M2_COUNT"));
@@ -532,21 +526,29 @@ public class Bootstrap_V2 {
 	
 	public static void main(String[] args) throws Exception{
 		File directory = new File("userStudyStat/survey");
-		Bootstrap_V2 stat = new Bootstrap_V2(directory);
+		Bootstrap_V3 stat = new Bootstrap_V3(directory);
+		
 		System.out.println("01: Hypothesis_0: For task 1, accuracy of method2 (our approach) is lower than or equal to that of method0 (original code).");
 		System.out.println("p-value: "+stat.computePvalueHypothesis01());
+		
 		System.out.println("02: Hypothesis_0: For task 2, accuracy of method2 (our approach) is lower than or equal to that of method0 (original code).");
 		System.out.println("p-value: "+stat.computePvalueHypothesis02());
+		
 		System.out.println("03: Hypothesis_0: For task 1, accuracy of method2 (our approach) is lower than or equal to that of method1 (naive approach).");
 		System.out.println("p-value: "+stat.computePvalueHypothesis03());
+		
 		System.out.println("04: Hypothesis_0: For task 2, accuracy of method2 (our approach) is lower than or equal to that of method1 (naive approach).");
 		System.out.println("p-value: "+stat.computePvalueHypothesis04());
+		
 		System.out.println("05: Hypothesis_0: For task 1, react time of method2 (our approach) is larger than or equal to that of method0 (original code).");
 		System.out.println("p-value: "+stat.computePvalueHypothesis05());
+		
 		System.out.println("06: Hypothesis_0: For task 2, react time of method2 (our approach) is larger than or equal to that of method0 (original code).");
 		System.out.println("p-value: "+stat.computePvalueHypothesis06());
+		
 		System.out.println("07: Hypothesis_0: For task 1, react time of method2 (our approach) is larger than or equal to that of method1 (naive approach).");
 		System.out.println("p-value: "+stat.computePvalueHypothesis07());
+		
 		System.out.println("08: Hypothesis_0: For task 2, react time of method2 (our approach) is larger than or equal to that of method1 (naive approach).");
 		System.out.println("p-value: "+stat.computePvalueHypothesis08());
 	}
