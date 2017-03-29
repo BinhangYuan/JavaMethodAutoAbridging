@@ -78,30 +78,50 @@ public class SwitchStatementWrapper extends StatementWrapper{
 
 	@Override
 	public String toString() {
-		return "switch (" + this.astNode.getExpression() + "){\n";
+		return "switch (" + this.astNode.getExpression() + "){";
 	}
 
 	@Override
 	public String computeOutput(int level) {
 		String result = new String();
 		result += super.computeIndent(level)+this.toString();
-		Assert.isTrue(this.branchEntries.size() == this.branchStatementsWrappers.size() && 
-				this.branchEntries.size() == this.isBlockList.size());
+		if(!this.branchEntries.isEmpty() && !this.branchEntries.get(0).isDisplay()){
+			result += "..."; 
+		}
+		result += "\n";
+		Assert.isTrue(this.branchEntries.size() == this.branchStatementsWrappers.size() && this.branchEntries.size() == this.isBlockList.size());
 		for(int i=0; i< this.branchEntries.size();i++){
 			StatementWrapper statementWrapper = this.branchEntries.get(i);
 			if(statementWrapper.isDisplay()){
 				result += statementWrapper.computeOutput(level);
-				result += this.isBlockList.get(i)?" {\n":"\n";
+				if(this.isBlockList.get(i)){
+					result += "{";
+				}
+				if(!this.branchStatementsWrappers.get(i).isEmpty() && !this.branchStatementsWrappers.get(i).get(0).isDisplay()){
+					result += "...";
+				}
+				result += "\n";
 			
-				for(StatementWrapper nestedStatementWrapper: this.branchStatementsWrappers.get(i)){
+				for(int j=0; j<this.branchStatementsWrappers.get(i).size();j++){
+					StatementWrapper nestedStatementWrapper= this.branchStatementsWrappers.get(i).get(j);
 					if(nestedStatementWrapper.isDisplay()){
 						result += nestedStatementWrapper.computeOutput(level+1);
+						if(j<this.branchStatementsWrappers.get(i).size()-1 && !this.branchStatementsWrappers.get(i).get(j+1).isDisplay()){
+							result += "...";
+						}
+						result += '\n';
 					}
 				}
-				result += this.isBlockList.get(i)?(super.computeIndent(level)+"}\n"):"";
+				if(this.isBlockList.get(i)){
+					result += (super.computeIndent(level)+"}");
+					if(i<this.branchEntries.size()-1 && !this.branchEntries.get(i+1).isDisplay()){
+						result += "...";
+					}
+					result += "\n";
+				}
 			}
 		}
-		result += (super.computeIndent(level)+"}\n");
+		result += (super.computeIndent(level)+"}");
 		return result;
 	}
 }

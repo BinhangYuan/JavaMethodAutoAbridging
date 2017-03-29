@@ -109,14 +109,22 @@ public class ForStatementWrapper extends StatementWrapper{
 	@Override
 	public String computeOutput(int level) {
 		String result = super.computeIndent(level)+this.toString();
+		if(!this.bodyWrappers.isEmpty() && !this.bodyWrappers.get(0).isDisplay()){
+			result += "...";
+		}
 		result += '\n';
-		for(StatementWrapper statementWrapper: this.bodyWrappers){
+		for(int i=0; i<this.bodyWrappers.size();i++){
+			StatementWrapper statementWrapper = this.bodyWrappers.get(i);
 			if(statementWrapper.isDisplay()){
 				result += statementWrapper.computeOutput(level+1);
+				if(i<this.bodyWrappers.size()-1 && !this.bodyWrappers.get(i+1).isDisplay()){
+					result += "...";
+				}
+				result += "\n";
 			}
 		}
 		if(this.bodyIsBlock){
-			result +=(super.computeIndent(level)+"}\n");
+			result +=(super.computeIndent(level)+"}");
 		}
 		return result;
 	}

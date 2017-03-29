@@ -652,8 +652,12 @@ public class SimplifiedAST {
 		String result = new String();
 		Javadoc methodDoc = this.methodASTNode.getJavadoc();
 		this.methodASTNode.setJavadoc(null);
+		//This may still problematic, keep it for now.
 		result = this.methodASTNode.toString().substring(0, this.methodASTNode.toString().indexOf('{')+1);
 		this.methodASTNode.setJavadoc(methodDoc);
+		if(solution.length>0 && !solution[0]){
+			result += "...";
+		}
 		result += '\n';
 		result += this.computeBody(solution);
 		result += '}';
@@ -668,9 +672,14 @@ public class SimplifiedAST {
 		}
 		String result = new String();
 		//Recursive handle each statement:
-		for(StatementWrapper statementWrapper: this.methodBlock){
+		for(int i=0; i<this.methodBlock.size();i++){
+			StatementWrapper statementWrapper = this.methodBlock.get(i);
 			if(statementWrapper.isDisplay()){
 				result += statementWrapper.computeOutput(1);
+				if(i<this.methodBlock.size()-1 && !this.methodBlock.get(i+1).isDisplay()){
+					result += "...";
+				}
+				result += "\n";
 			}
 		}
 		return result;

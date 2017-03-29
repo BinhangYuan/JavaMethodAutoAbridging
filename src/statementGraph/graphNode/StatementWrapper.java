@@ -384,28 +384,6 @@ public abstract class StatementWrapper {
 	}
 	
 	
-	private List<StatementWrapper> cfgSuccessors = new LinkedList<StatementWrapper>();
-	
-	public List<StatementWrapper> getCFGSuccessors(){
-		return this.cfgSuccessors;
-	}
-	
-	protected void addCFGSuccessors(StatementWrapper item){
-		this.cfgSuccessors.add(item);
-	}
-	
-	
-	private List<StatementWrapper> cfgPredecessor = new LinkedList<StatementWrapper>();
-	
-	public List<StatementWrapper> getCFGPredecessor(){
-		return this.cfgPredecessor;
-	}
-	
-	protected void addCFGPredecessor(StatementWrapper item){
-		this.cfgPredecessor.add(item);
-	}
-	
-	
 	//For the current implementation, this list should include only one element.
 	private List<StatementWrapper> ddgDefinedPredecessor = new LinkedList<StatementWrapper>();
 	

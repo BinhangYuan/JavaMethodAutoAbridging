@@ -66,14 +66,22 @@ public class LabeledStatementWrapper extends StatementWrapper{
 		if(this.bodyIsBlock){
 			result += '{';
 		}
+		if(!this.bodyWrappers.get(0).isDisplay()){
+			result += "...";
+		}
 		result += '\n';
-		for(StatementWrapper statementWrapper : this.bodyWrappers){
+		for(int i=0; i<this.bodyWrappers.size();i++){
+			StatementWrapper statementWrapper = this.bodyWrappers.get(i);
 			if(statementWrapper.isDisplay()){
 				result += statementWrapper.computeOutput(level+1);
+				if(i<this.bodyWrappers.size()-1 && !this.bodyWrappers.get(i+1).isDisplay()){
+					result += "...";
+				}
+				result += "\n";
 			}
 		}
 		if(this.bodyIsBlock){
-			result += "}\n";
+			result += "}";
 		}
 		return result;
 	}

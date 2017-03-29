@@ -121,7 +121,7 @@ public class TryStatementWrapper extends StatementWrapper{
 		String result = new String();
 		result = super.computeIndent(level);
 		if(this.astNode.resources().isEmpty()){
-			result += "try {\n";
+			result += "try {";
 		}
 		else{
 			result += "try (";
@@ -129,22 +129,39 @@ public class TryStatementWrapper extends StatementWrapper{
 				ASTNode node = (ASTNode) o;
 				result += node.toString(); 
 			}
-			result += "){\n";
+			result += "){";
 		}
+		if(!this.bodyWrappers.isEmpty() && !this.bodyWrappers.get(0).isDisplay()){
+			result += "...";
+		}
+		result += "\n";
 		//Handle body:
-		for(StatementWrapper statementWrapper: this.bodyWrappers){
+		for(int i=0; i<this.bodyWrappers.size();i++){
+			StatementWrapper statementWrapper = this.bodyWrappers.get(i);
 			if(statementWrapper.isDisplay()){
 				result += statementWrapper.computeOutput(level+1);
+				if(i<this.bodyWrappers.size()-1 && !this.bodyWrappers.get(i+1).isDisplay()){
+					result += "...";
+				}
+				result += "\n";
 			}
 		}
 		result += (super.computeIndent(level)+"} ");
 		//Handle catches:
 		if(this.catchList.size()!=0){
 			for(CatchClause catchItem: this.catchList){
-				result += "catch (" + catchItem.getException().toString() + "){\n";
-				for(StatementWrapper statementWrapper: this.catchMap.get(catchItem)){
+				result += "catch (" + catchItem.getException().toString() + "){";
+				if(!this.catchMap.get(catchItem).isEmpty() && !this.catchMap.get(catchItem).get(0).isDisplay()){
+					result += "...";
+				}
+				for(int i = 0; i<this.catchMap.get(catchItem).size(); i++){
+					StatementWrapper statementWrapper= this.catchMap.get(catchItem).get(i);
 					if(statementWrapper.isDisplay()){
 						result += statementWrapper.computeOutput(level+1);
+						if(i<this.catchMap.get(catchItem).size()-1 && !this.catchMap.get(catchItem).get(i+1).isDisplay()){
+							result += "...";
+						}
+						result += "\n";
 					}
 				}
 				result += (super.computeIndent(level)+"} ");
@@ -153,15 +170,24 @@ public class TryStatementWrapper extends StatementWrapper{
 		}
 		//Handle final:		
 		if(this.astNode.getFinally()!=null){
-			result += "finally {\n";
-			for(StatementWrapper statementWrapper: this.finalBodyWrappers){
+			result += "finally {";
+			if(!this.finalBodyWrappers.isEmpty() && !this.finalBodyWrappers.get(0).isDisplay()){
+				result += "...";
+			}
+			result += "\n";
+			for(int i=0; i<this.finalBodyWrappers.size();i++){
+				StatementWrapper statementWrapper= this.finalBodyWrappers.get(i);
 				if(statementWrapper.isDisplay()){
 					result += statementWrapper.computeOutput(level+1);
+					if(i<this.finalBodyWrappers.size()-1 && !this.finalBodyWrappers.get(i+1).isDisplay()){
+						result += "...";
+					}
+					result += "\n";
 				}
 			}
 			result += (super.computeIndent(level)+"} ");
 		}
-		result += '\n';
+		//result += '\n';
 		return result;
 	}
 }

@@ -141,25 +141,42 @@ public class IfStatementWrapper extends StatementWrapper{
 		if(this.thenIsBlock){
 			result += "{";
 		}
+		if(!this.thenBodyWrappers.isEmpty() && !this.thenBodyWrappers.get(0).isDisplay()){
+			result += "...";
+		}
 		result += '\n';
-		for(StatementWrapper statementWrapper: this.thenBodyWrappers){
+		for(int i=0; i<this.thenBodyWrappers.size();i++){
+			StatementWrapper statementWrapper= this.thenBodyWrappers.get(i);
 			if(statementWrapper.isDisplay()){
 				result += statementWrapper.computeOutput(level+1);
+				if(i<this.thenBodyWrappers.size()-1 && !this.thenBodyWrappers.get(i+1).isDisplay()){
+					result += "...";
+				}
+				result += "\n";
 			}
 		}
 		if(this.thenIsBlock){
-			result += (this.astNode.getElseStatement()==null?(super.computeIndent(level)+"}\n"):(super.computeIndent(level)+"} "));
+			result += (this.astNode.getElseStatement()==null?(super.computeIndent(level)+"}"):(super.computeIndent(level)+"} "));
 		}
 		if(this.astNode.getElseStatement()!=null){
 			result += (this.thenIsBlock?"else ":(super.computeIndent(level)+"else "));
 			if(this.elseIsBlock){
-				result += "{\n";
-				for(StatementWrapper statementWrapper: this.elseBodyWrappers){
+				result += "{";
+				if(!this.elseBodyWrappers.isEmpty() && !this.elseBodyWrappers.get(0).isDisplay()){
+					result += "...";
+				}
+				result += '\n';
+				for(int i=0; i<this.elseBodyWrappers.size();i++){
+					StatementWrapper statementWrapper= this.elseBodyWrappers.get(i);
 					if(statementWrapper.isDisplay()){
 						result += statementWrapper.computeOutput(level+1);
+						if(i<this.elseBodyWrappers.size()-1 && !this.elseBodyWrappers.get(i+1).isDisplay()){
+							result += "...";
+						}
+						result += "\n";
 					}
 				}
-				result += (super.computeIndent(level)+"}\n");
+				result += (super.computeIndent(level)+"}");
 			}
 			else{
 				if(this.astNode.getElseStatement().getNodeType()==ASTNode.IF_STATEMENT){
@@ -168,13 +185,17 @@ public class IfStatementWrapper extends StatementWrapper{
 						result += nestedElse.computeIfOutput(level, true);
 					}
 					else{
-						result += '\n';
+						result += "...\n";
 					}
 				}
 				else{
-					result += '\n';
+					
 					if(this.elseBodyWrappers.get(0).isDisplay()){
+						result += '\n';
 						result += this.elseBodyWrappers.get(0).computeOutput(level+1);
+					}
+					else{
+						result += "...";
 					}
 				}
 			}

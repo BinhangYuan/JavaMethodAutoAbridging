@@ -31,7 +31,7 @@ public class ParamILSV6 extends AbstractOptimizerV6{
 	
 	private HashMap<String,Double> visitedCandidates = new HashMap<String,Double>();
 	private int iterations = 0;
-	private int maxIterations = 500000;
+	private int maxIterations = 100;
 	private int paraLength;
 	private int paraR = 20;
 	private int paraS = 3;

@@ -47,7 +47,7 @@ public class EmptyStatementWrapper extends StatementWrapper{
 
 	@Override
 	public String computeOutput(int level) {
-		return super.computeIndent(level)+astNode.toString();
+		return super.computeIndent(level)+astNode.toString().substring(0,astNode.toString().length()-1);
 	}
 }
 
