@@ -238,6 +238,13 @@ public class ExpressionExtractor {
 		List<Expression> expressionList = new ArrayList<Expression>();
 		if(expression instanceof MethodInvocation) {
 			MethodInvocation methodInvocation = (MethodInvocation)expression;
+			
+			/********************************************/
+			//This is added by Binhang Yuan
+			if(methodInvocation.getName() != null){
+				expressionList.addAll(getExpressions(methodInvocation.getName(),instanceChecker));
+			}
+			/********************************************/
 			if(methodInvocation.getExpression() != null){
 				expressionList.addAll(getExpressions(methodInvocation.getExpression(),instanceChecker));
 			}

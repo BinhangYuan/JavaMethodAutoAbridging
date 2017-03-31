@@ -13,6 +13,16 @@
     height: 500px;
 }
 
+#a50{
+    position: relative;
+    height: 500px;
+}
+
+#a20{
+    position: relative;
+    height: 500px;
+}
+
 .minline{
 	fill: none;
     stroke: steelblue;

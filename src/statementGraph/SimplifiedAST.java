@@ -199,7 +199,12 @@ public class SimplifiedAST {
 			nodes.add(item);
 			buildTreeNodes((ASTNode)(((IfStatement)(node)).getThenStatement()),level+1);
 			if(((IfStatement)(node)).getElseStatement() != null){
-				buildTreeNodes((ASTNode)(((IfStatement)(node)).getElseStatement()),level+1);
+				if(((IfStatement)(node)).getElseStatement().getNodeType()==StatementWrapper.IF_STATEMENT){
+					//As we noted in the paper.
+					buildTreeNodes((ASTNode)(((IfStatement)(node)).getElseStatement()),level);
+				}else{
+					buildTreeNodes((ASTNode)(((IfStatement)(node)).getElseStatement()),level+1);
+				}
 			}
 		}
 		else if(nodeType == StatementWrapper.LABELED_STATEMENT){

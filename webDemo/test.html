@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Web Demo</title>
+    <title>Training Statistics</title>
     <meta name="author" content="Binhang Yuan">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" type="text/css">
@@ -10,30 +10,26 @@
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
-    <script type="text/javascript" src="loadcode_train.js"></script>
+    <script type="text/javascript" src="loadcode_test.js"></script>
 </head>
+
 <body>
     <div class="container">
-        <div class="text-center page-header">
+         <div class="text-center page-header">
             <h1>Web Demo</h1>
             <ul class="nav nav-tabs">
-                <li role="presentation" class="active"><a href="#">Train</a></li>
-                <li role="presentation"><a href="test.html">Test</a></li>
+                <li role="presentation"><a href="index.html">Train</a></li>
+                <li role="presentation" class="active"><a href="#">Test</a></li>
                 <li role="presentation"><a href="statistics.html">Statistics</a></li>
             </ul>
         </div>
-
-        <div class="row">
+         <div class="row">
             <div class="col-md-2">
                 <div class="row">
                     <h4>Load an example</h4>
                     <select class="form-control" id="select-example">
                         <option value=-1>--</option>
                     </select>
-                </div>
-                <div class="row">
-                    <h4>Jaccord Distance</h4>
-                    <input id="JaccordDistance" disabled></input>
                 </div>
             </div>
             <div class="col-md-10">
@@ -46,12 +42,12 @@
         <br>
         <div class="row">
             <div class="col-md-6">
-                <h4 class="text-center">Manual Labeled Result</h4>
-                <div id="manual"></div>
+                <h4 class="text-center">Abriged to 50%</h4>
+                <div id="a50"></div>
             </div>
             <div class="col-md-6">
-                <h4 class="text-center">Learned Result</h4>
-                <div id="auto"></div> 
+                <h4 class="text-center">Abriged to 20%</h4>
+                <div id="a20"></div> 
             </div>
         </div>
         <br>
@@ -62,4 +58,3 @@
         </div>
     </div>
 </body>
-</html>

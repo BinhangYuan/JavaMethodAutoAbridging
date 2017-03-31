@@ -27,6 +27,8 @@ public class DDG {
 	private Map<SimpleName,Integer> referencedCount = new HashMap<SimpleName,Integer>();
 	private Map<SimpleName,Type> variablesType = new HashMap<SimpleName,Type>();
 	
+	private boolean debug = false;
+	
 	public int getVariableAccessCount(SimpleName var){
 		Assert.isTrue(var.isDeclaration());
 		return this.referencedCount.get(var);
@@ -100,6 +102,15 @@ public class DDG {
 		for(StatementWrapper item:this.sAST.getAllWrapperList()){
 			Statement statement = StatementWrapper.getASTNodeStatement(item);
 			int count = ExpressionExtractor.getExpressions(statement, new ExpressionInstanceChecker(ASTNode.SIMPLE_NAME)).size();
+					//+ExpressionExtractor.getExpressions(statement, new ExpressionInstanceChecker(ASTNode.QUALIFIED_NAME)).size();
+			if(debug){
+				System.out.println("<<<<<<DDG simpleName count>>>>>>");
+				System.out.println(statement.toString());
+				for(Object o:ExpressionExtractor.getExpressions(statement, new ExpressionInstanceChecker(ASTNode.SIMPLE_NAME))){
+					System.out.print(((SimpleName)(o)).getIdentifier()+" ");
+				}
+				System.out.println();
+			}
 			item.addVariableCount(count);
 		}
 	}

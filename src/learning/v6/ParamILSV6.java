@@ -25,13 +25,13 @@ import statementGraph.ASTParserUtils;
 public class ParamILSV6 extends AbstractOptimizerV6{
 	private static double[] binaryCandidates = {-10.0,-9.0,-8.0,-7.0,-6.0,-5.0,-4.0,-3.0,-2.0,-1,0.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10};
 	private static double[] integerCandidates = {-3.0,-2.0,-1.0,-0.5,-0.4,-0.3,-0.2,-0.1,-0.05,0.0,0.05,0.1,0.2,0.3,0.5,1.0,2.0,3.0};
-	private static double lambda = 0.0001; 
+	private static double lambda = 0.00005; 
 	
 	private Random randGenerate = new Random();
 	
 	private HashMap<String,Double> visitedCandidates = new HashMap<String,Double>();
 	private int iterations = 0;
-	private int maxIterations = 100;
+	private int maxIterations = 100;//500000;
 	private int paraLength;
 	private int paraR = 20;
 	private int paraS = 3;
@@ -363,6 +363,7 @@ public class ParamILSV6 extends AbstractOptimizerV6{
 	public void outputTrainingResult() throws IOException{
 		JSONArray result = new JSONArray();
 		for(LearningBinaryIPSolverV6 solver:this.solverArray){
+			solver.setParameters(this.parameters);
 			JSONObject current = new JSONObject();
 			String origin = solver.originalProgram2String();
 			current.put("Origin", origin);
@@ -392,6 +393,39 @@ public class ParamILSV6 extends AbstractOptimizerV6{
 		resultFile.close();
 	}
 	
+	public void outputTrainingResultDifferentAbridgedRate()throws IOException{
+		JSONArray result = new JSONArray();
+		for(LearningBinaryIPSolverV6 solver:this.solverArray){
+			solver.setParameters(this.parameters);
+			JSONObject current = new JSONObject();
+			String origin = solver.originalProgram2String();
+			current.put("Origin", origin);
+			
+			int totalLine = solver.programLineCount(origin);
+			//Abridged to 50%;
+			Assert.isTrue(totalLine/2>0);
+			solver.setTargetLineCount(totalLine/2);
+			String a50 = solver.outputSolveResult();
+			current.put("a50", a50);
+			
+			//Abridged to 20%;
+			Assert.isTrue(totalLine/5>0);
+			solver.setTargetLineCount(totalLine/5);
+			String a20 = solver.outputSolveResult();
+			current.put("a20", a20);
+			result.put(current);
+		}
+		JSONObject obj = new JSONObject();
+		obj.put("Iterations", this.maxIterations);
+		obj.put("ObjectiveFunctionValue", this.getLowestObjectiveFunctionValue());
+		obj.put("result", result);
+		
+		//Save to webDemo;
+		FileWriter resultFile = new FileWriter("webDemo/result/result_test.json");
+		obj.write(resultFile);
+		resultFile.close();
+	}
+	
 	
 	public void outputTrainingCost2JsonFile() throws IOException{
 		FileWriter file = new FileWriter("webDemo/result/ParaILSTrainingCurve.json");
@@ -405,10 +439,11 @@ public class ParamILSV6 extends AbstractOptimizerV6{
 	
 	public static void main(String[] args) throws Exception {
 		ParamILSV6 model = new ParamILSV6();
-		model.initTraining("src/learning/labeling/labels.json");
+		model.initTraining("src/learning/labeling/labels2.json");
 		model.training();
 		System.out.println("Lowest loss function value:"+model.getLowestObjectiveFunctionValue());
 		System.out.println(model.getBestStateHash());
 		model.outputTrainingResult();
+		model.outputTrainingResultDifferentAbridgedRate();
 	}
 }
