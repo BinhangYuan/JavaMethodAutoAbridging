@@ -154,6 +154,7 @@ public class TryStatementWrapper extends StatementWrapper{
 				if(!this.catchMap.get(catchItem).isEmpty() && !this.catchMap.get(catchItem).get(0).isDisplay()){
 					result += "...";
 				}
+				result += '\n';
 				for(int i = 0; i<this.catchMap.get(catchItem).size(); i++){
 					StatementWrapper statementWrapper= this.catchMap.get(catchItem).get(i);
 					if(statementWrapper.isDisplay()){

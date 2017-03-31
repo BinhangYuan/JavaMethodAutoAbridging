@@ -140,11 +140,19 @@ public class IfStatementWrapper extends StatementWrapper{
 		result = (nestedElseFlag?"":super.computeIndent(level))+"if("+ this.astNode.getExpression().toString() +")";
 		if(this.thenIsBlock){
 			result += "{";
+			if(!this.thenBodyWrappers.isEmpty() && !this.thenBodyWrappers.get(0).isDisplay()){
+				result += "...";
+			}
+			result += '\n';
 		}
-		if(!this.thenBodyWrappers.isEmpty() && !this.thenBodyWrappers.get(0).isDisplay()){
-			result += "...";
+		else{
+			if(!this.thenBodyWrappers.isEmpty() && !this.thenBodyWrappers.get(0).isDisplay()){
+				result += "...";
+			}
+			else{
+				result += "\n";
+			}
 		}
-		result += '\n';
 		for(int i=0; i<this.thenBodyWrappers.size();i++){
 			StatementWrapper statementWrapper= this.thenBodyWrappers.get(i);
 			if(statementWrapper.isDisplay()){
@@ -152,14 +160,16 @@ public class IfStatementWrapper extends StatementWrapper{
 				if(i<this.thenBodyWrappers.size()-1 && !this.thenBodyWrappers.get(i+1).isDisplay()){
 					result += "...";
 				}
-				result += "\n";
+				if(this.thenIsBlock){
+					result += "\n";
+				}
 			}
 		}
 		if(this.thenIsBlock){
-			result += (this.astNode.getElseStatement()==null?(super.computeIndent(level)+"}"):(super.computeIndent(level)+"} "));
+			result += (this.astNode.getElseStatement()==null?(super.computeIndent(level)+"}"):(super.computeIndent(level)+"}"));
 		}
 		if(this.astNode.getElseStatement()!=null){
-			result += (this.thenIsBlock?"else ":(super.computeIndent(level)+"else "));
+			result += (this.thenIsBlock?"else ":"\n"+(super.computeIndent(level)+"else "));
 			if(this.elseIsBlock){
 				result += "{";
 				if(!this.elseBodyWrappers.isEmpty() && !this.elseBodyWrappers.get(0).isDisplay()){
@@ -173,7 +183,9 @@ public class IfStatementWrapper extends StatementWrapper{
 						if(i<this.elseBodyWrappers.size()-1 && !this.elseBodyWrappers.get(i+1).isDisplay()){
 							result += "...";
 						}
-						result += "\n";
+						if(this.elseIsBlock){
+							result += "\n";
+						}
 					}
 				}
 				result += (super.computeIndent(level)+"}");
@@ -185,11 +197,10 @@ public class IfStatementWrapper extends StatementWrapper{
 						result += nestedElse.computeIfOutput(level, true);
 					}
 					else{
-						result += "...\n";
+						result += "if ...";
 					}
 				}
 				else{
-					
 					if(this.elseBodyWrappers.get(0).isDisplay()){
 						result += '\n';
 						result += this.elseBodyWrappers.get(0).computeOutput(level+1);

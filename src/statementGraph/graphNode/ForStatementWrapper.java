@@ -120,7 +120,9 @@ public class ForStatementWrapper extends StatementWrapper{
 				if(i<this.bodyWrappers.size()-1 && !this.bodyWrappers.get(i+1).isDisplay()){
 					result += "...";
 				}
-				result += "\n";
+				if(this.bodyIsBlock){
+					result += "\n";
+				}
 			}
 		}
 		if(this.bodyIsBlock){

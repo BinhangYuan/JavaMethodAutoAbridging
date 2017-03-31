@@ -5,6 +5,8 @@ import org.json.*;
 import statementGraph.ASTParserUtils;
 
 public class SourceCodeDataLoader {
+	private static String labelPath = "src/learning/labeling/labels2.json";
+	
 	
 	public static void displaySourceCode(String filePath, String fileName, String methodName, int pos, boolean [] manualLabel) throws Exception{
 		System.out.println("Display source code data:");
@@ -14,7 +16,7 @@ public class SourceCodeDataLoader {
 	
 	
 	public static void showDataSet() throws Exception{
-		String  labelString = ASTParserUtils.readFileToString("src/learning/labeling/labels.json");
+		String  labelString = ASTParserUtils.readFileToString(labelPath);
 		JSONObject obj = new JSONObject(labelString);
 		
 		JSONArray dataArray = obj.getJSONArray("data");
@@ -34,7 +36,7 @@ public class SourceCodeDataLoader {
 	}
 	
 	public static void showLastProgram() throws Exception{
-		String  labelString = ASTParserUtils.readFileToString("src/learning/labeling/labels.json");
+		String  labelString = ASTParserUtils.readFileToString(labelPath);
 		JSONObject obj = new JSONObject(labelString);
 		
 		JSONArray dataArray = obj.getJSONArray("data");
@@ -58,7 +60,7 @@ public class SourceCodeDataLoader {
 	
 	
 	public static void showProgram(int index)throws Exception{
-		String  labelString = ASTParserUtils.readFileToString("src/learning/labeling/labels.json");
+		String  labelString = ASTParserUtils.readFileToString(labelPath);
 		JSONObject obj = new JSONObject(labelString);
 		
 		JSONArray dataArray = obj.getJSONArray("data");
@@ -79,7 +81,7 @@ public class SourceCodeDataLoader {
 	}
 	
 	public static void main(String[] args) throws Exception{
-		showProgram(40);
+		showProgram(39);
 		//showLastProgram();
 		//showDataSet();
 	}
