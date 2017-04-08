@@ -60,13 +60,6 @@
 				"dataset/org/codehaus/spring-security-oauth/spring-security-oauth/3.9.SS3",
 				"dataset/org/scribe"
 			]
-		},
-		{
-			"category":"Json Libraries",
-			"directories":[
-				"dataset/org/json",
-				"dataset/com/google/code/gson/gson/2.1/com/google"
-			]
 		}
 	]
 }

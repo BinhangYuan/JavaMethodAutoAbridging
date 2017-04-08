@@ -22,7 +22,7 @@ import statementGraph.ASTParserUtils;
  */
 
 public class StubQuery {
-	private static int filterVersion = 1;
+	private static int filterVersion = -1;
 	
 	private ArrayList<File> targetDirectories;
 	
@@ -44,9 +44,18 @@ public class StubQuery {
 	
 	private HashMap<MethodDeclaration,JSONObject> tempBuffer = new HashMap<MethodDeclaration,JSONObject>();
 	
+	private int totalFile = 0;
+	private int totalMethod = 0;
+	
 	public void visit() throws Exception{
+		this.totalFile = 0;
+		this.totalMethod = 0;
 		for(final File dir: this.targetDirectories){
 			this.visit(dir);
+		}
+		if(filterVersion==-1){
+			System.out.println("Totally checked file: "+this.totalFile);
+			System.out.println("Totally checked method: "+this.totalMethod);
 		}
 	}
 	
@@ -57,7 +66,11 @@ public class StubQuery {
 			}
 		}
 		else{
-			this.checkOneFile(target);
+			int fileMethodcount = this.checkOneFile(target);
+			if(filterVersion==-1){
+				this.totalFile ++;
+				this.totalMethod += fileMethodcount;
+			}
 		}
 	}
 	
@@ -113,6 +126,13 @@ public class StubQuery {
 		
 		HashMap<MethodDeclaration,JSONObject> results = new HashMap<MethodDeclaration,JSONObject>();
 		for(MethodDeclaration method: methods){
+			if(filterVersion==-1){//Count every method
+				JSONObject info= new JSONObject();
+				info.put("file_path", filePath.substring(filePath.indexOf("dataset")));
+				info.put("pos", cu.getLineNumber(method.getStartPosition()));
+				info.put("method", method.getName().toString());
+				results.put(method,info);
+			}
 			if(filterVersion==0){
 				if(this.filter0(method)){
 					System.out.println(filePath+": "+method.getName().toString());
@@ -141,9 +161,15 @@ public class StubQuery {
 	}
 	
 	
-	private void checkOneFile(final File target) throws Exception{
+	private int checkOneFile(final File target) throws Exception{
 		//System.out.println(target.getAbsolutePath()+":"+target.getName());
-		this.tempBuffer.putAll(parseStubQuery(target.getAbsolutePath()));
+		if(filterVersion==-1){
+			return parseStubQuery(target.getAbsolutePath()).size();
+		}
+		else{
+			this.tempBuffer.putAll(parseStubQuery(target.getAbsolutePath()));
+			return -1;
+		}
 	}
 	
 	public void outputResult() throws IOException{
@@ -159,7 +185,8 @@ public class StubQuery {
 		resultFile.close();
 	}
 	
-	public static void main(String[] args) throws Exception{
+	
+	public static void fakeQuery() throws Exception{
 		String  labelString = ASTParserUtils.readFileToString("src/stubQuery/category.json");
 		JSONObject obj = new JSONObject(labelString);
 		JSONArray jarray = obj.getJSONArray("query");
@@ -200,5 +227,36 @@ public class StubQuery {
 		stub.setLineLimits(30);
 		stub.visit();
 		stub.outputResult();
+	}
+	
+	public static void Stat() throws Exception{
+		String  labelString = ASTParserUtils.readFileToString("src/stubQuery/category.json");
+		JSONObject obj = new JSONObject(labelString);
+		JSONArray jarray = obj.getJSONArray("query");
+		
+		int alltotalFile = 0;
+		int alltotalMethod = 0;
+		for(int i=0; i<jarray.length(); i++){
+			JSONObject query = jarray.getJSONObject(i);
+			JSONArray jdirs = query.getJSONArray("directories");
+			ArrayList<File> dirs = new ArrayList<File>();
+			for(int j = 0; j < jdirs.length(); j ++){
+				dirs.add(new File(jdirs.getString(j)));
+			}
+			StubQuery stub = new StubQuery();
+			stub.setTargetDirectories(dirs);
+			System.out.println("Category"+query.getString("category"));
+			stub.visit();
+			alltotalFile += stub.totalFile;
+			alltotalMethod += stub.totalMethod;
+		}
+		System.out.println("Totally:");
+		System.out.println("Totally checked file: "+alltotalFile);
+		System.out.println("Totally checked method: "+alltotalMethod);
+	}
+	
+	public static void main(String[] args) throws Exception{
+		//fakeQuery();
+		Stat();
 	}
 }
