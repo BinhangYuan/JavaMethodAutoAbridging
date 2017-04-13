@@ -130,6 +130,7 @@ public class SimpleStatistics_V1 {
 		}
 		this.computeExpertStat();
 		this.computeSurvey();
+		this.computeOverallTime();
 	}
 	
 	private void computeAnswerCount(){
@@ -265,6 +266,27 @@ public class SimpleStatistics_V1 {
 			System.out.println("M2_WRONG"+":"+this.task2AnswerCount.get("sum").get("M2_WRONG"));
 			System.out.println("Correct rate:"+(double)(this.task2AnswerCount.get("sum").get("M2_CORRECT"))/(this.task2AnswerCount.get("sum").get("M2_CORRECT")+this.task2AnswerCount.get("sum").get("M2_WRONG")));
 		}
+	}
+	
+	private void computeOverallTime(){
+		int totalTimeTask1 = 0;
+		int totalTimeTask2 = 0;
+		for(JSONObject input:this.raw){
+			JSONObject answers = input.getJSONObject("answers");
+			for(String questionID: answers.keySet()){
+				if(answers.getJSONObject(questionID).get("type").equals("T1")){
+					JSONObject question = answers.getJSONObject(questionID);
+					totalTimeTask1 += question.getInt("time");
+				}
+				else if(answers.getJSONObject(questionID).get("type").equals("T2")){
+					JSONObject question = answers.getJSONObject(questionID);
+					totalTimeTask2 += question.getInt("time");
+				}
+			}
+		}
+		System.out.println("Overall time:"+(totalTimeTask1+totalTimeTask2)/this.raw.size());
+		System.out.println("Task1 overall time:"+(totalTimeTask1)/this.raw.size());
+		System.out.println("Task2 overall time:"+(totalTimeTask2)/this.raw.size());
 	}
 	
 	private void computeAverageTime(){
