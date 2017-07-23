@@ -32,7 +32,7 @@ public class EncoderUtils {
 	}
 	
 	public static LearningBinaryIPSolverV6 encodeSolverV6(String filePath, String fileName,String methodName,int pos) throws Exception{
-		ConstraintAndFeatureEncoderV6 encoder = ASTParserUtils.parseMethodV6(true,filePath, fileName,methodName,pos,null);
+		ConstraintAndFeatureEncoderV6 encoder = ASTParserUtils.parseMethodV6(false,filePath, fileName,methodName,pos,null);
 		LearningBinaryIPSolverV6 solver = new LearningBinaryIPSolverV6(encoder);
 		solver.setDependenceConstraints(encoder.getASTConstraints(), encoder.getCFGConstraints(), encoder.getDDGConstraints());
 		solver.setLineCostConstraints(encoder.getLineCounts());

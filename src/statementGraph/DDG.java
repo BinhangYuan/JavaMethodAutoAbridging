@@ -140,7 +140,9 @@ public class DDG {
 							}
 						}
 						else{//Little tricky here, we should consider the same name under different scope.
-							System.out.println(item.toString());
+							if(debug){
+								System.out.println(item.toString());
+							}
 							if(!item.getDefinedVariableSet().contains(varName)){
 								StatementWrapper current = item;
 								StatementWrapper parent = null;
@@ -172,10 +174,14 @@ public class DDG {
 										}
 									}
 									if(!done){
-										System.out.println(varName);
-										System.out.println(current.toString());
+										if(debug){
+											System.out.println(varName);
+											System.out.println(current.toString());
+										}
 										parent = this.sAST.getParent(current);
-										System.out.println(parent.toString());
+										if(debug){
+											System.out.println(parent.toString());
+										}
 										if(parent.getDefinedVariableSet().contains(varName)){
 											StatementWrapper preItem = parent;
 											item.addDDGDefinedPredecessor(preItem);

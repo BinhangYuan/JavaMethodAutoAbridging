@@ -27,6 +27,8 @@ public abstract class AbstractOptimizerV4 {
 	protected JaccardDistance computeDistance = new JaccardDistance();
 	protected Map<LearningBinaryIPSolverV4,ManualLabel> trainingSet = new HashMap<LearningBinaryIPSolverV4,ManualLabel>();
 	protected LinkedList<LearningBinaryIPSolverV4> solverArray = new LinkedList<LearningBinaryIPSolverV4>();
+	protected Map<LearningBinaryIPSolverV4,ManualLabel> validateSet = new HashMap<LearningBinaryIPSolverV4,ManualLabel>();
+	protected LinkedList<LearningBinaryIPSolverV4> validateSolverArray = new LinkedList<LearningBinaryIPSolverV4>(); 
 	
 	abstract protected double objectiveFunction(double [] paras);
 	
@@ -95,7 +97,7 @@ public abstract class AbstractOptimizerV4 {
 			solver.setTypeMap(this.typeMap);
 			solver.setParentTypeMap(this.parentTypeMap);
 			solver.setStatementType(encoder.getStatementType());
-			solver.setParementStatementType(encoder.getParentStatementType());
+			solver.setParentStatementType(encoder.getParentStatementType());
 			int lineCount = solver.programLineCount(solver.outputLabeledResult(label));
 			solver.setTargetLineCount(lineCount);
 			ManualLabel mlabel = new ManualLabel(lineCount,label);

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +25,8 @@ public abstract class AbstractOptimizerV3 {
 	protected Map<Integer,Integer> parentTypeMap;
 	protected JaccardDistance computeDistance = new JaccardDistance();
 	protected Map<LearningBinaryIPSolverV3,ManualLabel> trainingSet = new HashMap<LearningBinaryIPSolverV3,ManualLabel>();
+	protected Map<LearningBinaryIPSolverV3,ManualLabel> validateSet = new HashMap<LearningBinaryIPSolverV3,ManualLabel>();
+	protected LinkedList<LearningBinaryIPSolverV3> validateSolverArray = new LinkedList<LearningBinaryIPSolverV3>(); 
 
 	abstract protected double objectiveFunction(double [] paras);
 	
@@ -82,7 +85,7 @@ public abstract class AbstractOptimizerV3 {
 			for(int j =0; j< label.length; j++){
 				label[j] = labelJsonarray.getBoolean(j);
 			}
-			int lineCount = dataArray.getJSONObject(index).getInt("lineCount");
+
 			
 			ConstraintAndFeatureEncoderV3 encoder = ASTParserUtils.parseMethodV3(true,filePath, fileName,methodName,pos,label);
 			
@@ -92,8 +95,8 @@ public abstract class AbstractOptimizerV3 {
 			solver.setTypeMap(this.typeMap);
 			solver.setParentTypeMap(this.parentTypeMap);
 			solver.setStatementType(encoder.getStatementType());
-			solver.setParementStatementType(encoder.getParentStatementType());
-			
+			solver.setParentStatementType(encoder.getParentStatementType());
+			int lineCount = solver.programLineCount(solver.outputLabeledResult(label));
 			solver.setTargetLineCount(lineCount);
 			ManualLabel mlabel = new ManualLabel(lineCount,label);
 			this.trainingSet.put(solver,mlabel);

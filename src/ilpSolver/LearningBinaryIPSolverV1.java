@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.Assert;
+
 import scpsolver.constraints.LinearBiggerThanEqualsConstraint;
 import scpsolver.constraints.LinearSmallerThanEqualsConstraint;
 import scpsolver.lpsolver.LinearProgramSolver;
@@ -131,5 +133,11 @@ public class LearningBinaryIPSolverV1 {
 	
 	public String originalProgram2String(){
 		return this.encoder.originProgram2String();
+	}
+	
+	public int programLineCount(String program){
+		int total = program.split(System.getProperty("line.separator")).length;
+		Assert.isTrue(total>=2);
+		return total-2;
 	}
 }

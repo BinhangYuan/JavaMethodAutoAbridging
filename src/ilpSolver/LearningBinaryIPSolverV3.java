@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.Assert;
+
 import scpsolver.constraints.LinearBiggerThanEqualsConstraint;
 import scpsolver.constraints.LinearSmallerThanEqualsConstraint;
 import scpsolver.lpsolver.LinearProgramSolver;
@@ -80,7 +82,7 @@ public class LearningBinaryIPSolverV3 {
 		this.statementType = types;
 	}
 	
-	public void setParementStatementType(List<Integer> parentTypes){
+	public void setParentStatementType(List<Integer> parentTypes){
 		this.parentStatementType = parentTypes;
 	}
 	
@@ -152,6 +154,12 @@ public class LearningBinaryIPSolverV3 {
 	
 	public String outputSolveResult(){
 		return this.encoder.compressedProgram2String(this.solve());
+	}
+	
+	public int programLineCount(String program){
+		int total = program.split(System.getProperty("line.separator")).length;
+		Assert.isTrue(total>=2);
+		return total-2;
 	}
 	
 	

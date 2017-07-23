@@ -20,7 +20,9 @@ import org.json.JSONObject;
 
 import ilpSolver.LearningBinaryIPSolverV5;
 import learning.LearningHelper;
+import learning.ManualLabel;
 import statementGraph.ASTParserUtils;
+import statementGraph.constraintAndFeatureEncoder.ConstraintAndFeatureEncoderV5;
 
 public class ParamILSV5 extends AbstractOptimizerV5{
 	static double[] binaryCandidates = {1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10,11,12,13,14,15,16};
@@ -387,6 +389,63 @@ public class ParamILSV5 extends AbstractOptimizerV5{
 		file.close();
 	}
 	
+	public void validateModel(String labelPath) throws Exception{
+		double trainCost = objectiveFunction(this.parameters);
+		
+		String  labelString = ASTParserUtils.readFileToString(labelPath);
+		JSONObject obj = new JSONObject(labelString);
+		JSONArray dataArray = obj.getJSONArray("data");
+		
+		List<Integer> shuffleArray = new ArrayList<Integer>();
+		for(int i=0; i< dataArray.length(); i++){
+			shuffleArray.add(i);
+		}
+		
+		for(int i = 0; i < dataArray.length(); i++) {
+			int index = shuffleArray.get(i);
+			String filePath = dataArray.getJSONObject(index).getString("file_path");
+			String fileName = dataArray.getJSONObject(index).getString("file_name");
+			String methodName = dataArray.getJSONObject(index).getString("method");
+			int pos = dataArray.getJSONObject(index).getInt("pos");
+			JSONArray labelJsonarray = dataArray.getJSONObject(index).getJSONArray("label");
+			boolean [] label = new boolean[labelJsonarray.length()];
+			for(int j =0; j< label.length; j++){
+				label[j] = labelJsonarray.getBoolean(j);
+			}
+			
+			ConstraintAndFeatureEncoderV5 encoder = ASTParserUtils.parseMethodV5(false,filePath, fileName,methodName,pos,label);
+			LearningBinaryIPSolverV5 solver = new LearningBinaryIPSolverV5(encoder);
+			solver.setDependenceConstraints(encoder.getASTConstraints(), encoder.getCFGConstraints(), encoder.getDDGConstraints());
+			solver.setLineCostConstraints(encoder.getLineCounts());
+			solver.setTypeMap(this.typeMap);
+			solver.setParentTypeMap(this.parentTypeMap);
+			solver.setStatementType(encoder.getStatementType());
+			solver.setParentStatementType(encoder.getParentStatementType());
+			solver.setNestedLevels(encoder.getNestedLevel());
+			solver.setReferencedVariableCounts(encoder.getReferencedVariableCounts());
+			int lineCount = solver.programLineCount(solver.outputLabeledResult(label));
+			solver.setTargetLineCount(lineCount);
+			ManualLabel mlabel = new ManualLabel(lineCount,label);
+			this.validateSolverArray.add(solver);
+			this.validateSet.put(solver,mlabel);
+		}
+		
+		this.textClassifier.predictNaiveBayesTextOnTestSet(this.validateSet);
+		
+		double valCost = 0;
+		double valN = (double)this.validateSet.keySet().size();
+		for(LearningBinaryIPSolverV5 solver: this.validateSet.keySet()){
+			solver.setParameters(this.parameters);
+			valCost += this.computeDistance.distanceBetweenSets(solver.solve(),this.validateSet.get(solver).getBooleanLabels());
+		}
+		valCost = valCost/valN;
+		
+		System.out.println("Train model: distance: "+ trainCost);
+		System.out.println("Validate model: distance: "+ valCost);
+		System.out.println(this.bestStateHash);
+		System.out.println(LearningHelper.hashKeyDoubleArray2String(this.parameters));
+	}
+	
 	
 	public static void main(String[] args) throws Exception {
 		ParamILSV5 model = new ParamILSV5();
@@ -395,5 +454,6 @@ public class ParamILSV5 extends AbstractOptimizerV5{
 		System.out.println("Lowest loss function value:"+model.getLowestObjectiveFunctionValue());
 		System.out.println(model.getBestStateHash());
 		model.outputTrainingResult();
+		model.validateModel("src/learning/labeling/labels2.json");
 	}
 }

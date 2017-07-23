@@ -20,18 +20,20 @@ import org.json.JSONObject;
 
 import ilpSolver.LearningBinaryIPSolverV6;
 import learning.LearningHelper;
+import learning.ManualLabel;
 import statementGraph.ASTParserUtils;
+import statementGraph.constraintAndFeatureEncoder.ConstraintAndFeatureEncoderV6;
 
 public class ParamILSV6 extends AbstractOptimizerV6{
 	private static double[] binaryCandidates = {-10.0,-9.0,-8.0,-7.0,-6.0,-5.0,-4.0,-3.0,-2.0,-1,0.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10};
 	private static double[] integerCandidates = {-3.0,-2.0,-1.0,-0.5,-0.4,-0.3,-0.2,-0.1,-0.05,0.0,0.05,0.1,0.2,0.3,0.5,1.0,2.0,3.0};
-	private static double lambda = 0.00005; 
+	private static double lambda = 0.00005;
 	
 	private Random randGenerate = new Random();
 	
 	private HashMap<String,Double> visitedCandidates = new HashMap<String,Double>();
 	private int iterations = 0;
-	private int maxIterations = 100;//500000;
+	private int maxIterations = 100000;
 	private int paraLength;
 	private int paraR = 20;
 	private int paraS = 3;
@@ -359,10 +361,12 @@ public class ParamILSV6 extends AbstractOptimizerV6{
 	}
 	
 	
+	
+	
 	@Override
 	public void outputTrainingResult() throws IOException{
 		JSONArray result = new JSONArray();
-		for(LearningBinaryIPSolverV6 solver:this.solverArray){
+		for(LearningBinaryIPSolverV6 solver:this.trainingSolverArray){
 			solver.setParameters(this.parameters);
 			JSONObject current = new JSONObject();
 			String origin = solver.originalProgram2String();
@@ -395,7 +399,7 @@ public class ParamILSV6 extends AbstractOptimizerV6{
 	
 	public void outputTrainingResultDifferentAbridgedRate()throws IOException{
 		JSONArray result = new JSONArray();
-		for(LearningBinaryIPSolverV6 solver:this.solverArray){
+		for(LearningBinaryIPSolverV6 solver:this.trainingSolverArray){
 			solver.setParameters(this.parameters);
 			JSONObject current = new JSONObject();
 			String origin = solver.originalProgram2String();
@@ -436,14 +440,72 @@ public class ParamILSV6 extends AbstractOptimizerV6{
 		file.close();
 	}
 	
+	public void validateModel(String labelPath) throws Exception{
+		double trainCost = averageJaccordDistance(this.parameters);
+		
+		String  labelString = ASTParserUtils.readFileToString(labelPath);
+		JSONObject obj = new JSONObject(labelString);
+		JSONArray dataArray = obj.getJSONArray("data");
+		
+		List<Integer> shuffleArray = new ArrayList<Integer>();
+		for(int i=0; i< dataArray.length(); i++){
+			shuffleArray.add(i);
+		}
+		
+		for(int i = 0; i < dataArray.length(); i++) {
+			int index = shuffleArray.get(i);
+			String filePath = dataArray.getJSONObject(index).getString("file_path");
+			String fileName = dataArray.getJSONObject(index).getString("file_name");
+			String methodName = dataArray.getJSONObject(index).getString("method");
+			int pos = dataArray.getJSONObject(index).getInt("pos");
+			JSONArray labelJsonarray = dataArray.getJSONObject(index).getJSONArray("label");
+			boolean [] label = new boolean[labelJsonarray.length()];
+			for(int j =0; j< label.length; j++){
+				label[j] = labelJsonarray.getBoolean(j);
+			}
+			
+			ConstraintAndFeatureEncoderV6 encoder = ASTParserUtils.parseMethodV6(false,filePath, fileName,methodName,pos,label);
+			LearningBinaryIPSolverV6 solver = new LearningBinaryIPSolverV6(encoder);
+			solver.setDependenceConstraints(encoder.getASTConstraints(), encoder.getCFGConstraints(), encoder.getDDGConstraints());
+			solver.setLineCostConstraints(encoder.getLineCounts());
+			solver.setTypeMap(this.typeMap);
+			solver.setParentTypeMap(this.parentTypeMap);
+			solver.setStatementType(encoder.getStatementType());
+			solver.setParentStatementType(encoder.getParentStatementType());
+			solver.setNestedLevels(encoder.getNestedLevel());
+			solver.setReferencedVariableCounts(encoder.getReferencedVariableCounts());
+			int lineCount = solver.programLineCount(solver.outputLabeledResult(label));
+			solver.setTargetLineCount(lineCount);
+			ManualLabel mlabel = new ManualLabel(lineCount,label);
+			this.validateSolverArray.add(solver);
+			this.validateSet.put(solver,mlabel);
+		}
+		
+		this.textClassifier.predictNaiveBayesTextOnTestSet(this.validateSet);
+		
+		double valCost = 0;
+		double valN = (double)this.validateSet.keySet().size();
+		for(LearningBinaryIPSolverV6 solver: this.validateSet.keySet()){
+			solver.setParameters(this.parameters);
+			valCost += this.computeDistance.distanceBetweenSets(solver.solve(),this.validateSet.get(solver).getBooleanLabels());
+		}
+		valCost = valCost/valN;
+		
+		System.out.println("Train model: distance: "+ trainCost);
+		System.out.println("Validate model: distance: "+ valCost);
+		System.out.println(this.bestStateHash);
+		System.out.println(LearningHelper.hashKeyDoubleArray2String(this.parameters));
+	}
 	
 	public static void main(String[] args) throws Exception {
 		ParamILSV6 model = new ParamILSV6();
-		model.initTraining("src/learning/labeling/labels2.json");
+		model.initTraining("src/learning/labeling/labels.json");
 		model.training();
 		System.out.println("Lowest loss function value:"+model.getLowestObjectiveFunctionValue());
 		System.out.println(model.getBestStateHash());
 		model.outputTrainingResult();
-		model.outputTrainingResultDifferentAbridgedRate();
+		model.validateModel("src/learning/labeling/labels2.json");
+		
+		//model.outputTrainingResultDifferentAbridgedRate();
 	}
 }

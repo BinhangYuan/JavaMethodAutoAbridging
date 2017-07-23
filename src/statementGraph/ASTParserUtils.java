@@ -25,6 +25,7 @@ import statementGraph.constraintAndFeatureEncoder.ConstraintAndFeatureEncoderV6;
 import statementGraph.graphNode.StatementWrapper;
 
 public class ASTParserUtils {
+	static boolean debug = false;
 	//use ASTParse to parse string
 	public static void parse(String filePath, String fileName) throws Exception {
 		ASTParser parser = ASTParser.newParser(AST.JLS8);
@@ -43,17 +44,22 @@ public class ASTParserUtils {
 			
 			public boolean visit(MethodDeclaration node){
 				SimpleName name = node.getName();
-				System.out.println("Vistor:: Method Declaration of: '"+name+ "' at line" +cu.getLineNumber(node.getStartPosition()));
+				if(debug){
+					System.out.println("Vistor:: Method Declaration of: '"+name+ "' at line" +cu.getLineNumber(node.getStartPosition()));
+				}
 				methods.add(node);
 				return true;
 			}
 		});
-		
-		System.out.println("All Methods");
+		if(debug){
+			System.out.println("All Methods");
+		}
 		for(MethodDeclaration node: methods){
-			System.out.println("Method Declaration of: '"+node.getName()+ "' at line" +cu.getLineNumber(node.getStartPosition()));
-			System.out.println(node.toString());
-			//System.out.println("Generate CFG:");
+			if(debug){
+				System.out.println("Method Declaration of: '"+node.getName()+ "' at line" +cu.getLineNumber(node.getStartPosition()));
+				System.out.println(node.toString());
+				//System.out.println("Generate CFG:");
+			}
 			
 			SimplifiedAST sAST = new SimplifiedAST(node);
 			CFG cfg = new CFG(sAST);
@@ -69,7 +75,9 @@ public class ASTParserUtils {
 			int targetLine = 5;
 			solver.setTargetLineCount(targetLine);
 			boolean[] solution = solver.solve();
-			System.out.println(sAST.computeOutput(solution));
+			if(debug){
+				System.out.println(sAST.computeOutput(solution));
+			}
 		}
 	}
 
@@ -94,21 +102,22 @@ public class ASTParserUtils {
 				return true;
 			}
 		});
+		if(debug){	
+			System.out.println("All varabile declaration:");
+			for(SimpleName node: varaibles){
 			
-		System.out.println("All varabile declaration:");
-		for(SimpleName node: varaibles){
-			
-			if(node.resolveBinding().getKind()==IBinding.VARIABLE && node.isDeclaration()){
-				System.out.println("SimpleName: " + node.getIdentifier());
-				System.out.println("is variable and defined at line" +cu.getLineNumber(node.getStartPosition()));
-			}
-			else if(node.resolveBinding().getKind()==IBinding.VARIABLE && !node.isDeclaration()){
-				System.out.println("SimpleName: " + node.getIdentifier());
-				System.out.println("is variable and used at line" +cu.getLineNumber(node.getStartPosition()));
-			}
-			else{
-				System.out.println("SimpleName: " + node.getIdentifier());
-				System.out.println("is not variable!");
+				if(node.resolveBinding().getKind()==IBinding.VARIABLE && node.isDeclaration()){
+					System.out.println("SimpleName: " + node.getIdentifier());
+					System.out.println("is variable and defined at line" +cu.getLineNumber(node.getStartPosition()));
+				}
+				else if(node.resolveBinding().getKind()==IBinding.VARIABLE && !node.isDeclaration()){
+					System.out.println("SimpleName: " + node.getIdentifier());
+					System.out.println("is variable and used at line" +cu.getLineNumber(node.getStartPosition()));
+				}
+				else{
+					System.out.println("SimpleName: " + node.getIdentifier());
+					System.out.println("is not variable!");
+				}
 			}
 		}
 	}
@@ -178,8 +187,9 @@ public class ASTParserUtils {
 				
 		Assert.isTrue(methods.size()==1);
 		MethodDeclaration method = methods.get(0);
-		System.out.println("Method Declaration of: '"+method.getName()+ "' at line" +cu.getLineNumber(method.getStartPosition()));
+		
 		if(print){
+			System.out.println("Method Declaration of: '"+method.getName()+ "' at line" +cu.getLineNumber(method.getStartPosition()));
 			//System.out.println("Method Declaration of: '"+method.getName()+ "' at line" +cu.getLineNumber(method.getStartPosition()));
 			System.out.println(method.toString());
 		}
@@ -234,8 +244,9 @@ public class ASTParserUtils {
 					
 		Assert.isTrue(methods.size()==1);
 		MethodDeclaration method = methods.get(0);
-		System.out.println("Method Declaration of: '"+method.getName()+ "' at line" +cu.getLineNumber(method.getStartPosition()));
+		
 		if(print){
+			System.out.println("Method Declaration of: '"+method.getName()+ "' at line" +cu.getLineNumber(method.getStartPosition()));
 			//System.out.println("Method Declaration of: '"+method.getName()+ "' at line" +cu.getLineNumber(method.getStartPosition()));
 			System.out.println(method.toString());
 		}
@@ -290,8 +301,9 @@ public class ASTParserUtils {
 						
 		Assert.isTrue(methods.size()==1);
 		MethodDeclaration method = methods.get(0);
-		System.out.println("Method Declaration of: '"+method.getName()+ "' at line" +cu.getLineNumber(method.getStartPosition()));
+		
 		if(print){
+			System.out.println("Method Declaration of: '"+method.getName()+ "' at line" +cu.getLineNumber(method.getStartPosition()));
 			//System.out.println("Method Declaration of: '"+method.getName()+ "' at line" +cu.getLineNumber(method.getStartPosition()));
 			System.out.println(method.toString());
 		}
@@ -348,15 +360,18 @@ public class ASTParserUtils {
 							
 		Assert.isTrue(methods.size()==1);
 		MethodDeclaration method = methods.get(0);
-		System.out.println("Method Declaration of: '"+method.getName()+ "' at line " +cu.getLineNumber(method.getStartPosition()));
+		
 		if(print){
+			System.out.println("Method Declaration of: '"+method.getName()+ "' at line " +cu.getLineNumber(method.getStartPosition()));
 			//System.out.println("Method Declaration of: '"+method.getName()+ "' at line" +cu.getLineNumber(method.getStartPosition()));
 			System.out.println(method.toString());
 		}
 		SimplifiedAST sAST = new SimplifiedAST(method);
 		CFG cfg = new CFG(sAST);
 		DDG ddg = new DDG(sAST);
-		ddg.printDDG();
+		if(print){
+			ddg.printDDG();
+		}
 		ConstraintAndFeatureEncoderV4 encoder = new ConstraintAndFeatureEncoderV4(sAST,cfg,ddg);
 								
 		if(print){
@@ -407,15 +422,18 @@ public class ASTParserUtils {
 							
 		Assert.isTrue(methods.size()==1);
 		MethodDeclaration method = methods.get(0);
-		System.out.println("Method Declaration of: '"+method.getName()+ "' at line " +cu.getLineNumber(method.getStartPosition()));
+		
 		if(print){
+			System.out.println("Method Declaration of: '"+method.getName()+ "' at line " +cu.getLineNumber(method.getStartPosition()));
 			//System.out.println("Method Declaration of: '"+method.getName()+ "' at line" +cu.getLineNumber(method.getStartPosition()));
 			System.out.println(method.toString());
 		}
 		SimplifiedAST sAST = new SimplifiedAST(method);
 		CFG cfg = new CFG(sAST);
 		DDG ddg = new DDG(sAST);
-		ddg.printDDG();
+		if(print){
+			ddg.printDDG();
+		}
 		ConstraintAndFeatureEncoderV5 encoder = new ConstraintAndFeatureEncoderV5(sAST,cfg,ddg);
 								
 		if(print){
@@ -467,15 +485,18 @@ public class ASTParserUtils {
 								
 		Assert.isTrue(methods.size()==1);
 		MethodDeclaration method = methods.get(0);
-		System.out.println("Method Declaration of: '"+method.getName()+ "' at line " +cu.getLineNumber(method.getStartPosition()));
+		
 		if(print){
+			System.out.println("Method Declaration of: '"+method.getName()+ "' at line " +cu.getLineNumber(method.getStartPosition()));
 			//System.out.println("Method Declaration of: '"+method.getName()+ "' at line" +cu.getLineNumber(method.getStartPosition()));
 			System.out.println(method.toString());
 		}
 		SimplifiedAST sAST = new SimplifiedAST(method);
 		CFG cfg = new CFG(sAST);
 		DDG ddg = new DDG(sAST);
-		ddg.printDDG();
+		if(print){
+			ddg.printDDG();
+		}
 		ConstraintAndFeatureEncoderV6 encoder = new ConstraintAndFeatureEncoderV6(sAST,cfg,ddg);
 									
 		if(print){

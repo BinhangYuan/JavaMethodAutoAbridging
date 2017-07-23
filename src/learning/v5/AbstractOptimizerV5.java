@@ -27,6 +27,8 @@ public abstract class AbstractOptimizerV5 {
 	protected JaccardDistance computeDistance = new JaccardDistance();
 	protected Map<LearningBinaryIPSolverV5,ManualLabel> trainingSet = new HashMap<LearningBinaryIPSolverV5,ManualLabel>();
 	protected LinkedList<LearningBinaryIPSolverV5> solverArray = new LinkedList<LearningBinaryIPSolverV5>();
+	protected Map<LearningBinaryIPSolverV5,ManualLabel> validateSet = new HashMap<LearningBinaryIPSolverV5,ManualLabel>();
+	protected LinkedList<LearningBinaryIPSolverV5> validateSolverArray = new LinkedList<LearningBinaryIPSolverV5>(); 
 	
 	abstract protected double objectiveFunction(double [] paras);
 	

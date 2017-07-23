@@ -164,6 +164,39 @@ public class NaiveBayesTextClassifierV4 {
 	}
 	
 	
+	public void predictNaiveBayesTextOnTestSet(Map<LearningBinaryIPSolverV4,ManualLabel> testSet) throws Exception{
+		int truePositive = 0;
+		int trueNegative = 0;
+		int falsePositive = 0;
+		int falseNegative = 0;
+		for(LearningBinaryIPSolverV4 solver: testSet.keySet()){
+			List<StatementWrapper> statements = solver.getStatementWrapperList();
+			boolean[] labels = testSet.get(solver).getBooleanLabels();
+			Assert.isTrue(statements.size() == labels.length);
+			List<Boolean> predicts = new LinkedList<Boolean>();
+			for(int i = 0; i<statements.size();i++){
+				StatementWrapper item = statements.get(i);
+				boolean predict = this.predictNaiveBayesStatementFlag(item);
+				predicts.add(predict);
+				if(labels[i] && predict){
+					truePositive++;
+				}
+				else if(labels[i] && !predict){
+					falseNegative++;
+				}
+				else if(!labels[i] && predict){
+					falsePositive++;
+				}
+				else{
+					trueNegative++;
+				}
+			}
+			solver.setTextClassifierResults(predicts);
+		}
+		String statics = "TP:"+truePositive+" TN:"+trueNegative+" FP:"+falsePositive+" FN:"+falseNegative; 
+		this.trainlogger.info(statics);
+	}
+	
 	public void outputWordDistribution2JsonFile() throws IOException{
 		FileWriter file = new FileWriter("webDemo/result/NaiveBayesTextWordDistribution.json");
 		JSONObject obj = new JSONObject();

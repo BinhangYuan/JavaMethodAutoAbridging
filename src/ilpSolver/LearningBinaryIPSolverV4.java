@@ -97,7 +97,7 @@ public class LearningBinaryIPSolverV4 {
 		this.statementType = types;
 	}
 	
-	public void setParementStatementType(List<Integer> parentTypes){
+	public void setParentStatementType(List<Integer> parentTypes){
 		this.parentStatementType = parentTypes;
 	}
 	

@@ -26,7 +26,9 @@ public abstract class AbstractOptimizerV6 {
 	final protected Map<Integer,Integer> parentTypeMap;
 	protected JaccardDistance computeDistance = new JaccardDistance();
 	protected Map<LearningBinaryIPSolverV6,ManualLabel> trainingSet = new HashMap<LearningBinaryIPSolverV6,ManualLabel>();
-	protected LinkedList<LearningBinaryIPSolverV6> solverArray = new LinkedList<LearningBinaryIPSolverV6>();
+	protected LinkedList<LearningBinaryIPSolverV6> trainingSolverArray = new LinkedList<LearningBinaryIPSolverV6>();
+	protected Map<LearningBinaryIPSolverV6,ManualLabel> validateSet = new HashMap<LearningBinaryIPSolverV6,ManualLabel>();
+	protected LinkedList<LearningBinaryIPSolverV6> validateSolverArray = new LinkedList<LearningBinaryIPSolverV6>(); 
 	
 	
 	public void setParameters(double[] para){
@@ -46,12 +48,15 @@ public abstract class AbstractOptimizerV6 {
 	}
 	
 	
+	
+	
+	
 	public void initTraining(String labelPath) throws Exception{
 		String  labelString = ASTParserUtils.readFileToString(labelPath);
 		JSONObject obj = new JSONObject(labelString);
 		
 		JSONArray dataArray = obj.getJSONArray("data");
-		//Split the data set into training set and test set. 
+		
 		List<Integer> shuffleArray = new ArrayList<Integer>();
 		for(int i=0; i< dataArray.length(); i++){
 			shuffleArray.add(i);
@@ -78,7 +83,7 @@ public abstract class AbstractOptimizerV6 {
 				label[j] = labelJsonarray.getBoolean(j);
 			}
 			
-			ConstraintAndFeatureEncoderV6 encoder = ASTParserUtils.parseMethodV6(true,filePath, fileName,methodName,pos,label);
+			ConstraintAndFeatureEncoderV6 encoder = ASTParserUtils.parseMethodV6(false,filePath, fileName,methodName,pos,label);
 			LearningBinaryIPSolverV6 solver = new LearningBinaryIPSolverV6(encoder);
 			solver.setDependenceConstraints(encoder.getASTConstraints(), encoder.getCFGConstraints(), encoder.getDDGConstraints());
 			solver.setLineCostConstraints(encoder.getLineCounts());
@@ -91,7 +96,7 @@ public abstract class AbstractOptimizerV6 {
 			int lineCount = solver.programLineCount(solver.outputLabeledResult(label));
 			solver.setTargetLineCount(lineCount);
 			ManualLabel mlabel = new ManualLabel(lineCount,label);
-			this.solverArray.add(solver);
+			this.trainingSolverArray.add(solver);
 			this.trainingSet.put(solver,mlabel);
 		}
 	}

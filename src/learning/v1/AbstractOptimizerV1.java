@@ -23,6 +23,8 @@ public abstract class AbstractOptimizerV1 {
 	protected Map<Integer,Integer> typeMap;
 	protected JaccardDistance computeDistance = new JaccardDistance();
 	protected Map<LearningBinaryIPSolverV1,ManualLabel> trainingSet = new HashMap<LearningBinaryIPSolverV1,ManualLabel>();
+	protected Map<LearningBinaryIPSolverV1,ManualLabel> validateSet = new HashMap<LearningBinaryIPSolverV1,ManualLabel>();
+
 
 	abstract protected double objectiveFunction(double [] paras);
 	
@@ -76,7 +78,6 @@ public abstract class AbstractOptimizerV1 {
 			for(int j =0; j< label.length; j++){
 				label[j] = labelJsonarray.getBoolean(j);
 			}
-			int lineCount = dataArray.getJSONObject(index).getInt("lineCount");
 			
 			ConstraintAndFeatureEncoderV1 encoder = ASTParserUtils.parseMethodV1(true,filePath, fileName,methodName,pos,label);
 			
@@ -85,7 +86,7 @@ public abstract class AbstractOptimizerV1 {
 			solver.setLineCostConstraints(encoder.getLineCounts());
 			solver.setTypeMap(this.typeMap);
 			solver.setStatementType(encoder.getStatementType());
-			
+			int lineCount = solver.programLineCount(solver.outputLabeledResult(label));
 			solver.setTargetLineCount(lineCount);
 			ManualLabel mlabel = new ManualLabel(lineCount,label);
 			this.trainingSet.put(solver,mlabel);

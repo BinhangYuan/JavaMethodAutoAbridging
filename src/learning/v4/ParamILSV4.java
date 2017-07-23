@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
@@ -19,6 +20,9 @@ import org.json.JSONObject;
 
 import ilpSolver.LearningBinaryIPSolverV4;
 import learning.LearningHelper;
+import learning.ManualLabel;
+import statementGraph.ASTParserUtils;
+import statementGraph.constraintAndFeatureEncoder.ConstraintAndFeatureEncoderV4;
 
 public class ParamILSV4 extends AbstractOptimizerV4{
 	static double[] candidate = {1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0};
@@ -78,7 +82,7 @@ public class ParamILSV4 extends AbstractOptimizerV4{
 			this.visitedCandidates.put(stateHash, cost);
 			
 			this.trainingCostRecordIterations.add(cost);
-			this.trainlogger.info("Training process: Iteration "+this.iterations +" with cost value: "+ cost);
+			this.trainlogger.info("Training process: Iteration "+this.iterations +" with cost value: "+ cost+" best cost so far:"+this.visitedCandidates.get(this.bestStateHash));
 			this.trainlogger.info("Para:"+LearningHelper.outputDoubleArray2String(state));
 			
 			this.iterations++;
@@ -294,6 +298,63 @@ public class ParamILSV4 extends AbstractOptimizerV4{
 		file.close();
 	}
 	
+	public void validateModel(String labelPath) throws Exception{
+		double trainCost = objectiveFunction(this.parameters);
+		
+		String  labelString = ASTParserUtils.readFileToString(labelPath);
+		JSONObject obj = new JSONObject(labelString);
+		JSONArray dataArray = obj.getJSONArray("data");
+		
+		List<Integer> shuffleArray = new ArrayList<Integer>();
+		for(int i=0; i< dataArray.length(); i++){
+			shuffleArray.add(i);
+		}
+		
+		for(int i = 0; i < dataArray.length(); i++) {
+			int index = shuffleArray.get(i);
+			String filePath = dataArray.getJSONObject(index).getString("file_path");
+			String fileName = dataArray.getJSONObject(index).getString("file_name");
+			String methodName = dataArray.getJSONObject(index).getString("method");
+			int pos = dataArray.getJSONObject(index).getInt("pos");
+			JSONArray labelJsonarray = dataArray.getJSONObject(index).getJSONArray("label");
+			boolean [] label = new boolean[labelJsonarray.length()];
+			for(int j =0; j< label.length; j++){
+				label[j] = labelJsonarray.getBoolean(j);
+			}
+			
+			ConstraintAndFeatureEncoderV4 encoder = ASTParserUtils.parseMethodV4(false,filePath, fileName,methodName,pos,label);
+			LearningBinaryIPSolverV4 solver = new LearningBinaryIPSolverV4(encoder);
+			solver.setDependenceConstraints(encoder.getASTConstraints(), encoder.getCFGConstraints(), encoder.getDDGConstraints());
+			solver.setLineCostConstraints(encoder.getLineCounts());
+			solver.setTypeMap(this.typeMap);
+			solver.setParentTypeMap(this.parentTypeMap);
+			solver.setStatementType(encoder.getStatementType());
+			solver.setParentStatementType(encoder.getParentStatementType());
+			//solver.setNestedLevels(encoder.getNestedLevel());
+			//solver.setReferencedVariableCounts(encoder.getReferencedVariableCounts());
+			int lineCount = solver.programLineCount(solver.outputLabeledResult(label));
+			solver.setTargetLineCount(lineCount);
+			ManualLabel mlabel = new ManualLabel(lineCount,label);
+			this.validateSolverArray.add(solver);
+			this.validateSet.put(solver,mlabel);
+		}
+		
+		this.textClassifier.predictNaiveBayesTextOnTestSet(this.validateSet);
+		
+		double valCost = 0;
+		double valN = (double)this.validateSet.keySet().size();
+		for(LearningBinaryIPSolverV4 solver: this.validateSet.keySet()){
+			solver.setParameters(this.parameters);
+			valCost += this.computeDistance.distanceBetweenSets(solver.solve(),this.validateSet.get(solver).getBooleanLabels());
+		}
+		valCost = valCost/valN;
+		
+		System.out.println("Train model: distance: "+ trainCost);
+		System.out.println("Validate model: distance: "+ valCost);
+		System.out.println(this.bestStateHash);
+		System.out.println(LearningHelper.hashKeyDoubleArray2String(this.parameters));
+	}
+	
 	
 	
 	public static void main(String[] args) throws Exception {
@@ -303,5 +364,6 @@ public class ParamILSV4 extends AbstractOptimizerV4{
 		System.out.println("Lowest loss function value:"+model.getLowestObjectiveFunctionValue());
 		System.out.println(model.getBestStateHash());
 		model.outputTrainingResult();
+		model.validateModel("src/learning/labeling/labels2.json");
 	}
 }

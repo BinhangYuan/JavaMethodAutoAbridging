@@ -23,3 +23,9 @@ userStudyStat/survey
 *.log
 
 *.lck
+
+src/learning/labeling/labels2.json
+
+src/learning/labeling/labels.json
+
+src/learning/labeling/labels.json
