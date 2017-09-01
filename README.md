@@ -6,4 +6,4 @@ This is an application in PLINY project in computer science department, Rice unv
 
 User study web address: http://user-study-rice-cs-by8.surge.sh
 
-The work has been accepted by OOPSLA 2017.
+The work has been accepted by OOPSLA 2017.(http://2017.splashcon.org/track/splash-2017-OOPSLA#event-overview)
