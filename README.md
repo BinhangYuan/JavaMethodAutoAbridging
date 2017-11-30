@@ -1,4 +1,4 @@
-# Abridge Source Code. 
+# Abridging Source Code. 
 
 This is a research project targeting at automatically abridging Java methods, which makes it possible to display a large amounts of source code in a limited space and accelerates human comprehension for source code.
 
